@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Events</title>
+
+  <link rel="stylesheet" href="styles/layout.css" type="text/css">
+  <link rel="stylesheet" href="styles/styles.css" type="text/css">
+</head>
+<body onload=init()>
+
+
+<div class="wrapper col1">
+  <div id="topbar">
+    <ul>
+      <li id="text_topbar">Sign in for admin</li>
+      <li class="last">
+        <button id="connection_button"> Login</button>
+      </li>
+    </ul>
+    <br class="clear"/>
+  </div>
+</div>
+
+
+<script>
+  let admin = false;
+
+  async function checkToken() {
+
+    let req = await fetch("/api/token", {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    let res = await req.json();
+    if (res === "logged") {
+      document.getElementById("connection_button").innerHTML = "Logout";
+      document.getElementById("text_topbar").innerHTML = "Welcome admin";
+      admin = true;
+      document.getElementById("connection_button").addEventListener("click", async () => {
+        let req = await fetch("/api/logout", {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        let res = await req.json();
+        if (res === "logged out") {
+          window.location.href = "events.html";
+        }
+      });
+    }
+
+  }
+
+  function init() {
+    checkToken();
+  }
+
+</script>
+
+<div class="wrapper col2">
+  <div id="header">
+    <div id="topnav">
+      <ul>
+        <li class="last active"><a href="#">Sports & Events</a>
+          <ul>
+            <li><a href="sports.html">Sports</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="localisations.html">Localisations</a></li>
+          </ul>
+        </li>
+        <li><a href="stats.html">Stats</a></li>
+        <li><a href="athletes.html">Participants</a></li>
+        <li><a href="index.html">Homepage</a></li>
+      </ul>
+    </div>
+    <div id="logo">
+      <h1><a href="index.html">Olympics Games 2024</a></h1>
+    </div>
+    <br class="clear"/>
+  </div>
+</div>
+
+
+<div id="modal_connection" class="modal">
+  <div id="modal_connection_content" class="modal-content">
+    <span class="close"> &times; </span>
+    <h2 class="modal-text"> Please enter your credentials </h2>
+    <form action="/api/login" method="post" style="text-align: center">
+      <label for="username"> Username </label>
+      <input type="text" name="username" id="username" placeholder="Username" required>
+      <label for="password"> Password </label>
+      <input type="password" name="password" id="password" placeholder="Password" required>
+      <input type="submit" value="Login">
+    </form>
+  </div>
+</div>
+
+
+<div class="wrapper col3">
+  <div id="admin_addevent">
+  </div>
+  <script>
+    if (admin === true) {
+      document.getElementById("admin_addevent").innerHTML = "";
+    } else {
+      document.getElementById("admin_addevent").innerHTML =
+              `<h2> Add an event </h2>
+                <form action="/api/addevent" method="post" style="text-align: center">
+                <label for="event_code"> Event code </label>
+                <input type="text" name="event_code" id="event_code" placeholder="Event code" required>
+                <label for="event_starting_hour"> Event start Hour </label>
+                <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour" required>
+                <label for="event_ending_hour"> Event end Hour </label>
+                <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
+                <label for="event_desc"> Event description </label>
+                <input type="text" name="event_desc" id="event_desc" placeholder="Event description" required>
+                <label for="event_type"> Event type </label>
+                <select name="event_type" id="event_type" required>
+                        <option value="Medals">Medals</option>
+                        <option value="qualifications">Qualifications</option>
+                </select>
+                <label for="event_category"> Event category </label>
+                <select name="event_category" id="event_category" required>
+                        <option value="Men">Men</option>
+                        <option value="Female">Female</option>
+                        <option value="Mixed">Mixed</option>
+                </select>
+                <label for="event_sport"> Event sport </label>
+                <input type="text" name="event_sport" id="event_sport" placeholder="Event sport" required>
+                <label for="event_date"> Event date </label>
+                <input type="date" name="event_date" id="event_date" placeholder="Event date" required>
+                <label for="event_localisation"> Event localisation </label>
+                <input type="text" name="event_localisation" id="event_localisation" placeholder="Event localisation" required>
+                <button type="submit" id="submit" value="Add event"> Submit </button>
+                </form>`;
+      let submit = document.getElementById("submit");
+      submit.addEventListener("click", async () => {
+        let event_code = document.getElementById("event_code").value;
+        let event_starting_hour = document.getElementById("event_starting_hour").value;
+        let event_ending_hour = document.getElementById("event_ending_hour").value;
+        let event_desc = document.getElementById("event_desc").value;
+        let event_type = document.getElementById("event_type").value;
+        let event_category = document.getElementById("event_category").value;
+        let event_sport = document.getElementById("event_sport").value;
+        let event_date = document.getElementById("event_date").value;
+        let event_localisation = document.getElementById("event_localisation").value;
+        let req = await fetch("/api/addevent", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            event_code: event_code,
+            event_starting_hour: event_starting_hour,
+            event_ending_hour: event_ending_hour,
+            event_desc: event_desc,
+            event_type: event_type,
+            event_category: event_category,
+            event_sport: event_sport,
+            event_date: event_date,
+            event_localisation: event_localisation
+          })
+        })
+        let res = await req.json();
+        if (res === "event added") {
+          window.location.href = "events.html";
+        }else{
+          alert("Error :" + res);
+        }
+      });
+
+
+    }
+
+
+
+  </script>
+  <div>
+    <h1> Events </h1>
+    <table id="event_table">
+      <tr>
+        <th>Event name</th>
+        <th>Event sport</th>
+        <th>Event date</th>
+        <th>Event localisation</th>
+      </tr>
+    </table>
+  </div>
+  <script>
+    async function getEventList(){
+      let req = await fetch("/api/events", {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      let res = await req.json();
+      let table = document.getElementById("event_table");
+      for (let i = 0; i < res.length; i++) {
+        let row = table.insertRow(i+1);
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
+        let cell4 = row.insertCell(3);
+
+        cell1.innerHTML = res[i].name;
+        cell2.innerHTML = res[i].sport;
+        cell3.innerHTML = res[i].date;
+        cell4.innerHTML = res[i].localisation;
+      }
+    }
+
+
+  </script>
+</div>
+
+
+<div class="wrapper col6">
+  <div id="copyright">
+    <p class="fl_left">Copyright &copy; 2024 - All Rights Reserved - <a href="#">JO_PARIS_2024</a></p>
+    <br class="clear"/>
+  </div>
+</div>
+
+<script>
+  let login_button = document.getElementById("connection_button");
+  let modal = document.getElementById("modal_connection");
+  let span = document.getElementsByClassName("close")[0];
+
+  span.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  window.onclick = function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  login_button.addEventListener("click", function () {
+    modal.style.display = "block";
+  });
+
+</script>
+</body>
+</html>
