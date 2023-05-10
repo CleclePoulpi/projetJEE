@@ -1,14 +1,74 @@
+
 package projectJEE.Backend.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestController
-@RequestMapping("/pages")
+@Controller
+@RequestMapping("/")
 public class pagesController {
 
-    @Autowired
-    private pagesService pagesService;
+    @ResponseBody
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index.ht-ml");
+        return modelAndView;
+    }
 
-    @PostMapping("/")
+    @ResponseBody
+    @GetMapping("/athletes")
+    public ModelAndView athletes() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("athletes.html");
+        return modelAndView;
+    }
+
+    @ResponseBody
+    @GetMapping("/EventAdmin")
+    public ModelAndView EventAdmin() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("EventAdmin.html");
+        return modelAndView;
+    }
+
+    @ResponseBody
+    @GetMapping("/events")
+    public ModelAndView events() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("events.html");
+        return modelAndView;
+    }
+
+    @ResponseBody
+    @GetMapping("/localisations")
+    public ModelAndView localisations() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("localisations.html");
+        return modelAndView;
+    }
+
+    @ResponseBody
+    @GetMapping("/plan")
+    public ModelAndView plan() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("plan.html");
+        return modelAndView;
+    }
+
+    @ResponseBody
+    @GetMapping("/sports")
+    public ModelAndView sports() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("sports.html");
+        return modelAndView;
+    }
+
+    @ResponseBody
+    @GetMapping("/stats")
+    public ModelAndView stats() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("stats.html");
+        return modelAndView;
+    }
 }

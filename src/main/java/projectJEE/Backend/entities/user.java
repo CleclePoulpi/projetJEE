@@ -25,11 +25,14 @@ public class user {
     private String password;
     private String email;
 
-    public user(String name, String lastname, String username, String password, String email) {
+    private int privilege;
+
+    public user(String name, String lastname, String username, String password, String email, int privilege) {
         this.name = name;
         this.lastname = lastname;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.privilege = privilege;
     }
 }
