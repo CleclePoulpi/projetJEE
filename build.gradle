@@ -1,36 +1,33 @@
 plugins {
-  id 'java'
-  id 'war'
+	id 'java'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
 }
 
-group 'com.example'
-version '1.0-SNAPSHOT'
+group = 'projectJEE'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
 
 repositories {
-  mavenCentral()
-}
-
-ext {
-  junitVersion = '5.9.2'
-}
-
-sourceCompatibility = '11'
-targetCompatibility = '11'
-
-tasks.withType(JavaCompile) {
-  options.encoding = 'UTF-8'
+	mavenCentral()
 }
 
 dependencies {
-  compileOnly('jakarta.servlet:jakarta.servlet-api:5.0.0')
-  implementation('org.glassfish.jersey.containers:jersey-container-servlet:3.1.1')
-  implementation('org.glassfish.jersey.media:jersey-media-json-jackson:3.1.1')
-  implementation('org.glassfish.jersey.inject:jersey-cdi2-se:3.1.1')
-  implementation('org.jboss.weld.se:weld-se-core:4.0.3.Final')
-
-  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-test {
-  useJUnitPlatform()  }
+tasks.named('test') {
+	useJUnitPlatform()
+}
