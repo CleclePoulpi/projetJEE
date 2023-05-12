@@ -326,7 +326,7 @@ div.wrapper h6 {
     border-bottom: 1px dotted #CCCCCC;
 }
 
-#content {
+.content {
     display: block;
     float: left;
     width: 600px;

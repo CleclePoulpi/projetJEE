@@ -58,6 +58,8 @@
 
     function init() {
         checkToken();
+        //getAthletes(); //TODO: uncomment this line when the server is ready
+
     }
 
 </script>
@@ -70,13 +72,13 @@
                     <ul>
                         <li><a href="http://localhost:8081/sports">Sports</a></li>
                         <li><a href="http://localhost:8081/events">Events</a></li>
-                        <li id="adminEventTopbar"><a href="http://localhost:8081/EventAdmin">Admin Events</a> </li>
-                        <li><a href="http://localhost:8081/localisations">Localisations</a></li>
+                        <li id="adminEventTopbar"><a href="http://localhost:8081/EventAdmin">Admin Events</a></li>
+                        <li><a href="http://localhost:8081/locations">Locations</a></li>
                     </ul>
                 </li>
                 <li><a href="http://localhost:8081/stats">Stats</a></li>
                 <li class="active"><a href="http://localhost:8081/athletes">Participants</a></li>
-                <li ><a href="http://localhost:8081/">Homepage</a></li>
+                <li><a href="http://localhost:8081/">Homepage</a></li>
             </ul>
         </div>
         <div id="logo">
@@ -107,57 +109,74 @@
 
 
 <div class="wrapper col3">
-    <div id="admin_import">
-    </div>
-    <script>
-        if (admin === true) {
-            document.getElementById("admin_import").innerHTML = "";
-        } else {
-            document.getElementById("admin_import").innerHTML = '<form action="/api/importathleteslist" method="post" enctype="multipart/form-data" style="text-align: center" >\n' +
-                '            <label for="file"> Import athletes </label>\n' +
-                '            <input type="file" name="file" id="file" required>\n' +
-                '            <input type="submit" value="Import">\n' +
-                '        </form>';
-        }
-    </script>
-    <div>
-        <h1> Athletes </h1>
-        <table id="athletes_table">
-            <tr>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Country</th>
-                <th>Sport</th>
-            </tr>
-        </table>
-    </div>
-    <script>
-        async function getAthletes() {
-            let req = await fetch("/api/getathleteslist", {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-
-            let res = await req.json();
-            let table = document.getElementById("athletes_table");
-            for (let i = 0; i < res.length; i++) {
-                let row = table.insertRow(i + 1);
-                let cell1 = row.insertCell(0);
-                let cell2 = row.insertCell(1);
-                let cell3 = row.insertCell(2);
-                let cell4 = row.insertCell(3);
-
-                cell1.innerHTML = res[i].firstName;
-                cell2.innerHTML = res[i].lastName;
-                cell3.innerHTML = res[i].country;
-                cell4.innerHTML = res[i].sport;
+    <div id="container">
+        <div id="admin_import">
+        </div>
+        <script>
+            if (admin === true) {
+                document.getElementById("admin_import").innerHTML = "";
+            } else {
+                document.getElementById("admin_import").innerHTML = '<form action="/api/importathleteslist" method="post" enctype="multipart/form-data" style="text-align: center" >\n' +
+                    '            <label for="file"> Import athletes </label>\n' +
+                    '            <input type="file" name="file" id="file" required>\n' +
+                    '            <input type="submit" value="Import">\n' +
+                    '        </form>';
             }
-        }
+        </script>
+        <div>
+            <h1> Athletes </h1>
+            <table id="athletes_table">
+                <tr>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Gender</th>
+                    <th>Birth date</th>
+                    <th>Nationality</th>
+                    <th>Sport</th>
+                </tr>
+            </table>
+        </div>
+        <script>
+            async function getAthletes() {
+                let req = await fetch("/api/getathleteslist", {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
 
-        getAthletes();
-    </script>
+                let req2 = await fetch("/api/getathleteslist", {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                let res = await req.json();
+                let res2 = await req2.json();
+
+                let table = document.getElementById("athletes_table");
+                for (let i = 0; i < res.length; i++) {
+                    let row = table.insertRow(i + 1);
+                    let cell1 = row.insertCell(0);
+                    let cell2 = row.insertCell(1);
+                    let cell3 = row.insertCell(2);
+                    let cell4 = row.insertCell(3);
+                    let cell5 = row.insertCell(4);
+                    let cell6 = row.insertCell(5);
+
+                    cell1.innerHTML = res[i].prenomAthlete;
+                    cell2.innerHTML = res[i].nomAthlete;
+                    cell3.innerHTML = res[i].genreAthlete;
+                    cell4.innerHTML = res[i].naissanceAthlete;
+                    cell5.innerHTML = res[i].nationaliteAthlete;
+                    cell6.innerHTML = res2[res[i].disciplineAthlete].nomDiscipline; // à vérifier pour l'id de la discipline
+                }
+            }
+
+            getAthletes();
+        </script>
+    </div>
 </div>
 
 
