@@ -40,3 +40,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Property Files ###
+**/src/main/resources/*.properties
