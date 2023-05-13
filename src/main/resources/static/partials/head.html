@@ -55,7 +55,7 @@
   <div id="header">
     <div id="topnav">
       <ul>
-        <li class="last active"><a href="#">Sports & Events</a>
+        <li id="dropdown" class="last"><a href="#">Sports & Events</a>
           <ul>
             <li><a href="http://localhost:8081/sports">Sports</a></li>
             <li id="admin_sport"><a href="http://localhost:8081/sportsAdmin">Sport Admin</a></li>
@@ -65,13 +65,13 @@
             <li id="admin_location"><a href="http://localhost:8081/locationAdmin">Location Admin</a></li>
           </ul>
         </li>
-        <li><a href="http://localhost:8081/stats">Stats</a></li>
-        <li><a href="http://localhost:8081/athletes">Participants</a>
+        <li id="stats"><a href="http://localhost:8081/stats">Stats</a></li>
+        <li id="athletes"><a href="http://localhost:8081/athletes">Participants</a>
           <ul id="admin_athletes">
             <li><a href="http://localhost:8081/athletesAdmin">Athletes Admin</a></li>
           </ul>
         </li>
-        <li><a href="http://localhost:8081/">Homepage</a></li>
+        <li id="homepage"><a href="http://localhost:8081/">Homepage</a></li>
       </ul>
     </div>
     <div id="logo">
@@ -129,4 +129,48 @@
 
   checkAdmin();
 
+</script>
+
+
+<script>
+  $( document ).ready(function() {
+
+    var loc = window.location.href; // returns the full URL
+    var root = "localhost:8081/";
+    var end = loc.slice(loc.lastIndexOf(root)+root.length);
+
+
+
+    if(end === "") { // If Empty or if just home URL
+      $('#homepage').addClass('active');
+      //Remove All Other Classes
+      $('#dropdown').removeClass('active');
+      $('#athletes').removeClass('active');
+      $('#stats').removeClass('active');
+    }
+    if(end === "/sports" || end === "/sportsAdmin"|| end === "/events" || end === "/eventAdmin" || end==="/locations" || end === "/locationAdmin") { // if page = root/start-here/
+      $('#dropdown').addClass('active');
+      //Remove All Other Classes
+      $('#homepage').removeClass('active');
+      $('#athletes').removeClass('active');
+      $('#stats').removeClass('active');
+    }
+    if(end === "/athletes" || end === "/athletesAdmin") { // if page = root/work-with-me/
+      $('#athletes').addClass('active');
+      //Remove All Other Classes
+      $('#homepage').removeClass('active');
+      $('#dropdown').removeClass('active');
+      $('#stats').removeClass('active');
+    }
+
+    if(end === "/stats") { // if page = root/work-with-me/
+      $('#stats').addClass('active');
+      //Remove All Other Classes
+      $('#homepage').removeClass('active');
+      $('#dropdown').removeClass('active');
+      $('#athletes').removeClass('active');
+    }
+
+
+  });
 </script>
