@@ -3,8 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Plan</title>
+    <script src="./jquery-3.7.0.js"></script>
+    <script>
+
+        $(function(){
+            $("#includedContent").load("./partials/head.html");
+        });
+        $(function(){
+            $("#includedFooter").load("./partials/footer.html");
+        });
+    </script>
 </head>
 <body>
+
+<div id="includedContent">
+</div>
+
+
+<div id="includedFooter"></div>
+
+
 
 </body>
 </html>

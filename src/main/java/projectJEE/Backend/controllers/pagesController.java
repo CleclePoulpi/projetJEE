@@ -28,7 +28,7 @@ public class pagesController {
     @GetMapping("/EventAdmin")
     public ModelAndView EventAdmin() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("EventAdmin.html");
+        modelAndView.setViewName("eventAdmin.html");
         return modelAndView;
     }
 
