@@ -31,11 +31,13 @@
       if (admin === true) {
         document.getElementById("admin_import").innerHTML = "";
       } else {
-        document.getElementById("admin_import").innerHTML = '<form action="/api/importathleteslist" method="post" enctype="multipart/form-data" style="text-align: center" >\n' +
-                '            <label for="file"> Import athletes </label>\n' +
-                '            <input type="file" name="file" id="file" required>\n' +
-                '            <input type="submit" value="Import">\n' +
-                '        </form>';
+        document.getElementById("admin_import").innerHTML = `<form action="/api/importathleteslist" method="post" enctype="multipart/form-data" style="text-align: center" >
+                            <label for="file"> Import athletes </label>
+                            <input type="file" name="file" id="file" required>
+                            <br>
+                            <input type="submit" value="Import">
+
+                        </form>'`;
       }
     </script>
     <div>
