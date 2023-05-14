@@ -13,7 +13,6 @@
 
 
 <script>
-  let admin = false;
 
   async function checkToken() {
 
@@ -38,7 +37,7 @@
         })
         let res = await req.json();
         if (res === "logged out") {
-          window.location.href = "http://localhost:8081/locations";
+          window.location.href = "http://localhost:8081/";
         }
       });
     }

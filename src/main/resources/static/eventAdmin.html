@@ -6,100 +6,24 @@
 
     <link rel="stylesheet" href="styles/layout.css" type="text/css">
     <link rel="stylesheet" href="styles/styles.css" type="text/css">
+    <script src="./jquery-3.7.0.js"></script>
+    <script src="script.js"></script>
+    <script>
+
+        $(function(){
+            $("#includedContent").load("./partials/head.html");
+        });
+        $(function(){
+            $("#includedFooter").load("./partials/footer.html");
+        });
+    </script>
 </head>
-<body onload=init()>
+<body>
 
-
-<div class="wrapper col1">
-    <div id="topbar">
-        <ul>
-            <li id="text_topbar">Log in for admin</li>
-            <li class="last">
-                <button id="connection_button"> Login</button>
-            </li>
-        </ul>
-        <br class="clear"/>
-    </div>
+<div id="includedContent">
 </div>
 
 
-<script>
-    let admin = false;
-
-    async function checkToken() {
-
-        let req = await fetch("/api/token", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-
-        let res = await req.json();
-        if (res === "logged") {
-            document.getElementById("connection_button").innerHTML = "Logout";
-            document.getElementById("text_topbar").innerHTML = "Welcome admin";
-            admin = true;
-            document.getElementById("connection_button").addEventListener("click", async () => {
-                let req = await fetch("/api/logout", {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                let res = await req.json();
-                if (res === "logged out") {
-                    window.location.href = "events.html";
-                }
-            });
-        }
-
-    }
-
-    function init() {
-        checkToken();
-        //getEventList(); //TODO: uncomment this line when the server is ready
-    }
-
-</script>
-
-<div class="wrapper col2">
-    <div id="header">
-        <div id="topnav">
-            <ul>
-                <li class="last active"><a href="#">Sports & Events</a>
-                    <ul>
-                        <li><a href="http://localhost:8081/sports">Sports</a></li>
-                        <li><a href="http://localhost:8081/events">Events</a></li>
-                        <li><a href="http://localhost:8081/locations">Locations</a></li>
-                    </ul>
-                </li>
-                <li><a href="http://localhost:8081/stats">Stats</a></li>
-                <li><a href="http://localhost:8081/athletes">Participants</a></li>
-                <li><a href="http://localhost:8081/">Homepage</a></li>
-            </ul>
-        </div>
-        <div id="logo">
-            <h1><a href="http://localhost:8081/">Olympics Games 2024</a></h1>
-        </div>
-        <br class="clear"/>
-    </div>
-</div>
-
-
-<div id="modal_connection" class="modal">
-    <div id="modal_connection_content" class="modal-content">
-        <span class="close"> &times; </span>
-        <h2 class="modal-text"> Please enter your credentials </h2>
-        <form action="/api/login" method="post" style="text-align: center">
-            <label for="username"> Username </label>
-            <input type="text" name="username" id="username" placeholder="Username" required>
-            <label for="password"> Password </label>
-            <input type="password" name="password" id="password" placeholder="Password" required>
-            <input type="submit" value="Login">
-        </form>
-    </div>
-</div>
 
 
 <div class="wrapper col3">
@@ -108,9 +32,8 @@
         </div>
 
         <script>
-            if (admin === true) {
-                document.getElementById("admin_addevent").innerHTML = "";
-            } else {
+            let res;
+            async function getLocationList(){
                 let req = await fetch("/api/getLocationslist", {
                     method: "GET",
                     headers: {
@@ -118,7 +41,15 @@
                     }
                 });
 
-                let res = await req.json();
+                res = await req.json();
+
+            }
+
+            if (admin === true) {
+                document.getElementById("admin_addevent").innerHTML = "";
+            } else {
+
+                getLocationList();
 
                 let html = `<h2> Add an event </h2>
                 <form action="/api/addevent" method="post" style="text-align: center">
@@ -144,13 +75,12 @@
                         <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
                     <label for="event_localisation"> Event localisation </label>
                         <select name="event_localisation" id="event_localisation" required>`;
-
+                /* @TODO uncomment when the api is ready
                 res.forEach((localisation) => {
                     html += `<option value="${localisation.idSite}">${localisation.nomSite}, ${localisation.villeSite}</option>`
                 });
-
+                */
                 html += `</select>
-                    <input type="text" name="event_localisation" id="event_localisation" placeholder="Event localisation" required>
                     <br>
                     <label for="event_desc"> Event description </label>
                         <input type="text" name="event_desc" id="event_desc" placeholder="Event description" required>
@@ -238,32 +168,9 @@
 </div>
 
 
-<div class="wrapper col6">
-    <div id="copyright">
-        <p class="fl_left">Copyright &copy; 2024 - All Rights Reserved - <a href="#">JO_PARIS_2024</a></p>
-        <br class="clear"/>
-    </div>
-</div>
 
-<script>
-    let login_button = document.getElementById("connection_button");
-    let modal = document.getElementById("modal_connection");
-    let span = document.getElementsByClassName("close")[0];
+<div id="includedFooter"></div>
 
-    span.onclick = function () {
-        modal.style.display = "none";
-    };
 
-    window.onclick = function (event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    login_button.addEventListener("click", function () {
-        modal.style.display = "block";
-    });
-
-</script>
 </body>
 </html>
