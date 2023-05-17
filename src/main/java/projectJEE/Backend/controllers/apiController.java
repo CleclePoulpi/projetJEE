@@ -60,4 +60,18 @@ public class apiController {
             return new ResponseEntity<>("logged", HttpStatus.OK);
         }
     }
+
+    @ResponseBody
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse response) {
+        final Cookie JWebToken = new Cookie("JWebToken", "");
+        JWebToken.setMaxAge(0);
+        JWebToken.setHttpOnly(true);
+        JWebToken.setPath("/");
+        JWebToken.setDomain("localhost");
+        ResponseEntity<String> Response = new ResponseEntity<>("logged out", HttpStatus.OK);
+        response.addCookie(JWebToken);
+        return Response;
+    }
+
 }
