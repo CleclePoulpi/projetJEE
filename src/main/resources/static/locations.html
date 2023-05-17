@@ -2,46 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sports</title>
+  <title>Locations</title>
 
   <link rel="stylesheet" href="styles/layout.css" type="text/css">
   <link rel="stylesheet" href="styles/styles.css" type="text/css">
   <script src="./jquery-3.7.0.js"></script>
   <script src="script.js"></script>
   <script>
+
     $(function(){
       $("#includedContent").load("./partials/head.html");
     });
     $(function(){
       $("#includedFooter").load("./partials/footer.html");
     });
-
   </script>
 </head>
 <body>
 
+
 <div id="includedContent">
 </div>
 
+
 <div class="wrapper col3">
   <div id="container">
-    <div id="admin_addsport">
-    </div>
 
 
     <div>
-      <h1> Sports </h1>
-      <table id="sports_table">
+      <h1> Locations </h1>
+      <table id="locations_table">
         <tr>
-          <th>Sport name</th>
-          <th>Paralympic sport</th>
+          <th>Location name</th>
+          <th>Location city</th>
+          <th>Location category</th>
         </tr>
       </table>
     </div>
   </div>
   <script>
-    async function getSportsList() {
-      let req = await fetch("/api/getSportslist", {
+    async function getLocationList() {
+      let req = await fetch("/api/getLocationslist", {
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
@@ -49,14 +50,16 @@
       })
 
       let res = await req.json();
-      let table = document.getElementById("sports_table");
+      let table = document.getElementById("locations_table");
       for (let i = 0; i < res.length; i++) {
         let row = table.insertRow(i + 1);
         let cell1 = row.insertCell(0);
         let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
 
-        cell1.innerHTML = res[i].nomDiscipline;
-        cell2.innerHTML = res[i].paralympiqueDiscipline;
+        cell1.innerHTML = res[i].nomSite;
+        cell2.innerHTML = res[i].villeSite;
+        cell3.innerHTML = res[i].categorieSite;
       }
     }
 
@@ -64,8 +67,8 @@
   </script>
 </div>
 
-
 <div id="includedFooter"></div>
+
 
 
 </body>

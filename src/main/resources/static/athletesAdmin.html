@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Athletes</title>
+
+  <link rel="stylesheet" href="styles/layout.css" type="text/css">
+  <link rel="stylesheet" href="styles/styles.css" type="text/css">
+  <script src="./jquery-3.7.0.js"></script>
+  <script src="script.js"></script>
+  <script>
+
+    $(function(){
+      $("#includedContent").load("./partials/head.html");
+    });
+    $(function(){
+      $("#includedFooter").load("./partials/footer.html");
+    });
+  </script>
+</head>
+<body>
+
+<div id="includedContent">
+</div>
+
+<div class="wrapper col3">
+  <div id="container">
+    <div id="admin_import">
+    </div>
+    <script>
+      if (admin === true) {
+        document.getElementById("admin_import").innerHTML = "";
+      } else {
+        document.getElementById("admin_import").innerHTML = `<form action="/api/importathleteslist" method="post" enctype="multipart/form-data" style="text-align: center" >
+                            <label for="file"> Import athletes </label>
+                            <input type="file" name="file" id="file" required>
+                            <br>
+                            <input type="submit" value="Import">
+
+                        </form>'`;
+      }
+    </script>
+    <div>
+      <h1> Athletes </h1>
+      <table id="athletes_table">
+        <tr>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Gender</th>
+          <th>Birth date</th>
+          <th>Nationality</th>
+          <th>Sport</th>
+        </tr>
+      </table>
+    </div>
+    <script>
+      async function getAthletes() {
+        let req = await fetch("/api/getathleteslist", {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        let req2 = await fetch("/api/getathleteslist", {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        let res = await req.json();
+        let res2 = await req2.json();
+
+        let table = document.getElementById("athletes_table");
+        for (let i = 0; i < res.length; i++) {
+          let row = table.insertRow(i + 1);
+          let cell1 = row.insertCell(0);
+          let cell2 = row.insertCell(1);
+          let cell3 = row.insertCell(2);
+          let cell4 = row.insertCell(3);
+          let cell5 = row.insertCell(4);
+          let cell6 = row.insertCell(5);
+
+          cell1.innerHTML = res[i].prenomAthlete;
+          cell2.innerHTML = res[i].nomAthlete;
+          cell3.innerHTML = res[i].genreAthlete;
+          cell4.innerHTML = res[i].naissanceAthlete;
+          cell5.innerHTML = res[i].nationaliteAthlete;
+          cell6.innerHTML = res2[res[i].disciplineAthlete].nomDiscipline; // à vérifier pour l'id de la discipline
+        }
+      }
+
+      getAthletes();
+    </script>
+  </div>
+</div>
+
+
+<div id="includedFooter"></div>
+
+
+</body>
+</html>

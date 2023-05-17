@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Locations</title>
+
+    <link rel="stylesheet" href="styles/layout.css" type="text/css">
+    <link rel="stylesheet" href="styles/styles.css" type="text/css">
+    <script src="./jquery-3.7.0.js"></script>
+    <script src="script.js"></script>
+    <script>
+
+        $(function(){
+            $("#includedContent").load("./partials/head.html");
+        });
+        $(function(){
+            $("#includedFooter").load("./partials/footer.html");
+        });
+    </script>
+</head>
+<body>
+
+<div id="includedContent">
+</div>
+
+
+<div class="wrapper col3">
+    <div id="container">
+        <div id="admin_addlocation">
+        </div>
+
+        <script>
+            if (admin === true) {
+                document.getElementById("admin_addlocation").innerHTML = "";
+            } else {
+                document.getElementById("admin_addlocation").innerHTML = `<h2> Add a location </h2>
+                <form action="/api/addlocation" method="post" style="text-align: center">
+                    <label for="location_name"> Location name </label>
+                        <input type="text" name="location_name" id="location_name" placeholder="Location name" required>
+                    <label for="location_city"> Location city </label>
+                        <input type="text" name="location_city" id="location_city" placeholder="Location city" required>
+                    <label for="location_category"> Location category </label>
+                        <select name="location_category" id="location_category" required>
+                                <option value="stade">Stadium</option>
+                                <option value="salle de spectacle">Auditorium</option>
+                                <option value="lieu public">Public place</option>
+                                <option value="centre aquatique">Aquatic complex</option>
+                        </select>
+                    <br>
+                    <button type="submit" id="submit" value="Add location"> Submit </button>
+                </form>`;
+
+                let submit = document.getElementById("submit");
+                submit.addEventListener("click", async () => {
+                    let location_name = document.getElementById("location_name").value;
+                    let location_city = document.getElementById("location_city").value;
+                    let location_category = document.getElementById("location_category").value;
+
+                    let req = await fetch("/api/addlocation", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            nomSite: location_name,
+                            villeSite: location_city,
+                            categorieSite: location_category
+                        })
+                    })
+                    let res = await req.json();
+                    if (res === "location added") {
+                        window.location.href = "locationsAdmin.html";
+                    } else {
+                        alert("Error :" + res);
+                    }
+                });
+
+
+            }
+
+
+        </script>
+        <div>
+            <h1> Locations </h1>
+            <table id="locations_table">
+                <tr>
+                    <th>Location name</th>
+                    <th>Location city</th>
+                    <th>Location category</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        async function getLocationList() {
+            let req = await fetch("/api/getLocationslist", {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            let res = await req.json();
+            let table = document.getElementById("locations_table");
+            for (let i = 0; i < res.length; i++) {
+                let row = table.insertRow(i + 1);
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+
+                cell1.innerHTML = res[i].nomSite;
+                cell2.innerHTML = res[i].villeSite;
+                cell3.innerHTML = res[i].categorieSite;
+            }
+        }
+
+
+    </script>
+</div>
+
+
+<div id="includedFooter"></div>
+
+
+
+</body>
+</html>

@@ -3,8 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <title>Statistics</title>
+
+    <link rel="stylesheet" href="styles/layout.css" type="text/css">
+    <link rel="stylesheet" href="styles/styles.css" type="text/css">
+    <script src="./jquery-3.7.0.js"></script>
+    <script src="script.js"></script>
+    <script>
+
+        $(function(){
+            $("#includedContent").load("./partials/head.html");
+        });
+        $(function(){
+            $("#includedFooter").load("./partials/footer.html");
+        });
+    </script>
 </head>
 <body>
+
+
+<div id="includedContent">
+</div>
+
+
+<div class="wrapper col3">
+    <div id="container">
+
+        <h1>Statistics</h1>
+        <div class="left">
+            <h2>Sports with the most sessions</h2>
+            <table id="session_table">
+                <tr>
+                    <th>Sport</th>
+                    <th>Number of sessions</th>
+                </tr>
+            </table>
+        </div>
+        <div class="right">
+            <h2>Sports with the greatest duration</h2>
+            <table id="duration_table">
+                <tr>
+                    <th>Sport</th>
+                    <th>Duration</th>
+                </tr>
+            </table>
+        </div>
+        <script>
+            async function getStats() {
+                let req = await fetch("/api/stats", {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                let res = await req.json();
+                let sessionTable = document.getElementById("session_table");
+                let durationTable = document.getElementById("duration_table");
+                for (let i = 0; i < res.session.length; i++) {
+                    let srow = sessionTable.insertRow(i + 1);
+                    let drow = durationTable.insertRow(i + 1);
+
+                    let scell1 = srow.insertCell(0);
+                    let scell2 = srow.insertCell(1);
+                    let dcell1 = drow.insertCell(0);
+                    let dcell2 = drow.insertCell(1);
+
+                    scell1.innerHTML = res.session[i].nomDiscipline;
+                    scell2.innerHTML = res.session[i].nbSession;
+                    dcell1.innerHTML = res.duree[i].nomDiscipline;
+                    dcell2.innerHTML = res.duree[i].dureeTotale;
+                }
+            }
+
+
+        </script>
+    </div>
+</div>
+
+
+<div id="includedFooter"></div>
+
 
 </body>
 </html>

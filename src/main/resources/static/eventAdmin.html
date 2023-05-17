@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+
+    <link rel="stylesheet" href="styles/layout.css" type="text/css">
+    <link rel="stylesheet" href="styles/styles.css" type="text/css">
+    <script src="./jquery-3.7.0.js"></script>
+    <script src="script.js"></script>
+    <script>
+
+        $(function(){
+            $("#includedContent").load("./partials/head.html");
+        });
+        $(function(){
+            $("#includedFooter").load("./partials/footer.html");
+        });
+    </script>
+</head>
+<body>
+
+<div id="includedContent">
+</div>
+
+
+
+
+<div class="wrapper col3">
+    <div id="container">
+        <div id="admin_addevent">
+        </div>
+
+        <script>
+            let res;
+            async function getLocationList(){
+                let req = await fetch("/api/getLocationslist", {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                res = await req.json();
+
+            }
+
+            if (admin === true) {
+                document.getElementById("admin_addevent").innerHTML = "";
+            } else {
+
+                getLocationList();
+
+                let html = `<h2> Add an event </h2>
+                <form action="/api/addevent" method="post" style="text-align: center">
+                    <label for="event_sport"> Event sport </label>
+                        <input type="text" name="event_sport" id="event_sport" placeholder="Event sport" required>
+                    <label for="event_category"> Event category </label>
+                        <select name="event_category" id="event_category" required>
+                                <option value="H">Men</option>
+                                <option value="F">Female</option>
+                                <option value="mixte">Mixed</option>
+                        </select>
+                    <label for="event_type"> Event type </label>
+                        <select name="event_type" id="event_type" required>
+                                <option value="médailles">Medals</option>
+                                <option value="qualifications">Qualifications</option>
+                        </select>
+                    <br>
+                    <label for="event_date"> Event date </label>
+                        <input type="date" name="event_date" id="event_date" placeholder="Event date" required>
+                    <label for="event_starting_hour"> Event start Hour </label>
+                        <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour" required>
+                    <label for="event_ending_hour"> Event end Hour </label>
+                        <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
+                    <label for="event_localisation"> Event localisation </label>
+                        <select name="event_localisation" id="event_localisation" required>`;
+                /* @TODO uncomment when the api is ready
+                res.forEach((localisation) => {
+                    html += `<option value="${localisation.idSite}">${localisation.nomSite}, ${localisation.villeSite}</option>`
+                });
+                */
+                html += `</select>
+                    <br>
+                    <label for="event_desc"> Event description </label> <br>
+                        <textarea  name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
+                    <br>
+                    <button type="submit" id="submit" value="Add event"> Submit </button>
+                </form>`;
+
+                document.getElementById("admin_addevent").innerHTML = html;
+                let submit = document.getElementById("submit");
+                submit.addEventListener("click", async () => {
+                    let event_starting_hour = document.getElementById("event_starting_hour").value;
+                    let event_ending_hour = document.getElementById("event_ending_hour").value;
+                    let event_desc = document.getElementById("event_desc").value;
+                    let event_type = document.getElementById("event_type").value;
+                    let event_category = document.getElementById("event_category").value;
+                    let event_sport = document.getElementById("event_sport").value;
+                    let event_date = document.getElementById("event_date").value;
+                    let event_localisation = document.getElementById("event_localisation").value;
+                    let req = await fetch("/api/addevent", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            event_starting_hour: event_starting_hour,
+                            event_ending_hour: event_ending_hour,
+                            event_desc: event_desc,
+                            event_type: event_type,
+                            event_category: event_category,
+                            event_sport: event_sport,
+                            event_date: event_date,
+                            event_localisation: event_localisation
+                        })
+                    })
+                    let res = await req.json();
+                    if (res === "event added") {
+                        window.location.href = "events.html";
+                    } else {
+                        alert("Error :" + res);
+                    }
+                });
+
+
+            }
+
+
+        </script>
+        <div>
+            <h1> Events </h1>
+            <table id="event_table">
+                <tr>
+                    <th>Event name</th>
+                    <th>Event sport</th>
+                    <th>Event date</th>
+                    <th>Event localisation</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        async function getEventList() {
+            let req = await fetch("/api/events", {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            let res = await req.json();
+            let table = document.getElementById("event_table");
+            for (let i = 0; i < res.length; i++) {
+                let row = table.insertRow(i + 1);
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+                let cell4 = row.insertCell(3);
+
+                cell1.innerHTML = res[i].name;
+                cell2.innerHTML = res[i].sport;
+                cell3.innerHTML = res[i].date;
+                cell4.innerHTML = res[i].localisation;
+            }
+        }
+
+
+    </script>
+</div>
+
+
+
+<div id="includedFooter"></div>
+
+
+</body>
+</html>

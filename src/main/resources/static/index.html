@@ -6,111 +6,26 @@
 
     <link rel="stylesheet" href="styles/layout.css" type="text/css">
     <link rel="stylesheet" href="styles/styles.css" type="text/css">
+    <script src="./jquery-3.7.0.js"></script>
+    <script src="script.js"></script>
+    <script>
+
+        $(function(){
+            $("#includedContent").load("./partials/head.html");
+        });
+        $(function(){
+            $("#includedFooter").load("./partials/footer.html");
+        });
+    </script>
 </head>
-<body onload=init()>
+<body>
 
 
-
-<div class="wrapper col1">
-    <div id="topbar">
-        <ul>
-            <li id="text_topbar">Sign in for admin</li>
-            <li class="last">
-                <button id="connection_button"> Login</button>
-            </li>
-        </ul>
-        <br class="clear" />
-    </div>
+<div id="includedContent">
 </div>
 
 
 
-
-<script>
-    let admin = false;
-    async function checkToken() {
-
-        let req = await fetch("/api/token", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-
-        let res = await req.json();
-        if (res === "logged") {
-            document.getElementById("connection_button").innerHTML = "Logout";
-            document.getElementById("text_topbar").innerHTML = "Welcome admin";
-            document.getElementById("connection_button").addEventListener("click", async () => {
-                let req = await fetch("/api/logout", {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                let res = await req.json();
-                if (res === "logged out") {
-                    window.location.href = "index.html";
-                }
-            });
-        }
-
-    }
-
-    function init() {
-        checkToken();
-    }
-
-</script>
-
-<div class="wrapper col2">
-    <div id="header">
-        <div id="topnav">
-            <ul>
-                <li class="last"><a href="#">Sports & Events</a>
-                    <ul>
-                        <li><a href="http://localhost:8081/sports">Sports</a></li>
-                        <li><a href="http://localhost:8081/events">Events</a></li>
-                        <li id="adminEventTopbar"><a href="http://localhost:8081/EventAdmin">Admin Events</a> </li>
-                        <li><a href="http://localhost:8081/localisations">Localisations</a></li>
-                    </ul>
-                </li>
-                <li><a href="http://localhost:8081/stats">Stats</a></li>
-                <li class="active"><a href="http://localhost:8081/athletes">Participants</a></li>
-                <li ><a href="http://localhost:8081/">Homepage</a></li>
-            </ul>
-        </div>
-        <div id="logo">
-            <h1><a href="http://localhost:8081/">Olympics Games 2024</a></h1>
-        </div>
-        <br class="clear"/>
-    </div>
-</div>
-<script>
-    if (!admin) {
-        document.getElementById("adminEventTopbar").style.display = "none";
-    }
-</script>
-<script>
-    if (!admin) {
-        document.getElementById("adminEventTopbar").style.display = "none";
-    }
-</script>
-
-
-<div id="modal_connection" class="modal">
-    <div id="modal_connection_content" class="modal-content">
-        <span class="close"> &times; </span>
-        <h2 class="modal-text"> Please enter your credentials </h2>
-        <form  action="/api/login" method="post" style="text-align: center" >
-            <label for="username"> Username </label>
-            <input type="text" name="username" id="username" placeholder="Username" required>
-            <label for="password"> Password </label>
-            <input type="password" name="password" id="password" placeholder="Password" required>
-            <input type="submit" value="Login">
-        </form>
-    </div>
-</div>
 <div class="wrapper col3">
     <div id="intro">
         <ul>
@@ -125,7 +40,7 @@
 
 <div class="wrapper col4">
     <div id="container">
-        <div id="content">
+        <div class="content">
             <h2>About The Logo</h2>
             <img class="imgl" src="images/logo.jpg" alt="" width="200" height="125" />
             <p><strong>The Eiffel Tower, international symbol of France</strong></p>
@@ -209,47 +124,13 @@
         <br class="clear" />
     </div>
 </div>
-
-<div class="wrapper col6">
-    <div id="copyright">
-        <p class="fl_left">Copyright &copy; 2024 - All Rights Reserved - <a href="#">JO_PARIS_2024</a></p>
-        <br class="clear" />
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
-    let login_button = document.getElementById("connection_button");
-    let modal = document.getElementById("modal_connection");
-    let span = document.getElementsByClassName("close")[0];
 
-    span.onclick = function () {
-        modal.style.display = "none";
-    };
-
-    window.onclick = function (event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    login_button.addEventListener("click", function () {
-        modal.style.display = "block";
-    });
+    $(document.getElementById("homepage")).addClass("active");
 
 </script>
+<div id="includedFooter"></div>
+
+
 </body>
 </html>
