@@ -10,12 +10,46 @@
   <script src="script.js"></script>
   <script>
 
-    $(function(){
+    $(function () {
       $("#includedContent").load("./partials/head.html");
     });
-    $(function(){
+    $(function () {
       $("#includedFooter").load("./partials/footer.html");
     });
+
+
+    async function checkToken() {
+
+      let cookie = document.cookie;
+      cookie = cookie.split(";");
+      cookie = cookie.find((element) => {
+        return element.includes("JWebToken");
+      })
+      if (cookie != undefined) {
+        let token = cookie.split("=")[1];
+        let req = await fetch("/api/check-token", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          }
+          , body: JSON.stringify({token: token})
+        })
+        let res = await req.text();
+        if (res === "logged") {
+          admin = true;
+        } else {
+          console.log("not logged");
+          alert("Cookie expired, please log in");
+        }
+      }
+    }
+
+
+    function init() {
+      checkToken();
+    }
+
+
   </script>
 </head>
 <body>
@@ -28,6 +62,7 @@
     <div id="admin_import">
     </div>
     <script>
+      init();
       if (admin === true) {
         document.getElementById("admin_import").innerHTML = "";
       } else {

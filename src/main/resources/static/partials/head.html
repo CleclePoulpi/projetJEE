@@ -1,5 +1,24 @@
+<html>
+<head></head>
+<body>
 
-<div class="wrapper col1" onload="init()">
+
+<div id="modal_connection" class="modal">
+  <div id="modal_connection_content" class="modal-content">
+    <span class="close"> &times; </span>
+    <h2 class="modal-text"> Please enter your credentials </h2>
+    <form action="/api/login" method="post" style="text-align: center">
+      <label for="username"> Username </label>
+      <input type="text" name="username" id="username" placeholder="Username" required>
+      <label for="password"> Password </label>
+      <input type="password" name="password" id="password" placeholder="Password" required>
+      <button type="submit" value="Login" id="submit"> Login </button>
+    </form>
+  </div>
+</div>
+
+
+<div class="wrapper col1">
   <div id="topbar">
     <ul>
       <li id="text_topbar">Log in for admin</li>
@@ -12,43 +31,7 @@
 </div>
 
 
-<script>
 
-  async function checkToken() {
-
-    let req = await fetch("/api/token", {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-
-    let res = await req.json();
-    if (res === "logged") {
-      document.getElementById("connection_button").innerHTML = "Logout";
-      document.getElementById("text_topbar").innerHTML = "Welcome admin";
-      admin = true;
-      document.getElementById("connection_button").addEventListener("click", async () => {
-        let req = await fetch("/api/logout", {
-          method: "GET",
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        let res = await req.json();
-        if (res === "logged out") {
-          window.location.href = "http://localhost:8081/";
-        }
-      });
-    }
-
-  }
-
-  function init() {
-    checkToken();
-  }
-
-</script>
 
 <div class="wrapper col2">
   <div id="header">
@@ -81,19 +64,7 @@
 </div>
 
 
-<div id="modal_connection" class="modal">
-  <div id="modal_connection_content" class="modal-content">
-    <span class="close"> &times; </span>
-    <h2 class="modal-text"> Please enter your credentials </h2>
-    <form action="/api/login" method="post" style="text-align: center">
-      <label for="username"> Username </label>
-      <input type="text" name="username" id="username" placeholder="Username" required>
-      <label for="password"> Password </label>
-      <input type="password" name="password" id="password" placeholder="Password" required>
-      <input type="submit" value="Login">
-    </form>
-  </div>
-</div>
+
 
 
 
@@ -101,6 +72,9 @@
   let login_button = document.getElementById("connection_button");
   let modal = document.getElementById("modal_connection");
   let span = document.getElementsByClassName("close")[0];
+  let top_text = document.getElementById("text_topbar");
+
+
 
   span.onclick = function () {
     modal.style.display = "none";
@@ -113,8 +87,11 @@
   };
 
   login_button.addEventListener("click", function () {
+    if(!admin){
     modal.style.display = "block";
+    }
   });
+
 
 
   function checkAdmin() {
@@ -123,10 +100,26 @@
       document.getElementById("admin_event").style.display = "none";
       document.getElementById("admin_location").style.display = "none";
       document.getElementById("admin_athletes").style.display = "none";
+    }else{
+      top_text.innerHTML = "Welcome admin";
+      login_button.innerHTML = "Logout";
+        login_button.addEventListener("click", async function () {
+          let req = await fetch("/api/logout", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          let res = await req.text();
+          if (res === "logged out") {
+            window.location.href = "http://localhost:8081/";
+          }
+        });
+
     }
   }
 
-  checkAdmin();
+
 
 </script>
 
@@ -138,7 +131,7 @@
     var root = "localhost:8081/";
     var end = loc.slice(loc.lastIndexOf(root)+root.length);
 
-
+    checkAdmin();
 
     if(end === "") { // If Empty or if just home URL
       $('#homepage').addClass('active');
@@ -173,3 +166,5 @@
 
   });
 </script>
+</body>
+</html>

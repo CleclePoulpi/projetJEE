@@ -10,31 +10,63 @@
     <script src="script.js"></script>
     <script>
 
-        $(function(){
+        $(function () {
             $("#includedContent").load("./partials/head.html");
         });
-        $(function(){
+        $(function () {
             $("#includedFooter").load("./partials/footer.html");
         });
+
+
+        async function checkToken() {
+
+            let cookie = document.cookie;
+            cookie = cookie.split(";");
+            cookie = cookie.find((element) => {
+                return element.includes("JWebToken");
+            })
+            if (cookie != undefined) {
+                let token = cookie.split("=")[1];
+                let req = await fetch("/api/check-token", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                    , body: JSON.stringify({token: token})
+                })
+                let res = await req.text();
+                if (res === "logged") {
+                    admin = true;
+                } else {
+                    console.log("not logged");
+                    alert("Cookie expired, please log in");
+                }
+            }
+        }
+
+
+        function init() {
+            checkToken();
+        }
+
+
     </script>
 </head>
 <body>
-
 
 <div id="includedContent">
 </div>
 
 
-
 <div class="wrapper col3">
     <div id="intro">
         <ul>
-            <li><img src="images/dojo.jpg" alt="" /> <a href="#">A new Dojo for martial arts &raquo;</a></li>
-            <li><img src="images/ouverture.jpg" alt="" /> <a href="#">The opening ceremony &raquo;</a></li>
-            <li><img src="images/Paris.jpg" alt="" /> <a href="#">Paris, a greener city &raquo;</a></li>
-            <li class="last"><img src="images/running.jpg" alt="" /> <a href="#">Running like Jesus &raquo;</a></li>
+            <li><img src="images/dojo.jpg" alt=""/> <a href="#">A new Dojo for martial arts &raquo;</a></li>
+            <li><img src="images/ouverture.jpg" alt=""/> <a href="#">The opening ceremony &raquo;</a></li>
+            <li><img src="images/Paris.jpg" alt=""/> <a href="#">Paris, a greener city &raquo;</a></li>
+            <li class="last"><img src="images/running.jpg" alt=""/> <a href="#">Running like Jesus &raquo;</a></li>
         </ul>
-        <br class="clear" />
+        <br class="clear"/>
     </div>
 </div>
 
@@ -42,7 +74,7 @@
     <div id="container">
         <div class="content">
             <h2>About The Logo</h2>
-            <img class="imgl" src="images/logo.jpg" alt="" width="200" height="125" />
+            <img class="imgl" src="images/logo.jpg" alt="" width="200" height="125"/>
             <p><strong>The Eiffel Tower, international symbol of France</strong></p>
             <p>Description here</p>
             <p>More here</p>
@@ -121,11 +153,11 @@
         </div>
 
 
-        <br class="clear" />
+        <br class="clear"/>
     </div>
 </div>
 <script>
-
+    init();
     $(document.getElementById("homepage")).addClass("active");
 
 </script>
