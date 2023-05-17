@@ -1,5 +1,7 @@
 package projectJEE.Backend.controllers;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ public class apiController {
 
     @ResponseBody
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MultiValueMap<String, String> formData) {
+    public ResponseEntity<String> login(@RequestBody MultiValueMap<String, String> formData, HttpServletResponse response) {
         login login = new login(formData.getFirst("username"), formData.getFirst("password"));
         boolean empty= apiServiceImpl.login(login);
         if (empty) {
@@ -30,7 +32,15 @@ public class apiController {
         } else {
             user user = userRepository.findByUsernameAndPassword(login.getUsername(), login.getPassword()).get(0);
             String token = apiServiceImpl.generateToken(user);
-            return new ResponseEntity<>(token, HttpStatus.OK);
+            final Cookie JWebToken = new Cookie("JWebToken", token);
+            JWebToken.setMaxAge(86400);
+            JWebToken.setHttpOnly(true);
+            JWebToken.setPath("/");
+            JWebToken.setDomain("localhost");
+            ResponseEntity<String> Response = new ResponseEntity<>("authorized", HttpStatus.OK);
+            response.addCookie(JWebToken);
+            return Response;
         }
     }
+
 }
