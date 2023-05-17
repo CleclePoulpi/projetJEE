@@ -2,15 +2,20 @@ package projectJEE.Backend.controllers;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import projectJEE.Backend.entities.JWebToken;
 import projectJEE.Backend.entities.login;
 import projectJEE.Backend.repository.userRepository;
 import projectJEE.Backend.service.impl.apiServiceImpl;
 import projectJEE.Backend.entities.user;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -43,4 +48,16 @@ public class apiController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("/check-token")
+    public ResponseEntity<String> checkToken(@CookieValue("JWebToken") String bearertoken) throws NoSuchAlgorithmException {
+        System.out.println(bearertoken);
+        JWebToken incomingToken = new JWebToken(bearertoken);
+        if (!incomingToken.isValid()) {
+            return new ResponseEntity<>("unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+        else {
+            return new ResponseEntity<>("logged", HttpStatus.OK);
+        }
+    }
 }
