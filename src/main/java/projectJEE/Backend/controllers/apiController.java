@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import projectJEE.Backend.entities.login;
+import projectJEE.Backend.repository.userRepository;
 import projectJEE.Backend.service.impl.apiServiceImpl;
-
-import java.util.List;
+import projectJEE.Backend.entities.user;
 
 @RestController
 @RequestMapping("/api")
@@ -16,6 +16,9 @@ public class apiController {
 
     @Autowired
     private apiServiceImpl apiServiceImpl;
+
+    @Autowired
+    private userRepository userRepository;
 
     @ResponseBody
     @PostMapping("/login")
@@ -25,7 +28,9 @@ public class apiController {
         if (empty) {
             return new ResponseEntity<>("unauthorized", HttpStatus.UNAUTHORIZED);
         } else {
-            return new ResponseEntity<>("authorized", HttpStatus.OK);
+            user user = userRepository.findByUsernameAndPassword(login.getUsername(), login.getPassword()).get(0);
+            String token = apiServiceImpl.generateToken(user);
+            return new ResponseEntity<>(token, HttpStatus.OK);
         }
     }
 }

@@ -21,11 +21,15 @@ public class user {
     private Long id;
     private String username;
     private String password;
-    private int privilege;
+    private Long privilege;
 
-    public user(String username, String password, int privilege) {
+    public user(String username, String password, Long privilege) {
         this.username = username;
         this.password = password;
         this.privilege = privilege;
+    }
+
+    public Long getPrivilege() {
+        return privilege;
     }
 }
