@@ -70,9 +70,28 @@
                             <label for="file"> Import athletes </label>
                             <input type="file" name="file" id="file" required>
                             <br>
-                            <input type="submit" value="Import">
+                            <input id="submit" value="Import">
 
                         </form>'`;
+
+        document.getElementById("submit").addEventListener("click", function () {
+          let file = document.getElementById("file").files[0];
+          let formData = new FormData();
+          formData.append("file", file);
+          fetch("/api/importathleteslist", {
+            method: "POST",
+            body: formData
+          }).then((res) => {
+            if (res.status === 200) {
+              alert("Import successful");
+              window.location.reload();
+            } else {
+              alert("Import failed");
+            }
+          })
+        });
+
+
       }
     </script>
     <div>

@@ -52,10 +52,17 @@ public class pagesController {
     @GetMapping("/locations")
     public ModelAndView localisations() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("locationsAdmin.html");
+        modelAndView.setViewName("locations.html");
         return modelAndView;
     }
 
+    @ResponseBody
+    @GetMapping("/locationsAdmin")
+    public ModelAndView localisationsAdmin() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("locationsAdmin.html");
+        return modelAndView;
+    }
     @ResponseBody
     @GetMapping("/plan")
     public ModelAndView plan() {
