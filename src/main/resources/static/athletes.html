@@ -77,14 +77,14 @@
         <script>
             init();
             async function getAthletes() {
-                let req = await fetch("/api/getathleteslist", {
+                let req = await fetch("/api/athletes/getAllAthletes", {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 })
 
-                let req2 = await fetch("/api/getathleteslist", {
+                let req2 = await fetch("/api/athletes/getAllAthletes", {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json'
@@ -113,7 +113,7 @@
                 }
             }
 
-            //getAthletes(); //@TODO: uncomment this line when the API is ready
+            getAthletes(); //@TODO: uncomment this line when the API is ready
         </script>
     </div>
 </div>

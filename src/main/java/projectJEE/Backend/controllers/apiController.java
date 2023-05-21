@@ -32,8 +32,9 @@ public class apiController {
     public ResponseEntity<Void> login(@RequestBody MultiValueMap<String, String> formData, HttpServletResponse response) {
         login login = new login(formData.getFirst("username"), formData.getFirst("password"));
         boolean empty= apiServiceImpl.login(login);
+        System.out.println(empty);
         if (empty) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).location(URI.create("/")).build();
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
         } else {
             user user = userRepository.findByUsernameAndPassword(login.getUsername(), login.getPassword()).get(0);
             String token = apiServiceImpl.generateToken(user);
@@ -49,11 +50,18 @@ public class apiController {
 
     @ResponseBody
     @PostMapping("/token")
-    public ResponseEntity<String> checkToken(@CookieValue("JWebToken") String bearertoken) throws NoSuchAlgorithmException {
-        System.out.println(bearertoken);
-        JWebToken incomingToken = new JWebToken(bearertoken);
+    public ResponseEntity<String> checkToken(@CookieValue("JWebToken") String bearerToken, HttpServletResponse response) throws NoSuchAlgorithmException {
+        System.out.println(bearerToken);
+        JWebToken incomingToken = new JWebToken(bearerToken);
         if (!incomingToken.isValid()) {
-            return new ResponseEntity<>("unauthorized", HttpStatus.UNAUTHORIZED);
+            final Cookie JWebToken = new Cookie("JWebToken", "");
+            JWebToken.setMaxAge(0);
+            JWebToken.setHttpOnly(true);
+            JWebToken.setPath("/");
+            JWebToken.setDomain("localhost");
+            ResponseEntity<String> Response = new ResponseEntity<>("unauthorized", HttpStatus.OK);
+            response.addCookie(JWebToken);
+            return Response;
         }
         else {
             return new ResponseEntity<>("logged", HttpStatus.OK);

@@ -1,9 +1,15 @@
 package projectJEE.Backend.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "discipline")
 public class discipline {
 
     @Id
@@ -13,5 +19,10 @@ public class discipline {
     private String name;
 
     private int paralympic;
+
+    public discipline(String name, int paralympic) {
+        this.name = name;
+        this.paralympic = paralympic;
+    }
 
 }
