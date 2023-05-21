@@ -25,6 +25,14 @@ public class pagesController {
     }
 
     @ResponseBody
+    @GetMapping("/athletesAdmin")
+    public ModelAndView athletesAdmin() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("athletesAdmin.html");
+        return modelAndView;
+    }
+
+    @ResponseBody
     @GetMapping("/EventAdmin")
     public ModelAndView EventAdmin() {
         ModelAndView modelAndView = new ModelAndView();
@@ -44,10 +52,17 @@ public class pagesController {
     @GetMapping("/locations")
     public ModelAndView localisations() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("locationsAdmin.html");
+        modelAndView.setViewName("locations.html");
         return modelAndView;
     }
 
+    @ResponseBody
+    @GetMapping("/locationsAdmin")
+    public ModelAndView localisationsAdmin() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("locationsAdmin.html");
+        return modelAndView;
+    }
     @ResponseBody
     @GetMapping("/plan")
     public ModelAndView plan() {
@@ -59,6 +74,14 @@ public class pagesController {
     @ResponseBody
     @GetMapping("/sports")
     public ModelAndView sports() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("sports.html");
+        return modelAndView;
+    }
+
+    @ResponseBody
+    @GetMapping("/sportsAdmin")
+    public ModelAndView sportsAdmin() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("sportsAdmin.html");
         return modelAndView;

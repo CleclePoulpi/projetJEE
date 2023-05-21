@@ -66,13 +66,32 @@
       if (admin === true) {
         document.getElementById("admin_import").innerHTML = "";
       } else {
-        document.getElementById("admin_import").innerHTML = `<form action="/api/importathleteslist" method="post" enctype="multipart/form-data" style="text-align: center" >
+        document.getElementById("admin_import").innerHTML = `<form style="text-align: center" >
                             <label for="file"> Import athletes </label>
                             <input type="file" name="file" id="file" required>
                             <br>
-                            <input type="submit" value="Import">
+                            <input id="submit" value="Import">
 
                         </form>'`;
+
+        document.getElementById("submit").addEventListener("click", function () {
+          let file = document.getElementById("file").files[0];
+          let formData = new FormData();
+          formData.append("file", file);
+          fetch("/api/importathleteslist", {
+            method: "POST",
+            body: formData
+          }).then((res) => {
+            if (res.status === 200) {
+              alert("Import successful");
+              window.location.reload();
+            } else {
+              alert("Import failed");
+            }
+          })
+        });
+
+
       }
     </script>
     <div>
