@@ -154,37 +154,37 @@
 
 
 <script>
-    $(document).ready(function () {
+    function ready() {
 
         var loc = window.location.href; // returns the full URL
         var root = "localhost:8081/";
         var end = loc.slice(loc.lastIndexOf(root) + root.length);
 
         checkAdmin();
-
+        console.log(end)
         if (end === "") { // If Empty or if just home URL
             $('#homepage').addClass('active');
             //Remove All Other Classes
             $('#dropdown').removeClass('active');
             $('#athletes').removeClass('active');
             $('#stats').removeClass('active');
-        }
-        if (end === "/sports" || end === "/sportsAdmin" || end === "/events" || end === "/eventAdmin" || end === "/locations" || end === "/locationAdmin") { // if page = root/start-here/
+        }else
+        if (end === "sports" || end === "sportsAdmin" || end === "events" || end === "eventAdmin" || end === "locations" || end === "locationAdmin") { // if page = root/start-here/
             $('#dropdown').addClass('active');
             //Remove All Other Classes
             $('#homepage').removeClass('active');
             $('#athletes').removeClass('active');
             $('#stats').removeClass('active');
-        }
-        if (end === "/athletes" || end === "/athletesAdmin") { // if page = root/work-with-me/
+        }else
+        if (end === "athletes" || end === "athletesAdmin") { // if page = root/work-with-me/
             $('#athletes').addClass('active');
             //Remove All Other Classes
             $('#homepage').removeClass('active');
             $('#dropdown').removeClass('active');
             $('#stats').removeClass('active');
-        }
+        }else
 
-        if (end === "/stats") { // if page = root/work-with-me/
+        if (end === "stats") { // if page = root/work-with-me/
             $('#stats').addClass('active');
             //Remove All Other Classes
             $('#homepage').removeClass('active');
@@ -193,7 +193,8 @@
         }
 
 
-    });
+    };
+    ready();
 </script>
 </body>
 </html>

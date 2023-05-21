@@ -10,12 +10,6 @@
     <script src="script.js"></script>
     <script>
 
-        $(function () {
-            $("#includedContent").load("./partials/head.html");
-        });
-        $(function () {
-            $("#includedFooter").load("./partials/footer.html");
-        });
 
 
         async function checkToken() {
@@ -109,7 +103,12 @@
                 }
             }
 
-
+            $(function () {
+                $("#includedContent").load("./partials/head.html");
+            });
+            $(function () {
+                $("#includedFooter").load("./partials/footer.html");
+            });
         </script>
     </div>
 </div>

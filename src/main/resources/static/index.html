@@ -10,13 +10,6 @@
     <script src="script.js"></script>
     <script>
 
-        $(function () {
-            $("#includedContent").load("./partials/head.html");
-        });
-        $(function () {
-            $("#includedFooter").load("./partials/footer.html");
-        });
-
 
         async function checkToken() {
 
@@ -53,7 +46,9 @@
     </script>
 </head>
 <body>
+<script>
 
+</script>
 <div id="includedContent">
 </div>
 
@@ -79,75 +74,14 @@
             <p>Description here</p>
             <p>More here</p>
         </div>
-        <!--
-        <div id="column">
-            <div class="holder">
-                <h2>Nullamlacus loborttis</h2>
-                <ul id="latestnews">
-                    <li><img class="imgl" src="images/demo/80x80.gif" alt="" />
-                        <p><strong>Indonectetus facilis leo nibh.</strong></p>
-                        <p>Nullamlacus dui ipsum cons eque loborttis non euis que morbi penas dapibulum orna.</p>
-                        <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
-                    </li>
-                    <li class="last"><img class="imgl" src="images/demo/80x80.gif" alt="" />
-                        <p><strong>Indonectetus facilis leo nibh.</strong></p>
-                        <p>Nullamlacus dui ipsum cons eque loborttis non euis que morbi penas dapibulum orna.</p>
-                        <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <br class="clear" /> -->
+
     </div>
 </div>
 
 
 <div class="wrapper col5">
     <div id="footer">
-        <!--
-        <div id="newsletter">
-            <h2>Stay In The Know !</h2>
-            <p>Please enter your email to join our mailing list</p>
-            <form action="#" method="post">
-                <fieldset>
-                    <legend>News Letter</legend>
-                    <input type="text" value="Enter Email Here&hellip;"  onfocus="this.value=(this.value=='Enter Email Here&hellip;')? '' : this.value ;" />
-                    <input type="submit" name="news_go" id="news_go" value="GO" />
-                </fieldset>
-            </form>
-            <p>To unsubscribe please <a href="#">click here &raquo;</a></p>
-        </div>
-        <div class="footbox">
-            <h2>Lacus interdum</h2>
-            <ul>
-                <li><a href="#">Praesent et eros</a></li>
-                <li><a href="#">Praesent et eros</a></li>
-                <li><a href="#">Lorem ipsum dolor</a></li>
-                <li><a href="#">Suspendisse in neque</a></li>
-                <li class="last"><a href="#">Praesent et eros</a></li>
-            </ul>
-        </div>
-        <div class="footbox">
-            <h2>Lacus interdum</h2>
-            <ul>
-                <li><a href="#">Praesent et eros</a></li>
-                <li><a href="#">Praesent et eros</a></li>
-                <li><a href="#">Lorem ipsum dolor</a></li>
-                <li><a href="#">Suspendisse in neque</a></li>
-                <li class="last"><a href="#">Praesent et eros</a></li>
-            </ul>
-        </div>
-        <div class="footbox">
-            <h2>Lacus interdum</h2>
-            <ul>
-                <li><a href="#">Praesent et eros</a></li>
-                <li><a href="#">Praesent et eros</a></li>
-                <li><a href="#">Lorem ipsum dolor</a></li>
-                <li><a href="#">Suspendisse in neque</a></li>
-                <li class="last"><a href="#">Praesent et eros</a></li>
-            </ul>
-        </div>
-        -->
+
         <div class="footbox">
             <a href="plan.html">Plan du site</a>
         </div>
@@ -158,8 +92,12 @@
 </div>
 <script>
     init();
-    $(document.getElementById("homepage")).addClass("active");
-
+    $(function () {
+        $("#includedContent").load("./partials/head.html");
+    });
+    $(function () {
+        $("#includedFooter").load("./partials/footer.html");
+    });
 </script>
 <div id="includedFooter"></div>
 
