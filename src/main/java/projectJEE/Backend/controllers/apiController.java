@@ -34,7 +34,7 @@ public class apiController {
         boolean empty= apiServiceImpl.login(login);
         System.out.println(empty);
         if (empty) {
-            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).location(URI.create("/")).build();
         } else {
             user user = userRepository.findByUsernameAndPassword(login.getUsername(), login.getPassword()).get(0);
             String token = apiServiceImpl.generateToken(user);

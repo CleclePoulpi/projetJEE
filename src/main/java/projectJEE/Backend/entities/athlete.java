@@ -40,4 +40,16 @@ public class athlete {
         this.discipline = discipline;
         this.gender = gender;
     }
+
+    public void setSurname(String x) {
+        this.surname = x;
+    }
+
+    public void setName(String x) {
+        this.name = x;
+    }
+
+    public void setGender(String x) {
+        this.gender = x;
+    }
 }
