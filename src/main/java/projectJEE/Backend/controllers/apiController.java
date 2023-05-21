@@ -29,12 +29,11 @@ public class apiController {
 
     @ResponseBody
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody MultiValueMap<String, String> formData, HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody MultiValueMap<String, String> formData, HttpServletResponse response) {
         login login = new login(formData.getFirst("username"), formData.getFirst("password"));
         boolean empty= apiServiceImpl.login(login);
-        System.out.println(empty);
         if (empty) {
-            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
+            return new ResponseEntity<>("unauthorized", HttpStatus.UNAUTHORIZED);
         } else {
             user user = userRepository.findByUsernameAndPassword(login.getUsername(), login.getPassword()).get(0);
             String token = apiServiceImpl.generateToken(user);
@@ -44,7 +43,7 @@ public class apiController {
             JWebToken.setDomain("localhost");
             ResponseEntity<String> Response = new ResponseEntity<>("authorized", HttpStatus.OK);
             response.addCookie(JWebToken);
-            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
+            return Response;
         }
     }
 
