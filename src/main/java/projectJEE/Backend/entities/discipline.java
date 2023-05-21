@@ -18,9 +18,9 @@ public class discipline {
 
     private String name;
 
-    private int paralympic;
+    private boolean paralympic;
 
-    public discipline(String name, int paralympic) {
+    public discipline(String name, boolean paralympic) {
         this.name = name;
         this.paralympic = paralympic;
     }

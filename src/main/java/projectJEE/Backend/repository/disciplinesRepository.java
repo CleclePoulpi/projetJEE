@@ -3,6 +3,9 @@ package projectJEE.Backend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import projectJEE.Backend.entities.discipline;
 
-public interface disciplineRepository extends JpaRepository<discipline, Long> {
+import java.util.List;
+
+public interface disciplinesRepository extends JpaRepository<discipline, Long> {
+    List<discipline> findByName(String name);
 
 }

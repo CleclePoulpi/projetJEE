@@ -64,7 +64,7 @@
 
 
                 document.getElementById("admin_addsport").innerHTML = `<h2> Add a sport </h2>
-                <form action="/api/addsport" method="post" style="text-align: center">
+                <form action="/api/disciplines/add" method="post" style="text-align: center">
                     <label for="sport_name"> Sport name </label>
                         <input type="text" name="sport_name" id="sport_name" placeholder="Sport name" required>
                     <label for="sport_paralympic"> Paralympic sport </label>
@@ -116,7 +116,7 @@
     </div>
     <script>
         async function getSportsList() {
-            let req = await fetch("/api/getSportslist", {
+            let req = await fetch("/api/disciplines/get", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'

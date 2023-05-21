@@ -71,7 +71,7 @@
   <script>
     init();
     async function getSportsList() {
-      let req = await fetch("/api/getSportslist", {
+      let req = await fetch("/api/disciplines/get", {
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
@@ -79,16 +79,19 @@
       })
 
       let res = await req.json();
+      console.log(res);
       let table = document.getElementById("sports_table");
-      for (let i = 0; i < res.length; i++) {
+      for (let i = 0; i < res.disciplines.length; i++) {
         let row = table.insertRow(i + 1);
         let cell1 = row.insertCell(0);
         let cell2 = row.insertCell(1);
 
-        cell1.innerHTML = res[i].nomDiscipline;
-        cell2.innerHTML = res[i].paralympiqueDiscipline;
+        cell1.innerHTML = res.disciplines[i].name;
+        cell2.innerHTML = res.disciplines[i].paralympic;
       }
     }
+
+    getSportsList();
 
     $(function () {
       $("#includedContent").load("./partials/head.html");

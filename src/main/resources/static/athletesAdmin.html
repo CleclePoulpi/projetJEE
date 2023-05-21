@@ -61,7 +61,7 @@
       if (admin === true) {
         document.getElementById("admin_import").innerHTML = "";
       } else {
-        document.getElementById("admin_import").innerHTML = `<form style="text-align: center" >
+        document.getElementById("admin_import").innerHTML = `<form action="/api/importathletes" method="post" enctype="multipart/form-data" style="text-align: center" >
                             <label for="file"> Import athletes </label>
                             <input type="file" name="file" id="file" required>
                             <br>
@@ -104,14 +104,14 @@
     </div>
     <script>
       async function getAthletes() {
-        let req = await fetch("/api/getathleteslist", {
+        let req = await fetch("/api/athletes/getAllAthletes", {
           method: "GET",
           headers: {
             'Content-Type': 'application/json'
           }
         })
 
-        let req2 = await fetch("/api/getathleteslist", {
+        let req2 = await fetch("/api/athletes/getAllAthletes", {
           method: "GET",
           headers: {
             'Content-Type': 'application/json'
