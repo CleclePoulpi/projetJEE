@@ -2,20 +2,21 @@
 <head></head>
 <body>
 
+<dialog id="dialog_login">
 
-<div id="modal_connection" class="modal">
-    <div id="modal_connection_content" class="modal-content">
-        <span class="close"> &times; </span>
-        <h2 class="modal-text"> Please enter your credentials </h2>
-        <form style="text-align: center">
-            <label for="username"> Username </label>
-            <input type="text" name="username" id="username" placeholder="Username" required>
-            <label for="password"> Password </label>
-            <input type="password" name="password" id="password" placeholder="Password" required>
-            <button value="Login" id="submit"> Login</button>
-        </form>
+    <h2 id="credentials"> Please enter your credentials </h2>
+    <form style="text-align: center">
+        <label for="username"> Username </label>
+        <input type="text" name="username" id="username" placeholder="Username" required>
+        <label for="password"> Password </label>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <button value="Login" id="submit"> Login</button>
+    </form>
+    <div class="container">
+        <button value="Cancel" id="cancel" onclick="closeDialog(event)"> Close</button>
     </div>
-</div>
+</dialog>
+
 
 <script>
     let username = document.getElementById("username");
@@ -102,26 +103,20 @@
 
 <script>
     let login_button = document.getElementById("connection_button");
-    let modal = document.getElementById("modal_connection");
-    let span = document.getElementsByClassName("close")[0];
     let top_text = document.getElementById("text_topbar");
+    let dialog = document.getElementById("dialog_login");
 
-
-    span.onclick = function () {
-        modal.style.display = "none";
-    };
-
-    window.onclick = function (event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
 
     login_button.addEventListener("click", function () {
         if (!admin) {
-            modal.style.display = "block";
+            dialog.showModal();
         }
     });
+
+    function closeDialog(event) {
+        event.preventDefault();
+        dialog.close();
+    }
 
 
     function checkAdmin() {
