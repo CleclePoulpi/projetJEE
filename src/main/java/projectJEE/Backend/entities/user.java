@@ -32,4 +32,5 @@ public class user {
     public Long getPrivilege() {
         return privilege;
     }
+
 }

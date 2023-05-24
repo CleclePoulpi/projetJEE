@@ -21,7 +21,7 @@ public class athleteController {
     private athletesService athletesService;
 
     @ResponseBody
-    @GetMapping("/getAllAthletes")
+    @PostMapping("/getAllAthletes")
     public ResponseEntity<JSONObject> getAllAthletes() {
         JSONObject response = new JSONObject();
         response.put("athletes", athletesService.getAllAthletes());
@@ -30,9 +30,9 @@ public class athleteController {
 
     @ResponseBody
     @PostMapping("/importAthletes")
-    public ResponseEntity<String> importathletes(@RequestBody MultiValueMap<String, File> request) throws FileNotFoundException {
-        System.out.println(request.getFirst("file"));
+    public ResponseEntity<String> importAthletes(@RequestBody MultiValueMap<String, File> request) throws FileNotFoundException {
+        System.out.println("ok");
         athletesService.importathletes(request.getFirst("file"));
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/athletesAdmin")).build();
+        return new ResponseEntity<>("imported", HttpStatus.OK);
     }
 }

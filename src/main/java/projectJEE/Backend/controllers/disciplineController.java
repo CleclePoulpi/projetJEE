@@ -25,7 +25,7 @@ public class disciplineController {
     }
 
     @ResponseBody
-    @GetMapping("/get")
+    @PostMapping("/get")
     public ResponseEntity<JSONObject> getDisciplines() {
         JSONObject response = new JSONObject();
         response.put("disciplines", disciplineService.getDisciplines());

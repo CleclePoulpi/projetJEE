@@ -34,17 +34,18 @@ public class JWebToken {
     }
 
     public JWebToken(JSONObject payload) {
-        this(payload.getString("sub"), payload.getJSONArray("aud"), payload.getLong("exp"));
+        this(payload.getString("sub"), payload.getString("privilege"), payload.getJSONArray("aud"), payload.getLong("exp"));
     }
 
-    public JWebToken(String sub, JSONArray aud, long expires) {
+    public JWebToken(String sub, String privilege, JSONArray aud, long expires) {
         this();
         payload.put("sub", sub);
+        payload.put("privilege", privilege);
         payload.put("aud", aud);
         payload.put("exp", expires);
         payload.put("iat", LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
         payload.put("iss", ISSUER);
-        payload.put("jti", UUID.randomUUID().toString()); //how do we use this?
+        payload.put("jti", UUID.randomUUID().toString());
         signature = hmacSha256(encodedHeader + "." + encode(payload), SECRET_KEY);
     }
 
@@ -84,6 +85,10 @@ public class JWebToken {
         return payload.getString("sub");
     }
 
+    public String getPrivilege() {
+        return payload.getString("privilege");
+    }
+
     public List<String> getAudience() {
         JSONArray arr = payload.getJSONArray("aud");
         List<String> list = new ArrayList<>();
@@ -101,7 +106,7 @@ public class JWebToken {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
-    private static String decode(String encodedString) {
+    public static String decode(String encodedString) {
         return new String(Base64.getUrlDecoder().decode(encodedString));
     }
 

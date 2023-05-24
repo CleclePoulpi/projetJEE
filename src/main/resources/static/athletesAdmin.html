@@ -73,7 +73,7 @@
           let file = document.getElementById("file").files[0];
           let formData = new FormData();
           formData.append("file", file);
-          fetch("/api/importathleteslist", {
+          fetch("/api/athletes/importAthletes", {
             method: "POST",
             body: formData
           }).then((res) => {
@@ -105,14 +105,14 @@
     <script>
       async function getAthletes() {
         let req = await fetch("/api/athletes/getAllAthletes", {
-          method: "GET",
+          method: "POST",
           headers: {
             'Content-Type': 'application/json'
           }
         })
 
-        let req2 = await fetch("/api/athletes/getAllAthletes", {
-          method: "GET",
+        let req2 = await fetch("/api/disciplines/get", {
+          method: "POST",
           headers: {
             'Content-Type': 'application/json'
           }

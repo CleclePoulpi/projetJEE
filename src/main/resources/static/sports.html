@@ -72,7 +72,7 @@
     init();
     async function getSportsList() {
       let req = await fetch("/api/disciplines/get", {
-        method: "GET",
+        method: "POST",
         headers: {
           'Content-Type': 'application/json'
         }

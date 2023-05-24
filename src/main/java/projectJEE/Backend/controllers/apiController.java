@@ -58,12 +58,13 @@ public class apiController {
             JWebToken.setHttpOnly(true);
             JWebToken.setPath("/");
             JWebToken.setDomain("localhost");
-            ResponseEntity<String> Response = new ResponseEntity<>("unauthorized", HttpStatus.OK);
+            ResponseEntity<String> Response = new ResponseEntity<>("unauthorized", HttpStatus.UNAUTHORIZED);
             response.addCookie(JWebToken);
             return Response;
         }
         else {
-            return new ResponseEntity<>("logged", HttpStatus.OK);
+            String privilege = incomingToken.getPrivilege();
+            return new ResponseEntity<>(privilege, HttpStatus.OK);
         }
     }
 

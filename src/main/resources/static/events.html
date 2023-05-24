@@ -68,8 +68,8 @@
         <script>
             init();
             async function getEventList() {
-                let req = await fetch("/api/events", {
-                    method: "GET",
+                let req = await fetch("/api/events/get", {
+                    method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
                     }

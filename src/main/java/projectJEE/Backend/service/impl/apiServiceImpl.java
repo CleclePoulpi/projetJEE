@@ -29,6 +29,7 @@ public class apiServiceImpl implements apiService {
         JSONObject jwtPayload = new JSONObject();
         jwtPayload.put("status", "connected");
         jwtPayload.put("sub", user.getUsername());
+        jwtPayload.put("privilege", user.getPrivilege().toString());
 
         JSONArray aud = new JSONArray();
         aud.put("user");
