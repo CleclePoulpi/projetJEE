@@ -11,8 +11,6 @@
   <script>
 
 
-
-
     async function checkToken() {
 
       let cookie = document.cookie;
@@ -30,18 +28,24 @@
           , body: JSON.stringify({token: token})
         })
         let res = await req.text();
-        if (res === "logged") {
-          admin = true;
-        } else {
+        if (res === "unauthorized") {
           console.log("not logged");
           alert("Cookie expired, please log in");
+        } else {
+          admin = true;
+          privileges = parseInt(res);
+          checkAdmin();
         }
       }
     }
 
+    addEventListener('load', function () {
+      init();
+    });
 
     function init() {
       checkToken();
+      checkAdmin();
     }
 
 
@@ -49,8 +53,213 @@
 </head>
 <body>
 
-<div id="includedContent">
+<dialog id="dialog_login">
+  <div class="container">
+    <button value="Cancel" id="cancel" onclick="closeDialog(event)">X</button>
+  </div>
+  <h2 id="credentials"> Please enter your credentials </h2>
+  <form style="text-align: center">
+    <label for="username"> Username </label>
+    <input type="text" name="username" id="username" placeholder="Username" required>
+    <label for="password"> Password </label>
+    <input type="password" name="password" id="password" placeholder="Password" required>
+    <button value="Login" id="submit_header"> Login</button>
+  </form>
+
+</dialog>
+
+
+<script>
+  let username = document.getElementById("username");
+  let password = document.getElementById("password");
+  let submit = document.getElementById("submit_header");
+
+  submit.addEventListener("click", async function (event) {
+    event.preventDefault();
+    let data = {
+      'username': username.value,
+      'password': password.value
+    };
+    let formBody = [];
+    for (let property in data) {
+      let encodedKey = encodeURIComponent(property);
+      let encodedValue = encodeURIComponent(data[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: formBody,
+      credentials: "same-origin"
+    }).then(function (response) {
+      if (response.status == 200) {
+        alert("Logged in");
+        admin = true;
+        dialog.close();
+        window.location.reload();
+      } else {
+        alert("Wrong credentials");
+      }
+    })
+  });
+</script>
+
+
+<div class="wrapper col1">
+  <div id="topbar">
+    <ul>
+      <li id="text_topbar">Log in for admin</li>
+      <li class="last">
+        <button id="connection_button"> Login</button>
+      </li>
+    </ul>
+    <br class="clear"/>
+  </div>
 </div>
+
+
+<div class="wrapper col2">
+  <div id="header">
+    <div id="topnav">
+      <ul>
+        <li id="dropdown" class="last"><a href="#">Sports & Events</a>
+          <ul>
+            <li><a href="http://localhost:8081/sports">Sports</a></li>
+            <li id="admin_sport"><a href="http://localhost:8081/sportsAdmin">Sport Admin</a></li>
+            <li><a href="http://localhost:8081/events">Events</a></li>
+            <li id="admin_event"><a href="http://localhost:8081/EventAdmin">Event Admin</a></li>
+            <li><a href="http://localhost:8081/locations">Locations</a></li>
+            <li id="admin_location"><a href="http://localhost:8081/locationsAdmin">Location Admin</a></li>
+          </ul>
+        </li>
+        <li id="stats"><a href="http://localhost:8081/stats">Stats</a></li>
+        <li id="athletes"><a href="http://localhost:8081/athletes">Participants</a>
+          <ul id="admin_athletes">
+            <li><a href="http://localhost:8081/athletesAdmin">Athletes Admin</a></li>
+          </ul>
+        </li>
+        <li id="homepage"><a href="http://localhost:8081/">Homepage</a></li>
+      </ul>
+    </div>
+    <div id="logo">
+      <h1><a href="http://localhost:8081/">Olympics Games 2024</a></h1>
+    </div>
+    <br class="clear"/>
+  </div>
+</div>
+
+
+<script>
+  let login_button = document.getElementById("connection_button");
+  let top_text = document.getElementById("text_topbar");
+  let dialog = document.getElementById("dialog_login");
+
+
+  login_button.addEventListener("click", function () {
+    if (!admin) {
+      dialog.showModal();
+    }
+  });
+
+  function closeDialog(event) {
+    event.preventDefault();
+    dialog.close();
+  }
+
+
+  function checkAdmin() {
+    if (!admin) {
+      document.getElementById("admin_sport").style.display = "none";
+      document.getElementById("admin_event").style.display = "none";
+      document.getElementById("admin_location").style.display = "none";
+      document.getElementById("admin_athletes").style.display = "none";
+    } else {
+      if (privileges === 0) {
+        document.getElementById("admin_sport").style.display = "block";
+        document.getElementById("admin_event").style.display = "none";
+        document.getElementById("admin_location").style.display = "block";
+        document.getElementById("admin_athletes").style.display = "block";
+      } else if (privileges === 1) {
+        document.getElementById("admin_sport").style.display = "none";
+        document.getElementById("admin_event").style.display = "block";
+        document.getElementById("admin_location").style.display = "none";
+        document.getElementById("admin_athletes").style.display = "none";
+      } else if (privileges === 2) {
+        document.getElementById("admin_sport").style.display = "block";
+        document.getElementById("admin_event").style.display = "block";
+        document.getElementById("admin_location").style.display = "block";
+        document.getElementById("admin_athletes").style.display = "block";
+      }
+      top_text.innerHTML = "Welcome admin";
+      login_button.innerHTML = "Logout";
+      login_button.addEventListener("click", async function () {
+        let req = await fetch("/api/logout", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        let res = await req.text();
+        if (res === "logged out") {
+          window.location.href = "http://localhost:8081/";
+        }
+      });
+
+    }
+  }
+
+
+</script>
+
+
+<script>
+  checkAdmin();
+
+  function ready() {
+
+    var loc = window.location.href; // returns the full URL
+    var root = "localhost:8081/";
+    var end = loc.slice(loc.lastIndexOf(root) + root.length);
+    let homepage = document.getElementById("homepage");
+    let dropdown = document.getElementById("dropdown");
+    let athletes = document.getElementById("athletes");
+    let stats = document.getElementById("stats");
+
+
+    if (end === "") { // If Empty or if just home URL
+      homepage.classList.add('active');
+      //Remove All Other Classes
+      dropdown.classList.remove('active');
+      athletes.classList.remove('active');
+      stats.classList.remove('active');
+    } else if (end === "sports" || end === "sportsAdmin" || end === "events" || end === "eventAdmin" || end === "locations" || end === "locationAdmin") { // if page = root/start-here/
+      dropdown.classList.add('active');
+      //Remove All Other Classes
+      homepage.classList.remove('active');
+      athletes.classList.remove('active');
+      stats.classList.remove('active');
+    } else if (end === "athletes" || end === "athletesAdmin") { // if page = root/work-with-me/
+      athletes.classList.add('active');
+      //Remove All Other Classes
+      homepage.classList.remove('active');
+      dropdown.classList.remove('active');
+      stats.classList.remove('active');
+    } else if (end === "stats") { // if page = root/work-with-me/
+      stats.classList.add('active');
+      //Remove All Other Classes
+      homepage.classList.remove('active');
+      dropdown.classList.remove('active');
+      athletes.classList.remove('active');
+    }
+
+
+  };
+  ready();
+</script>
 
 <div class="wrapper col3">
   <div id="container">
@@ -87,15 +296,13 @@
         let cell2 = row.insertCell(1);
 
         cell1.innerHTML = res.disciplines[i].name;
-        cell2.innerHTML = res.disciplines[i].paralympic;
+        cell2.innerHTML = function(){if(res.disciplines[i].paralympic){return "Yes"}else{return "No"}}();
       }
     }
 
     getSportsList();
 
-    $(function () {
-      $("#includedContent").load("./partials/head.html");
-    });
+
     $(function () {
       $("#includedFooter").load("./partials/footer.html");
     });

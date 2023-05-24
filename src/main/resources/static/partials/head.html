@@ -1,6 +1,3 @@
-<html>
-<head></head>
-<body>
 
 <dialog id="dialog_login">
     <div class="container">
@@ -12,7 +9,7 @@
         <input type="text" name="username" id="username" placeholder="Username" required>
         <label for="password"> Password </label>
         <input type="password" name="password" id="password" placeholder="Password" required>
-        <button value="Login" id="submit"> Login</button>
+        <button value="Login" id="submit_header"> Login</button>
     </form>
 
 </dialog>
@@ -21,7 +18,7 @@
 <script>
     let username = document.getElementById("username");
     let password = document.getElementById("password");
-    let submit = document.getElementById("submit");
+    let submit = document.getElementById("submit_header");
 
     submit.addEventListener("click", async function (event) {
         event.preventDefault();
@@ -48,7 +45,9 @@
             if (response.status == 200) {
                 alert("Logged in");
                 admin = true;
-                window.location.reload();
+                // privileges = parseInt(response.text());
+                dialog.close();
+                checkAdmin();
             } else {
                 alert("Wrong credentials");
             }
@@ -126,6 +125,22 @@
             document.getElementById("admin_location").style.display = "none";
             document.getElementById("admin_athletes").style.display = "none";
         } else {
+            if(privileges === 0){
+                document.getElementById("admin_sport").style.display = "block";
+                document.getElementById("admin_event").style.display = "none";
+                document.getElementById("admin_location").style.display = "block";
+                document.getElementById("admin_athletes").style.display = "block";
+            }else if(privileges===1){
+                document.getElementById("admin_sport").style.display = "none";
+                document.getElementById("admin_event").style.display = "block";
+                document.getElementById("admin_location").style.display = "none";
+                document.getElementById("admin_athletes").style.display = "none";
+            }else if(privileges===2){
+                document.getElementById("admin_sport").style.display = "block";
+                document.getElementById("admin_event").style.display = "block";
+                document.getElementById("admin_location").style.display = "block";
+                document.getElementById("admin_athletes").style.display = "block";
+            }
             top_text.innerHTML = "Welcome admin";
             login_button.innerHTML = "Logout";
             login_button.addEventListener("click", async function () {
@@ -149,14 +164,14 @@
 
 
 <script>
+    checkAdmin();
     function ready() {
 
         var loc = window.location.href; // returns the full URL
         var root = "localhost:8081/";
         var end = loc.slice(loc.lastIndexOf(root) + root.length);
 
-        checkAdmin();
-        console.log(end)
+
         if (end === "") { // If Empty or if just home URL
             $('#homepage').addClass('active');
             //Remove All Other Classes
@@ -191,5 +206,3 @@
     };
     ready();
 </script>
-</body>
-</html>
