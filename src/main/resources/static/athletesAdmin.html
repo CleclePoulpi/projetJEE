@@ -61,11 +61,11 @@
       if (admin === true) {
         document.getElementById("admin_import").innerHTML = "";
       } else {
-        document.getElementById("admin_import").innerHTML = `<form action="/api/importathletes" method="post" enctype="multipart/form-data" style="text-align: center" >
+        document.getElementById("admin_import").innerHTML = `<form style="text-align: center" >
                             <label for="file"> Import athletes </label>
                             <input type="file" name="file" id="file" required>
                             <br>
-                            <input id="submit" value="Import">
+                            <button id="submit"> Submit </button>
 
                         </form>'`;
 
