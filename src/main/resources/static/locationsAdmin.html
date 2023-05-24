@@ -130,18 +130,20 @@
             })
 
             let res = await req.json();
+            console.log(res.locations);
             let table = document.getElementById("locations_table");
-            for (let i = 0; i < res.length; i++) {
+            for (let i = 0; i < res.locations.length; i++) {
                 let row = table.insertRow(i + 1);
                 let cell1 = row.insertCell(0);
                 let cell2 = row.insertCell(1);
                 let cell3 = row.insertCell(2);
 
-                cell1.innerHTML = res[i].nomSite;
-                cell2.innerHTML = res[i].villeSite;
-                cell3.innerHTML = res[i].categorieSite;
+                cell1.innerHTML = res.locations[i].location_name;
+                cell2.innerHTML = res.locations[i].location_city;
+                cell3.innerHTML = res.locations[i].location_category;
             }
         }
+        getLocationList();
 
         $(function () {
             $("#includedContent").load("./partials/head.html");
