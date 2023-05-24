@@ -61,7 +61,7 @@
       if (admin === true) {
         document.getElementById("admin_import").innerHTML = "";
       } else {
-        document.getElementById("admin_import").innerHTML = `<form action="/api/importathletes" method="post" enctype="multipart/form-data" style="text-align: center" >
+        document.getElementById("admin_import").innerHTML = `<form action="/api/athletes/importAthletes" method="post" enctype="multipart/form-data" style="text-align: center" >
                             <label for="file"> Import athletes </label>
                             <input type="file" name="file" id="file" required>
                             <br>
@@ -73,8 +73,8 @@
           let file = document.getElementById("file").files[0];
           let formData = new FormData();
           formData.append("file", file);
-          fetch("/api/importathleteslist", {
-            method: "POST",
+          fetch("/api/athletes/getAllAthletes", {
+            method: "GET",
             body: formData
           }).then((res) => {
             if (res.status === 200) {

@@ -29,8 +29,9 @@ public class athleteController {
     }
 
     @ResponseBody
-    @PostMapping("/importathletes")
+    @PostMapping("/importAthletes")
     public ResponseEntity<String> importathletes(@RequestBody MultiValueMap<String, File> request) throws FileNotFoundException {
+        System.out.println(request.getFirst("file"));
         athletesService.importathletes(request.getFirst("file"));
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/athletesAdmin")).build();
     }
