@@ -3,7 +3,9 @@
 <body>
 
 <dialog id="dialog_login">
-
+    <div class="container">
+        <button value="Cancel" id="cancel" onclick="closeDialog(event)">X</button>
+    </div>
     <h2 id="credentials"> Please enter your credentials </h2>
     <form style="text-align: center">
         <label for="username"> Username </label>
@@ -12,9 +14,7 @@
         <input type="password" name="password" id="password" placeholder="Password" required>
         <button value="Login" id="submit"> Login</button>
     </form>
-    <div class="container">
-        <button value="Cancel" id="cancel" onclick="closeDialog(event)"> Close</button>
-    </div>
+
 </dialog>
 
 

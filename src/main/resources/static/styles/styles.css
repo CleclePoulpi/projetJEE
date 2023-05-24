@@ -218,12 +218,13 @@ input[type=file]:hover {
 }
 
 #cancel {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    float: right;
+    height: 25px;
+    width: 25px;
+    padding: 0px;
+    background-color: #cb5050;
+    color: white;
+    text-align: center;
 }
 
 .container {
@@ -242,5 +243,8 @@ input[type=file]:hover {
 
 #dialog_login{
     border-radius: 10px;
+    padding: 10px;
+    padding-top: 10px;
     border: none;
+
 }
