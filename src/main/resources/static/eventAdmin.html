@@ -81,7 +81,7 @@
                 getLocationList();
 
                 let html = `<h2> Add an event </h2>
-                <form action="/api/addevent" method="post" style="text-align: center">
+                <form style="text-align: center">
                     <label for="event_sport"> Event sport </label>
                         <input type="text" name="event_sport" id="event_sport" placeholder="Event sport" required>
                     <label for="event_category"> Event category </label>
@@ -114,7 +114,7 @@
                     <label for="event_desc"> Event description </label> <br>
                         <textarea  name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
                     <br>
-                    <button type="submit" id="submit" value="Add event"> Submit </button>
+                    <button id="submit" value="Add event"> Submit </button>
                 </form>`;
 
                 document.getElementById("admin_addevent").innerHTML = html;
