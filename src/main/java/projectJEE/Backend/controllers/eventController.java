@@ -24,4 +24,10 @@ public class eventController {
         return ResponseEntity.ok(response);
     }
 
+    @ResponseBody
+    @PostMapping("/add")
+    public ResponseEntity<String> addEvent(@RequestBody JSONObject request){
+        eventService.addEvent(request.getAsString("event_date"),request.getAsString("event_sport"), request.getAsString("event_location"), request.getAsString("event_desc"), request.getAsString("event_category"), request.getAsString("event_type"), request.getAsString("event_starting_hour"), request.getAsString("event_ending_hour"));
+        return ResponseEntity.ok("Event added");
+    }
 }
