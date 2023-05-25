@@ -368,13 +368,12 @@
                 /**
                  * script to get the list of locations and sports and add them to the corresponding select
                  */
-                getLocationList().then((res) => {
+                getLocationList().then(async(res) => {
                     res.locations.forEach((localisation) => {
-                        document.getElementById("event_localisation").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
+                        document.getElementById("event_location").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
                     });
                 });
-                let res1 = getSportsList();
-                res1.then(async (result) => {
+               getSportsList().then(async (result) => {
                     result.disciplines.forEach((sports) => {
                         document.getElementById("event_sport").add(new Option(sports.name + ", " + function(paralympic){if(paralympic){return "Paralympic"}else{return "Not paralympic"}}(sports.paralympic), sports.id));
                     });
@@ -399,7 +398,6 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            event_name : event_name,
                             event_starting_hour: event_starting_hour,
                             event_ending_hour: event_ending_hour,
                             event_desc: event_desc,
