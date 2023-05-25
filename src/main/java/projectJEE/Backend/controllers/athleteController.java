@@ -26,6 +26,13 @@ public class athleteController {
     }
 
     @ResponseBody
+    @PostMapping("/dropAthletes")
+    public ResponseEntity<String> dropAthletes() {
+        athletesService.dropAthletes();
+        return new ResponseEntity<>("dropped", HttpStatus.OK);
+    }
+
+    @ResponseBody
     @PostMapping("/importAthletes")
     public ResponseEntity<String> importAthletes(@RequestBody JSONObject request) throws ParseException {
         System.out.println(request.get("athletes"));

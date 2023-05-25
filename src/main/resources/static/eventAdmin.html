@@ -34,6 +34,7 @@
                 if (res === "unauthorized") {
                     console.log("not logged");
                     alert("Cookie expired, please log in");
+                    admin = false;
                 } else {
                     admin = true;
                     privileges = parseInt(res);
@@ -53,7 +54,6 @@
     </script>
 </head>
 <body>
-
 
 
 <dialog id="dialog_login">
@@ -288,8 +288,6 @@
 </script>
 
 
-
-
 <div class="wrapper col3">
     <div id="container">
         <div id="admin_addevent">
@@ -313,17 +311,19 @@
                 <label for="event_date"> Event date </label>
                 <input type="date" name="event_date" id="event_date" placeholder="Event date" required>
                 <label for="event_starting_hour"> Event start Hour </label>
-                <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour" required>
+                <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour"
+                       required>
                 <label for="event_ending_hour"> Event end Hour </label>
-                <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
+                <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour"
+                       required>
                 <label for="event_location"> Event location </label>
                 <select name="event_location" id="event_location" required>
                 </select>
                 <br>
                 <label for="event_desc"> Event description </label> <br>
-                <textarea  name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
+                <textarea name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
                 <br>
-                <button id="submit" value="Add event"> Submit </button>
+                <button id="submit" value="Add event"> Submit</button>
             </form>
         </div>
 
@@ -350,7 +350,7 @@
              * function to get the list of locations
              * @returns {Promise<any>}
              */
-            async function getLocationList(){
+            async function getLocationList() {
                 let req = await fetch("/api/getLocationslist", {
                     method: "GET",
                     headers: {
@@ -368,14 +368,20 @@
                 /**
                  * script to get the list of locations and sports and add them to the corresponding select
                  */
-                getLocationList().then(async(res) => {
+                getLocationList().then(async (res) => {
                     res.locations.forEach((localisation) => {
                         document.getElementById("event_location").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
                     });
                 });
-               getSportsList().then(async (result) => {
+                getSportsList().then(async (result) => {
                     result.disciplines.forEach((sports) => {
-                        document.getElementById("event_sport").add(new Option(sports.name + ", " + function(paralympic){if(paralympic){return "Paralympic"}else{return "Not paralympic"}}(sports.paralympic), sports.id));
+                        document.getElementById("event_sport").add(new Option(sports.name + ", " + function (paralympic) {
+                            if (paralympic) {
+                                return "Paralympic"
+                            } else {
+                                return "Not paralympic"
+                            }
+                        }(sports.paralympic), sports.id));
                     });
                 });
 
@@ -384,36 +390,48 @@
                  * script to add an event to the database
                  */
                 submit.addEventListener("click", async () => {
-                    let event_starting_hour = document.getElementById("event_starting_hour").value;
-                    let event_ending_hour = document.getElementById("event_ending_hour").value;
-                    let event_desc = document.getElementById("event_desc").value;
-                    let event_type = document.getElementById("event_type").value;
-                    let event_category = document.getElementById("event_category").value;
-                    let event_sport = document.getElementById("event_sport").value;
-                    let event_date = document.getElementById("event_date").value;
-                    let event_location = document.getElementById("event_location").value;
-                    let req = await fetch("/api/events/add", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            event_starting_hour: event_starting_hour,
-                            event_ending_hour: event_ending_hour,
-                            event_desc: event_desc,
-                            event_type: event_type,
-                            event_category: event_category,
-                            event_sport: event_sport,
-                            event_date: event_date,
-                            event_location: event_location
-                        })
-                    })
-                    let res = await req.json();
-                    if (res === "event added") {
-                        alert("Event added");
-                        window.location.href = "eventAdmin.html";
+                    let cookie = document.cookie;
+                    cookie = cookie.split(";");
+                    cookie = cookie.find((element) => {
+                        return element.includes("JWebToken");
+                    });
+                    if (cookie == undefined) {
+                        admin = false;
+                        alert("You are not logged in as an admin");
+                        window.location.href = "http://localhost:8081/";
                     } else {
-                        alert("Error :" + res);
+
+                        let event_starting_hour = document.getElementById("event_starting_hour").value;
+                        let event_ending_hour = document.getElementById("event_ending_hour").value;
+                        let event_desc = document.getElementById("event_desc").value;
+                        let event_type = document.getElementById("event_type").value;
+                        let event_category = document.getElementById("event_category").value;
+                        let event_sport = document.getElementById("event_sport").value;
+                        let event_date = document.getElementById("event_date").value;
+                        let event_location = document.getElementById("event_location").value;
+                        let req = await fetch("/api/events/add", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                event_starting_hour: event_starting_hour,
+                                event_ending_hour: event_ending_hour,
+                                event_desc: event_desc,
+                                event_type: event_type,
+                                event_category: event_category,
+                                event_sport: event_sport,
+                                event_date: event_date,
+                                event_location: event_location
+                            })
+                        })
+                        let res = await req.json();
+                        if (res === "event added") {
+                        alert("Event added");
+                            window.location.href = "eventAdmin.html";
+                        } else {
+                            alert("Error :" + res);
+                        }
                     }
                 });
 
@@ -486,6 +504,7 @@
             }
             return res;
         }
+
         let res = getEventList();
         /**
          * function to add the list of events to the select
@@ -493,7 +512,7 @@
         res.then(async (result) => {
             response = result.events;
             response.forEach((events) => {
-                document.getElementById("event_delete").add(new Option(events.name + ", " + events.sport +', '+ events.location +': '+events.date , events.id));
+                document.getElementById("event_delete").add(new Option(events.name + ", " + events.sport + ', ' + events.location + ': ' + events.date, events.id));
             });
         });
         let delete_button = document.getElementById("submit_delete");
@@ -501,35 +520,46 @@
          * function to delete an event from the database
          */
         delete_button.addEventListener("click", async () => {
-            let sport_delete = document.getElementById("sports_delete").value;
-            await checkToken();
-            let data = {
-                'sport_id': sport_delete
-            };
-            let formBody = [];
-            for (let property in data) {
-                let encodedKey = encodeURIComponent(property);
-                let encodedValue = encodeURIComponent(data[property]);
-                formBody.push(encodedKey + "=" + encodedValue);
-            }
-            formBody = formBody.join("&");
-            if (admin) {
-                let req = await fetch("/api/deleteevent", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                    },
-                    body: formBody
-                })
-                let res = await req.text();
-                if (res == "event deleted") {
-                    window.location.href = "eventAdmin.html";
-                } else {
-                    alert("Error :" + res);
-                }
+            let cookie = document.cookie;
+            cookie = cookie.split(";");
+            cookie = cookie.find((element) => {
+                return element.includes("JWebToken");
+            });
+            if (cookie == undefined) {
+                admin = false;
+                alert("You are not logged in as an admin");
+                window.location.href = "http://localhost:8081/";
             } else {
-                alert("You are not an admin");
-                window.location.href = "events.html";
+                let sport_delete = document.getElementById("sports_delete").value;
+                await checkToken();
+                let data = {
+                    'sport_id': sport_delete
+                };
+                let formBody = [];
+                for (let property in data) {
+                    let encodedKey = encodeURIComponent(property);
+                    let encodedValue = encodeURIComponent(data[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
+                }
+                formBody = formBody.join("&");
+                if (admin) {
+                    let req = await fetch("/api/deleteevent", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        body: formBody
+                    })
+                    let res = await req.text();
+                    if (res == "event deleted") {
+                        window.location.href = "eventAdmin.html";
+                    } else {
+                        alert("Error :" + res);
+                    }
+                } else {
+                    alert("You are not an admin");
+                    window.location.href = "events.html";
+                }
             }
         });
         /**
@@ -540,7 +570,6 @@
         });
     </script>
 </div>
-
 
 
 <div id="includedFooter"></div>

@@ -8,5 +8,6 @@ public interface athletesService {
     List<athlete> getAllAthletes();
 
     void importathletes(List<LinkedHashMap<String,String>> list) throws ParseException;
+    void dropAthletes();
 
 }

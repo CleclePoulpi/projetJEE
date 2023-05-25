@@ -34,6 +34,7 @@
                 if (res === "unauthorized") {
                     console.log("not logged");
                     alert("Cookie expired, please log in");
+                    admin = false;
                 } else {
                     admin = true;
                     privileges = parseInt(res);
@@ -53,7 +54,6 @@
     </script>
 </head>
 <body>
-
 
 
 <dialog id="dialog_login">
@@ -323,23 +323,31 @@
                  */
                 let submit = document.getElementById("submit");
                 submit.addEventListener("click", async () => {
-                    let location_name = document.getElementById("location_name").value;
-                    let location_city = document.getElementById("location_city").value;
-                    let location_category = document.getElementById("location_category").value;
-                    await checkToken();
-                    let data = {
-                        'location_name': location_name,
-                        'location_city': location_city,
-                        'location_category': location_category
-                    };
-                    let formBody = [];
-                    for (let property in data) {
-                        let encodedKey = encodeURIComponent(property);
-                        let encodedValue = encodeURIComponent(data[property]);
-                        formBody.push(encodedKey + "=" + encodedValue);
-                    }
-                    formBody = formBody.join("&");
-                    if (admin) {
+                    let cookie = document.cookie;
+                    cookie = cookie.split(";");
+                    cookie = cookie.find((element) => {
+                        return element.includes("JWebToken");
+                    });
+                    if (cookie == undefined) {
+                        admin = false;
+                        alert("You are not logged in as an admin");
+                        window.location.href = "http://localhost:8081/";
+                    } else {
+                        let location_name = document.getElementById("location_name").value;
+                        let location_city = document.getElementById("location_city").value;
+                        let location_category = document.getElementById("location_category").value;
+                        let data = {
+                            'location_name': location_name,
+                            'location_city': location_city,
+                            'location_category': location_category
+                        };
+                        let formBody = [];
+                        for (let property in data) {
+                            let encodedKey = encodeURIComponent(property);
+                            let encodedValue = encodeURIComponent(data[property]);
+                            formBody.push(encodedKey + "=" + encodedValue);
+                        }
+                        formBody = formBody.join("&");
                         let req = await fetch("/api/addlocation", {
                             method: "POST",
                             headers: {
@@ -353,9 +361,7 @@
                         } else {
                             alert("Error :" + res);
                         }
-                    } else {
-                        alert("You are not an admin");
-                        window.location.href = "locations.html";
+
                     }
                 });
 
@@ -431,35 +437,46 @@
          */
         let delete_button = document.getElementById("submit_delete");
         delete_button.addEventListener("click", async () => {
-            let location_delete = document.getElementById("location_delete").value;
-            await checkToken();
-            let data = {
-                'location_id': location_delete
-            };
-            let formBody = [];
-            for (let property in data) {
-                let encodedKey = encodeURIComponent(property);
-                let encodedValue = encodeURIComponent(data[property]);
-                formBody.push(encodedKey + "=" + encodedValue);
-            }
-            formBody = formBody.join("&");
-            if (admin) {
-                let req = await fetch("/api/deletelocation", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                    },
-                    body: formBody
-                })
-                let res = await req.text();
-                if (res == "location deleted") {
-                    window.location.href = "locationsAdmin.html";
-                } else {
-                    alert("Error :" + res);
-                }
+            let cookie = document.cookie;
+            cookie = cookie.split(";");
+            cookie = cookie.find((element) => {
+                return element.includes("JWebToken");
+            });
+            if (cookie == undefined) {
+                admin = false;
+                alert("You are not logged in as an admin");
+                window.location.href = "http://localhost:8081/";
             } else {
-                alert("You are not an admin");
-                window.location.href = "locations.html";
+                let location_delete = document.getElementById("location_delete").value;
+                await checkToken();
+                let data = {
+                    'location_id': location_delete
+                };
+                let formBody = [];
+                for (let property in data) {
+                    let encodedKey = encodeURIComponent(property);
+                    let encodedValue = encodeURIComponent(data[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
+                }
+                formBody = formBody.join("&");
+                if (admin) {
+                    let req = await fetch("/api/deletelocation", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        body: formBody
+                    })
+                    let res = await req.text();
+                    if (res == "location deleted") {
+                        window.location.href = "locationsAdmin.html";
+                    } else {
+                        alert("Error :" + res);
+                    }
+                } else {
+                    alert("You are not an admin");
+                    window.location.href = "locations.html";
+                }
             }
         });
 
