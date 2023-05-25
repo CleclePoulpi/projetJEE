@@ -34,6 +34,7 @@
                 if (res === "unauthorized") {
                     console.log("not logged");
                     alert("Cookie expired, please log in");
+                    admin = false;
                 } else {
                     admin = true;
                     privileges = parseInt(res);
@@ -53,7 +54,6 @@
     </script>
 </head>
 <body>
-
 
 
 <dialog id="dialog_login">
@@ -321,27 +321,32 @@
                  * Function to add a sport to the database
                  */
                 submit.addEventListener("click", async () => {
-                    let sport_name = document.getElementById("sport_name").value;
-                    let sport_paralympic = document.getElementById("sport_paralympic").value;
-                    let data = {
-                        'sport_name': sport_name,
-                        'sport_paralympic': sport_paralympic
-                    };
-                    let formBody = [];
-                    for (let property in data) {
-                        let encodedKey = encodeURIComponent(property);
-                        let encodedValue = encodeURIComponent(data[property]);
-                        formBody.push(encodedKey + "=" + encodedValue);
+                    await checkToken();
+                    if (!admin) {
+                        alert("You are not logged in as an admin");
+                        window.location.href = "http://localhost:8081/";
+                    } else {
+                        let sport_name = document.getElementById("sport_name").value;
+                        let sport_paralympic = document.getElementById("sport_paralympic").value;
+                        let data = {
+                            'sport_name': sport_name,
+                            'sport_paralympic': sport_paralympic
+                        };
+                        let formBody = [];
+                        for (let property in data) {
+                            let encodedKey = encodeURIComponent(property);
+                            let encodedValue = encodeURIComponent(data[property]);
+                            formBody.push(encodedKey + "=" + encodedValue);
+                        }
+                        formBody = formBody.join("&");
+                        let req = await fetch("/api/disciplines/add", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                            },
+                            body: formBody
+                        })
                     }
-                    formBody = formBody.join("&");
-                    let req = await fetch("/api/disciplines/add", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                        },
-                        body: formBody
-                    })
-
                 });
 
 
@@ -389,10 +394,17 @@
                 let cell2 = row.insertCell(1);
 
                 cell1.innerHTML = res.disciplines[i].name;
-                cell2.innerHTML = function(){if(res.disciplines[i].paralympic){return "Yes"}else{return "No"}}();
+                cell2.innerHTML = function () {
+                    if (res.disciplines[i].paralympic) {
+                        return "Yes"
+                    } else {
+                        return "No"
+                    }
+                }();
             }
             return res;
         }
+
         let res = getSportsList();
 
         /**
@@ -402,7 +414,13 @@
         res.then(async (result) => {
             response = result.disciplines;
             response.forEach((sports) => {
-                document.getElementById("sports_delete").add(new Option(sports.name + ", " + function(paralympic){if(paralympic){return "Paralympic"}else{return "Not paralympic"}}(sports.paralympic), sports.id));
+                document.getElementById("sports_delete").add(new Option(sports.name + ", " + function (paralympic) {
+                    if (paralympic) {
+                        return "Paralympic"
+                    } else {
+                        return "Not paralympic"
+                    }
+                }(sports.paralympic), sports.id));
             });
         });
         /**
@@ -413,17 +431,21 @@
         delete_button.addEventListener("click", async () => {
             let sport_delete = document.getElementById("sports_delete").value;
             await checkToken();
-            let data = {
-                'sport_id': sport_delete
-            };
-            let formBody = [];
-            for (let property in data) {
-                let encodedKey = encodeURIComponent(property);
-                let encodedValue = encodeURIComponent(data[property]);
-                formBody.push(encodedKey + "=" + encodedValue);
-            }
-            formBody = formBody.join("&");
-            if (admin) {
+            if (!admin) {
+                alert("You are not logged in as an admin");
+                window.location.href = "http://localhost:8081/";
+            } else {
+                let data = {
+                    'sport_id': sport_delete
+                };
+                let formBody = [];
+                for (let property in data) {
+                    let encodedKey = encodeURIComponent(property);
+                    let encodedValue = encodeURIComponent(data[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
+                }
+                formBody = formBody.join("&");
+
                 let req = await fetch("/api/disciplines/delete", {
                     method: "POST",
                     headers: {
@@ -437,9 +459,7 @@
                 } else {
                     alert("Error :" + res);
                 }
-            } else {
-                alert("You are not an admin");
-                window.location.href = "sports.html";
+
             }
         });
 

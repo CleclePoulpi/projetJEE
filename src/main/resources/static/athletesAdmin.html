@@ -34,6 +34,7 @@
                 if (res === "unauthorized") {
                     console.log("not logged");
                     alert("Cookie expired, please log in");
+                    admin = false;
                 } else {
                     admin = true;
                     privileges = parseInt(res);
@@ -53,7 +54,6 @@
     </script>
 </head>
 <body>
-
 
 
 <dialog id="dialog_login">
@@ -292,6 +292,7 @@
     <div id="container">
         <div id="admin_import">
         </div>
+
         <script>
             init();
             if (admin === true) {
@@ -306,72 +307,98 @@
                             <input type="file" name="file" id="file" accept="text/csv" required>
                             <br>
                             <button id="submit"> Submit </button>
-
+                            <button id="drop_athletes">Remove all athletes</button>
                         </div>'`;
                 /**
                  * Function to import the athletes from a csv file
                  */
                 document.getElementById("submit").addEventListener("click", async function () {
-                    let file = function (array) {
-                        if (array.length > 1) {
-                            alert("Selecting multiples files at the same time can cause issues, please do not !")
-                        } else {
-                            return array[0]
-                        }
-                    }(document.getElementById("file").files);
-                    let text = await file.text();
-                    let array = text.split("\r\n");
-                    let separated = array[0].split(",");
-                    /**
-                     * Function to check if the csv file is correctly formatted
-                     */
-                    let separator = ',';
-                    if (separated[1][0]==' ') {
-                        separator =  ', ';
-                    }else{
-                        separator = ',';
-                    }
-                    let fields = array[0].split(separator);
-                    let athletes = [];
-                    /**
-                     * Function to create an array of athletes from the csv file
-                     */
-                    for (let i = 1; i < array.length; i++) {
-                        if(array[i]!=="") {
-                            let athlete = array[i].split(separator);
-                            let athlete_object = {};
-                            for (let j = 0; j < athlete.length; j++) {
-                                if (athlete[j] !== "") {
-                                    athlete_object[fields[j]] = athlete[j];
-                                }
+                    await checkToken();
+                    if (!admin) {
+                        alert("You are not an admin");
+                        window.location.href = "http://localhost:8081/";
+                    } else {
+                        let file = function (array) {
+                            if (array.length > 1) {
+                                alert("Selecting multiples files at the same time can cause issues, please do not !")
+                            } else {
+                                return array[0]
                             }
-                            athletes.push(athlete_object);
-                        }
-                    }
-                    /**
-                     * Function to send the array of athletes to the backend
-                     */
-                    await fetch("/api/athletes/importAthletes", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            athletes
-                        }),
-                    }).then((res) => {
-                        if (res.status === 200) {
-                            alert("Import successful");
-                            window.location.reload();
+                        }(document.getElementById("file").files);
+                        let text = await file.text();
+                        let array = text.split("\r\n");
+                        let separated = array[0].split(",");
+                        /**
+                         * Function to check if the csv file is correctly formatted
+                         */
+                        let separator = ',';
+                        if (separated[1][0] == ' ') {
+                            separator = ', ';
                         } else {
-                            alert("Import failed");
+                            separator = ',';
                         }
-                    })
+                        let fields = array[0].split(separator);
+                        let athletes = [];
+                        /**
+                         * Function to create an array of athletes from the csv file
+                         */
+                        for (let i = 1; i < array.length; i++) {
+                            if (array[i] !== "") {
+                                let athlete = array[i].split(separator);
+                                let athlete_object = {};
+                                for (let j = 0; j < athlete.length; j++) {
+                                    if (athlete[j] !== "") {
+                                        athlete_object[fields[j]] = athlete[j];
+                                    }
+                                }
+                                athletes.push(athlete_object);
+                            }
+                        }
+                        /**
+                         * Function to send the array of athletes to the backend
+                         */
+                        await fetch("/api/athletes/importAthletes", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                athletes
+                            }),
+                        }).then((res) => {
+                            if (res.status === 200) {
+                                alert("Import successful");
+                                window.location.reload();
+                            } else {
+                                alert("Import failed");
+                            }
+                        })
+                    }
                 });
-
-
+                document.getElementById("drop_athletes").addEventListener("click", async function () {
+                    await checkToken();
+                    if (!admin) {
+                        alert("You are not admin")
+                    } else {
+                        await fetch("/api/athletes/dropAthletes", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                        }).then((res) => {
+                            if (res.status === 200) {
+                                alert("Drop successful");
+                                window.location.reload();
+                            } else {
+                                alert("Drop failed");
+                            }
+                        })
+                    }
+                });
             }
         </script>
+
+
         <div>
             <h1> Athletes </h1>
             <table id="athletes_table">
@@ -397,7 +424,6 @@
                         'Content-Type': 'application/json'
                     }
                 })
-
 
 
                 let res = await req.json();

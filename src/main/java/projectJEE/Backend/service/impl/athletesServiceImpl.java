@@ -26,6 +26,12 @@ public class athletesServiceImpl implements athletesService {
         return athletesRepository.findAll();
     }
 
+
+    @Override
+    public void dropAthletes() {
+        athletesRepository.deleteAll();
+    }
+
     @Override
     public void importathletes(List<LinkedHashMap<String,String>> list) throws ParseException {
         for(int i = 0; i<list.size(); i++){
