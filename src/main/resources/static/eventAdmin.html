@@ -365,6 +365,15 @@
 
 
         </script>
+        <div><h2> Delete a event </h2>
+            <form style="text-align: center">
+                <label for="event_delete"> Locations </label>
+                <select name="event_delete" id="event_delete">
+                </select>
+                <br>
+                <button id="submit_delete" value="Delete event"> Submit</button>
+            </form>
+        </div>
         <div>
             <h1> Events </h1>
             <table id="event_table">
@@ -397,10 +406,50 @@
                 cell1.innerHTML = res[i].name;
                 cell2.innerHTML = res[i].sport;
                 cell3.innerHTML = res[i].date;
-                cell4.innerHTML = res[i].localisation;
+                cell4.innerHTML = res[i].location;
             }
+            return res;
         }
-
+        let res = getEventList();
+        res.then(async (result) => {
+            response = result.events;
+            response.forEach((events) => {
+                document.getElementById("sports_delete").add(new Option(events.name + ", " + events.sport +', '+ events.location +': '+events.date , events.id));
+            });
+        });
+        let delete_button = document.getElementById("submit_delete");
+        delete_button.addEventListener("click", async () => {
+            let sport_delete = document.getElementById("sports_delete").value;
+            await checkToken();
+            let data = {
+                'sport_id': sport_delete
+            };
+            let formBody = [];
+            for (let property in data) {
+                let encodedKey = encodeURIComponent(property);
+                let encodedValue = encodeURIComponent(data[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            }
+            formBody = formBody.join("&");
+            if (admin) {
+                let req = await fetch("/api/deleteevent", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formBody
+                })
+                let res = await req.text();
+                if (res == "event deleted") {
+                    window.location.href = "eventAdmin.html";
+                } else {
+                    alert("Error :" + res);
+                }
+            } else {
+                alert("You are not an admin");
+                window.location.href = "events.html";
+            }
+        });
         $(function () {
             $("#includedFooter").load("./partials/footer.html");
         });
