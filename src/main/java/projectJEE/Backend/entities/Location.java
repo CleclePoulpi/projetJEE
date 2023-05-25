@@ -51,7 +51,7 @@ public class Location {
      */
     public Location(long id, String name, String city, String category) {
         this.id = id;
-        this.name = name;
+        this.location_name = name;
         this.location_city = city;
         this.location_category = category;
     }
