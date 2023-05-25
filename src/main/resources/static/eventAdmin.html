@@ -434,7 +434,10 @@
                                     if (response == "End before start") {
                                         alert("Don't be stupid, the end of the event can't be before the start");
                                     } else {
-                                        alert("Timing not available, next available time is " + response);
+                                        let date = response.split("T")[0];
+                                        let hour = response.split("T")[1].split(":")[0];
+                                        let min = hour.split(":")[1];
+                                        alert("Timing not available, next available time is at " + hour + ":" + min + " on " + date);
                                     }
                                 })
                             } else {
