@@ -267,11 +267,41 @@
 <div class="wrapper col3">
     <div id="container">
         <div id="admin_addevent">
+            <h2> Add an event </h2>
+            <form style="text-align: center">
+                <label for="event_sport"> Event sport </label>
+                <input type="text" name="event_sport" id="event_sport" placeholder="Event sport" required>
+                <label for="event_category"> Event category </label>
+                <select name="event_category" id="event_category" required>
+                    <option value="H">Men</option>
+                    <option value="F">Female</option>
+                    <option value="mixte">Mixed</option>
+                </select>
+                <label for="event_type"> Event type </label>
+                <select name="event_type" id="event_type" required>
+                    <option value="médailles">Medals</option>
+                    <option value="qualifications">Qualifications</option>
+                </select>
+                <br>
+                <label for="event_date"> Event date </label>
+                <input type="date" name="event_date" id="event_date" placeholder="Event date" required>
+                <label for="event_starting_hour"> Event start Hour </label>
+                <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour" required>
+                <label for="event_ending_hour"> Event end Hour </label>
+                <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
+                <label for="event_localisation"> Event localisation </label>
+                <select name="event_localisation" id="event_localisation" required>
+                </select>
+                <br>
+                <label for="event_desc"> Event description </label> <br>
+                <textarea  name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
+                <br>
+                <button id="submit" value="Add event"> Submit </button>
+            </form>
         </div>
 
         <script>
             init();
-            let res;
             async function getLocationList(){
                 let req = await fetch("/api/getLocationslist", {
                     method: "GET",
@@ -280,7 +310,7 @@
                     }
                 });
 
-                res = await req.json();
+                return  await req.json();
 
             }
 
@@ -288,46 +318,14 @@
                 document.getElementById("admin_addevent").innerHTML = "";
             } else {
 
-                getLocationList();
-
-                let html = `<h2> Add an event </h2>
-                <form style="text-align: center">
-                    <label for="event_sport"> Event sport </label>
-                        <input type="text" name="event_sport" id="event_sport" placeholder="Event sport" required>
-                    <label for="event_category"> Event category </label>
-                        <select name="event_category" id="event_category" required>
-                                <option value="H">Men</option>
-                                <option value="F">Female</option>
-                                <option value="mixte">Mixed</option>
-                        </select>
-                    <label for="event_type"> Event type </label>
-                        <select name="event_type" id="event_type" required>
-                                <option value="médailles">Medals</option>
-                                <option value="qualifications">Qualifications</option>
-                        </select>
-                    <br>
-                    <label for="event_date"> Event date </label>
-                        <input type="date" name="event_date" id="event_date" placeholder="Event date" required>
-                    <label for="event_starting_hour"> Event start Hour </label>
-                        <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour" required>
-                    <label for="event_ending_hour"> Event end Hour </label>
-                        <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
-                    <label for="event_localisation"> Event localisation </label>
-                        <select name="event_localisation" id="event_localisation" required>`;
-
-                res.forEach((localisation) => {
-                    html += `<option value="${localisation.idSite}">${localisation.nomSite}, ${localisation.villeSite}</option>`
+                getLocationList().then((res) => {
+                    console.log(res);
+                    res.locations.forEach((localisation) => {
+                        document.getElementById("event_localisation").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
+                    });
                 });
 
-                html += `</select>
-                    <br>
-                    <label for="event_desc"> Event description </label> <br>
-                        <textarea  name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
-                    <br>
-                    <button id="submit" value="Add event"> Submit </button>
-                </form>`;
 
-                document.getElementById("admin_addevent").innerHTML = html;
                 let submit = document.getElementById("submit");
                 submit.addEventListener("click", async () => {
                     let event_starting_hour = document.getElementById("event_starting_hour").value;

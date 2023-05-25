@@ -315,6 +315,15 @@
 
 
         </script>
+        <div><h2> Delete a location </h2>
+            <form style="text-align: center">
+                <label for="sports_delete"> Locations </label>
+                <select name="sports_delete" id="sports_delete">
+                </select>
+                <br>
+                <button id="submit_delete" value="Delete location"> Submit</button>
+            </form>
+        </div>
         <div>
             <h1> Sports </h1>
             <table id="sports_table">
@@ -344,8 +353,48 @@
                 cell1.innerHTML = res.disciplines[i].name;
                 cell2.innerHTML = function(){if(res.disciplines[i].paralympic){return "Yes"}else{return "No"}}();
             }
+            return res;
         }
-
+        let res = getSportsList();
+        res.then(async (result) => {
+            response = result.disciplines;
+            response.forEach((sports) => {
+                document.getElementById("sports_delete").add(new Option(sports.name + ", " + function(paralympic){if(paralympic){return "Paralympic"}else{return "Not paralympic"}}(sports.paralympic), sports.id));
+            });
+        });
+        let delete_button = document.getElementById("submit_delete");
+        delete_button.addEventListener("click", async () => {
+            let sport_delete = document.getElementById("sports_delete").value;
+            await checkToken();
+            let data = {
+                'sport_id': sport_delete
+            };
+            let formBody = [];
+            for (let property in data) {
+                let encodedKey = encodeURIComponent(property);
+                let encodedValue = encodeURIComponent(data[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            }
+            formBody = formBody.join("&");
+            if (admin) {
+                let req = await fetch("/api/deletesport", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formBody
+                })
+                let res = await req.text();
+                if (res == "sports deleted") {
+                    window.location.href = "sportsAdmin.html";
+                } else {
+                    alert("Error :" + res);
+                }
+            } else {
+                alert("You are not an admin");
+                window.location.href = "sports.html";
+            }
+        });
 
         $(function () {
             $("#includedFooter").load("./partials/footer.html");
