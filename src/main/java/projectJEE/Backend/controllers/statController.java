@@ -1,6 +1,7 @@
 package projectJEE.Backend.controllers;
 
-import org.json.JSONObject;
+
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class statController {
     public ResponseEntity<JSONObject> getStat() {
         JSONObject response = new JSONObject();
         response.put("locations", statService.getMostPopularLocations());
-        //response.put("disciplines", statService.getMostPopularDisciplines());
+        response.put("disciplines", statService.getMostPopularDisciplines());
         return ResponseEntity.ok(response);
     }
 }

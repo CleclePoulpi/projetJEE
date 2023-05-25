@@ -16,16 +16,12 @@ public class timecalc {
     public long gettime () {
         return this.time;
     }
-    @Override
-    public String toString() {
-        return "timecalc{" +
-                "time=" + time +
-                ", discipline=" + discipline.toString() +
-                '}';
-    }
 
     public discipline getdiscipline () {
         return this.discipline;
     }
 
+    public void setTime(long time) {
+        this.time = time;
+    }
 }
