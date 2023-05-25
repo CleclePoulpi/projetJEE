@@ -327,7 +327,7 @@
                 let res = await req.json();
                 let sessionTable = document.getElementById("session_table");
                 let durationTable = document.getElementById("duration_table");
-                for (let i = 0; i < res.disciplines.length; i++) {
+                for (let i = 0; i < Math.max(res.disciplines.length,res.locations.length); i++) {
                     let srow = sessionTable.insertRow(i + 1);
                     let drow = durationTable.insertRow(i + 1);
 
