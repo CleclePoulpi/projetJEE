@@ -12,7 +12,5 @@ import java.util.List;
  * Represents the event table in the database
  */
 public interface eventRepository extends JpaRepository<event, Long> {
-    List<event> findEventByCode(String code);
-
     List<event> findEventByCodeAndDiscipline(String code, discipline discipline);
 }
