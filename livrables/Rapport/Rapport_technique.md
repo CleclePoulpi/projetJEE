@@ -15,4 +15,4 @@ La principale force de Spring Boot est l'automatisation des liens entre les cont
 Hibernate s'occupe de générer dans la base MySql les tables dont nous avons besoins, il génère également une table seq pour chacune, permettant de générer automatiquement les IDs des entitées qui se trouvent dans la base.
 
 
-![schema](./Fig-2-Architecture-flow-of-spring-boot-Applications-Spring-boot-uses-all-the-features.png)
+![schema](Fig-2-Architecture-flow-of-spring-boot-Applications-Spring-boot-uses-all-the-features.png)
