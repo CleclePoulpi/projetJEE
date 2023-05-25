@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"projectJEE.Backend"},{"l":"projectJEE.Backend.controllers"},{"l":"projectJEE.Backend.entities"},{"l":"projectJEE.Backend.repository"},{"l":"projectJEE.Backend.service"},{"l":"projectJEE.Backend.service.impl"}];updateSearchResults();
