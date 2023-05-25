@@ -2,7 +2,7 @@
 -- Query: SELECT * FROM info_team06_schema.site
 LIMIT 0, 1000
 
--- Date: 2023-05-25 18:50
+-- Date: 2023-05-25 19:55
 */
 INSERT INTO `` (`id`,`location_category`,`location_city`,`location_name`,`name`) VALUES (202,'lieu public','Paris','Elysée',NULL);
 INSERT INTO `` (`id`,`location_category`,`location_city`,`location_name`,`name`) VALUES (252,'salle de spectacle','Lannion','Park Névez',NULL);

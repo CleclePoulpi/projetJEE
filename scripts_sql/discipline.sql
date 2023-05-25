@@ -2,7 +2,7 @@
 -- Query: SELECT * FROM info_team06_schema.discipline
 LIMIT 0, 1000
 
--- Date: 2023-05-25 18:49
+-- Date: 2023-05-25 19:55
 */
 INSERT INTO `` (`id`,`name`,`paralympic`) VALUES (203,'Sport automobile','0');
 INSERT INTO `` (`id`,`name`,`paralympic`) VALUES (204,'Natation','0');
