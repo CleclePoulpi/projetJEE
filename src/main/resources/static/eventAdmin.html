@@ -323,8 +323,8 @@
                 <label for="event_desc"> Event description </label> <br>
                 <textarea name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
                 <br>
-                <button id="submit" value="Add event"> Submit</button>
             </form>
+            <button id="event_add"> Submit</button>
         </div>
 
         <script>
@@ -385,7 +385,7 @@
                     });
                 });
 
-                let submit = document.getElementById("submit");
+                let submit = document.getElementById("event_add");
                 /**
                  * script to add an event to the database
                  */
@@ -400,7 +400,6 @@
                         alert("You are not logged in as an admin");
                         window.location.href = "http://localhost:8081/";
                     } else {
-
                         let event_starting_hour = document.getElementById("event_starting_hour").value;
                         let event_ending_hour = document.getElementById("event_ending_hour").value;
                         let event_desc = document.getElementById("event_desc").value;
@@ -409,7 +408,7 @@
                         let event_sport = document.getElementById("event_sport").value;
                         let event_date = document.getElementById("event_date").value;
                         let event_location = document.getElementById("event_location").value;
-                        let req = await fetch("/api/events/add", {
+                        fetch("/api/events/add", {
                             method: "POST",
                             headers: {
                                 'Content-Type': 'application/json'
@@ -424,14 +423,23 @@
                                 event_date: event_date,
                                 event_location: event_location
                             })
+                        }).then((res) => {
+                            if (res.status == 200) {
+                                alert("Event added");
+                                window.location.href = "eventAdmin.html";
+                            } else if (res.status == 400) {
+                                res.text().then((response) => {
+                                    if (response == "End before start") {
+                                        alert("Don't be stupid, the end of the event can't be before the start");
+                                    } else {
+                                        alert("Timing not available, next available time is " + response);
+                                    }
+                                })
+                            } else {
+                                alert("Error");
+                            }
                         })
-                        let res = await req.json();
-                        if (res === "event added") {
-                        alert("Event added");
-                            window.location.href = "eventAdmin.html";
-                        } else {
-                            alert("Error :" + res);
-                        }
+
                     }
                 });
 
