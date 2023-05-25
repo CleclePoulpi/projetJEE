@@ -3,15 +3,12 @@ package projectJEE.Backend.controllers;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
-
-import java.io.FileNotFoundException;
-import java.net.URI;
 import projectJEE.Backend.service.athletesService;
-
-import java.io.File;
+import java.text.ParseException;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/athletes")
@@ -30,9 +27,9 @@ public class athleteController {
 
     @ResponseBody
     @PostMapping("/importAthletes")
-    public ResponseEntity<String> importAthletes(@RequestBody MultiValueMap<String, File> request) throws FileNotFoundException {
-        System.out.println("ok");
-        athletesService.importathletes(request.getFirst("file"));
+    public ResponseEntity<String> importAthletes(@RequestBody JSONObject request) throws ParseException {
+        System.out.println(request.get("athletes"));
+        athletesService.importathletes((List<LinkedHashMap<String, String>>) request.get("athletes"));
         return new ResponseEntity<>("imported", HttpStatus.OK);
     }
 }
