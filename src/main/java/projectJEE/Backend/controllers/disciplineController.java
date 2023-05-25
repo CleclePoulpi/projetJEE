@@ -8,15 +8,26 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import projectJEE.Backend.service.disciplineService;
 
-import java.net.URI;
-
+/**
+ * This class is the controller for the discipline entity
+ * It handles the requests from the frontend
+ * It calls the service layer to execute the requests
+ */
 @RestController
 @RequestMapping("/api/disciplines")
 public class disciplineController {
 
+    /**
+     * The service layer for the discipline entity
+     */
     @Autowired
     private disciplineService disciplineService;
 
+    /**
+     * This method is used to add a discipline
+     * @param request the request from the frontend
+     * @return a response entity
+     */
     @ResponseBody
     @PostMapping("/add")
     public ResponseEntity<String> addDiscipline(@RequestBody MultiValueMap<String, String> request) {
@@ -24,6 +35,10 @@ public class disciplineController {
         return new ResponseEntity<>("sport added", HttpStatus.OK);
     }
 
+    /**
+     * This method is used to get the list of disciplines
+     * @return the list of disciplines
+     */
     @ResponseBody
     @PostMapping("/get")
     public ResponseEntity<JSONObject> getDisciplines() {
@@ -32,6 +47,11 @@ public class disciplineController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * This method is used to delete a discipline
+     * @param request the request from the frontend
+     * @return a response entity
+     */
     @ResponseBody
     @PostMapping("/delete")
     public ResponseEntity<String> delDiscipline(@RequestBody MultiValueMap<String, String> request) {

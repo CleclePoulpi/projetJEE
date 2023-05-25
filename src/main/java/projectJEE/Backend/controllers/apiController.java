@@ -12,21 +12,34 @@ import projectJEE.Backend.entities.login;
 import projectJEE.Backend.repository.userRepository;
 import projectJEE.Backend.service.impl.apiServiceImpl;
 import projectJEE.Backend.entities.user;
-
 import java.security.NoSuchAlgorithmException;
-import java.net.URI;
 
-
+/**
+ * This class is the controller for the api
+ * It contains the login/logout and checkToken methods
+ */
 @RestController
 @RequestMapping("/api")
 public class apiController {
 
+    /**
+     * The api service
+     */
     @Autowired
     private apiServiceImpl apiServiceImpl;
 
+    /**
+     * This is the userRepository object that we will use to manipulate the database
+     */
     @Autowired
     private userRepository userRepository;
 
+    /**
+     * This method is used to log in the user
+     * @param formData the form data
+     * @param response the response
+     * @return ResponseEntity<String>
+     */
     @ResponseBody
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody MultiValueMap<String, String> formData, HttpServletResponse response) {
@@ -47,6 +60,13 @@ public class apiController {
         }
     }
 
+    /**
+     * This method is used to check if the token is valid
+     * @param bearerToken the token
+     * @param response the response
+     * @return ResponseEntity<String>
+     * @throws NoSuchAlgorithmException
+     */
     @ResponseBody
     @PostMapping("/token")
     public ResponseEntity<String> checkToken(@CookieValue("JWebToken") String bearerToken, HttpServletResponse response) throws NoSuchAlgorithmException {
@@ -68,6 +88,11 @@ public class apiController {
         }
     }
 
+    /**
+     * This method is used to log out the user
+     * @param response the response
+     * @return ResponseEntity<String>
+     */
     @ResponseBody
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletResponse response) {
