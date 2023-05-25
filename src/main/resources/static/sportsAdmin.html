@@ -377,7 +377,7 @@
             }
             formBody = formBody.join("&");
             if (admin) {
-                let req = await fetch("/api/deletesport", {
+                let req = await fetch("/api/disciplines/delete", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -400,7 +400,6 @@
             $("#includedFooter").load("./partials/footer.html");
         });
 
-        getSportsList();
     </script>
 </div>
 

@@ -24,4 +24,9 @@ public class disciplineServiceImpl implements disciplineService {
     public List<discipline> getDisciplines() {
         return disciplinesRepository.findAll();
     }
+
+    @Override
+    public void delDiscipline(int id) {
+        disciplinesRepository.delete(new discipline((long)id));
+    }
 }

@@ -354,7 +354,7 @@
                     })
                     let res = await req.json();
                     if (res === "event added") {
-                        window.location.href = "events.html";
+                        window.location.href = "eventAdmin.html";
                     } else {
                         alert("Error :" + res);
                     }
@@ -429,7 +429,7 @@
         res.then(async (result) => {
             response = result.events;
             response.forEach((events) => {
-                document.getElementById("sports_delete").add(new Option(events.name + ", " + events.sport +', '+ events.location +': '+events.date , events.id));
+                document.getElementById("event_delete").add(new Option(events.name + ", " + events.sport +', '+ events.location +': '+events.date , events.id));
             });
         });
         let delete_button = document.getElementById("submit_delete");

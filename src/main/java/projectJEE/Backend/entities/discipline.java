@@ -25,4 +25,8 @@ public class discipline {
         this.paralympic = paralympic;
     }
 
+    public discipline(Long id) {
+        this.id = id;
+    }
+
 }

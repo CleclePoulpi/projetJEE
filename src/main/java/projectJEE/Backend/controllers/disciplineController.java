@@ -31,4 +31,11 @@ public class disciplineController {
         response.put("disciplines", disciplineService.getDisciplines());
         return ResponseEntity.ok(response);
     }
+
+    @ResponseBody
+    @PostMapping("/delete")
+    public ResponseEntity<String> delDiscipline(@RequestBody MultiValueMap<String, String> request) {
+        disciplineService.delDiscipline(Integer.parseInt(request.getFirst("sport_id")));
+        return new ResponseEntity<>("discipline deleted", HttpStatus.OK);
+    }
 }
