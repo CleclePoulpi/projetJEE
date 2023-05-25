@@ -9,6 +9,7 @@ build/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea
 *.iws
 *.iml
 *.ipr
@@ -40,4 +41,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Property Files ###
+**/src/main/resources/*.properties
 /.idea/

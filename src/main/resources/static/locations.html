@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Locations</title>
+
+    <link rel="stylesheet" href="styles/layout.css" type="text/css">
+    <link rel="stylesheet" href="styles/styles.css" type="text/css">
+    <script src="./jquery-3.7.0.js"></script>
+    <script src="script.js"></script>
+    <script>
+
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
+        async function checkToken() {
+
+            let cookie = document.cookie;
+            cookie = cookie.split(";");
+            cookie = cookie.find((element) => {
+                return element.includes("JWebToken");
+            })
+            if (cookie != undefined) {
+                let token = cookie.split("=")[1];
+                let req = await fetch("/api/token", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                    , body: JSON.stringify({token: token})
+                })
+                let res = await req.text();
+                if (res === "unauthorized") {
+                    console.log("not logged");
+                    alert("Cookie expired, please log in");
+                    admin = false;
+                } else {
+                    admin = true;
+                    privileges = parseInt(res);
+                    checkAdmin();
+                }
+            }
+        }
+
+        /**
+         * Function to init the page
+         */
+        function init() {
+            checkToken();
+            checkAdmin();
+        }
+
+
+    </script>
+</head>
+<body>
+
+
+
+<dialog id="dialog_login">
+    <div class="container">
+        <button value="Cancel" id="cancel" onclick="closeDialog(event)">X</button>
+    </div>
+    <h2 id="credentials"> Please enter your credentials </h2>
+    <form style="text-align: center">
+        <label for="username"> Username </label>
+        <input type="text" name="username" id="username" placeholder="Username" required>
+        <label for="password"> Password </label>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <button value="Login" id="submit_header"> Login</button>
+    </form>
+
+</dialog>
+
+
+<script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
+    let username = document.getElementById("username");
+    let password = document.getElementById("password");
+    let submit = document.getElementById("submit_header");
+
+    submit.addEventListener("click", async function (event) {
+        event.preventDefault();
+        let data = {
+            'username': username.value,
+            'password': password.value
+        };
+        let formBody = [];
+        for (let property in data) {
+            let encodedKey = encodeURIComponent(property);
+            let encodedValue = encodeURIComponent(data[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&");
+
+        fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: formBody,
+            credentials: "same-origin"
+        }).then(function (response) {
+            if (response.status == 200) {
+                alert("Logged in");
+                admin = true;
+                dialog.close();
+                window.location.reload();
+            } else {
+                alert("Wrong credentials");
+            }
+        })
+    });
+</script>
+
+
+<div class="wrapper col1">
+    <div id="topbar">
+        <ul>
+            <li id="text_topbar">Log in for admin</li>
+            <li class="last">
+                <button id="connection_button"> Login</button>
+            </li>
+        </ul>
+        <br class="clear"/>
+    </div>
+</div>
+
+
+<div class="wrapper col2">
+    <div id="header">
+        <div id="topnav">
+            <ul>
+                <li id="dropdown" class="last"><a href="#">Sports & Events</a>
+                    <ul>
+                        <li><a href="http://localhost:8081/sports">Sports</a></li>
+                        <li id="admin_sport"><a href="http://localhost:8081/sportsAdmin">Sport Admin</a></li>
+                        <li><a href="http://localhost:8081/events">Events</a></li>
+                        <li id="admin_event"><a href="http://localhost:8081/EventAdmin">Event Admin</a></li>
+                        <li><a href="http://localhost:8081/locations">Locations</a></li>
+                        <li id="admin_location"><a href="http://localhost:8081/locationsAdmin">Location Admin</a></li>
+                    </ul>
+                </li>
+                <li id="stats"><a href="http://localhost:8081/stats">Stats</a></li>
+                <li id="athletes"><a href="http://localhost:8081/athletes">Participants</a>
+                    <ul id="admin_athletes">
+                        <li><a href="http://localhost:8081/athletesAdmin">Athletes Admin</a></li>
+                    </ul>
+                </li>
+                <li id="homepage"><a href="http://localhost:8081/">Homepage</a></li>
+            </ul>
+        </div>
+        <div id="logo">
+            <h1><a href="http://localhost:8081/">Olympics Games 2024</a></h1>
+        </div>
+        <br class="clear"/>
+    </div>
+</div>
+
+
+<script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
+    let login_button = document.getElementById("connection_button");
+    let top_text = document.getElementById("text_topbar");
+    let dialog = document.getElementById("dialog_login");
+
+
+    login_button.addEventListener("click", function () {
+        if (!admin) {
+            dialog.showModal();
+        }
+    });
+
+    /**
+     * Function to close the dialog
+     * @param event
+     */
+    function closeDialog(event) {
+        event.preventDefault();
+        dialog.close();
+    }
+
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
+    function checkAdmin() {
+        if (!admin) {
+            document.getElementById("admin_sport").style.display = "none";
+            document.getElementById("admin_event").style.display = "none";
+            document.getElementById("admin_location").style.display = "none";
+            document.getElementById("admin_athletes").style.display = "none";
+        } else {
+            if (privileges === 0) {
+                document.getElementById("admin_sport").style.display = "block";
+                document.getElementById("admin_event").style.display = "none";
+                document.getElementById("admin_location").style.display = "block";
+                document.getElementById("admin_athletes").style.display = "block";
+            } else if (privileges === 1) {
+                document.getElementById("admin_sport").style.display = "none";
+                document.getElementById("admin_event").style.display = "block";
+                document.getElementById("admin_location").style.display = "none";
+                document.getElementById("admin_athletes").style.display = "none";
+            } else if (privileges === 2) {
+                document.getElementById("admin_sport").style.display = "block";
+                document.getElementById("admin_event").style.display = "block";
+                document.getElementById("admin_location").style.display = "block";
+                document.getElementById("admin_athletes").style.display = "block";
+            }
+            top_text.innerHTML = "Welcome admin";
+            login_button.innerHTML = "Logout";
+            login_button.addEventListener("click", async function () {
+                let req = await fetch("/api/logout", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                let res = await req.text();
+                if (res === "logged out") {
+                    window.location.href = "http://localhost:8081/";
+                }
+            });
+
+        }
+    }
+
+
+</script>
+
+
+<script>
+    checkAdmin();
+
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
+    function ready() {
+
+        var loc = window.location.href; // returns the full URL
+        var root = "localhost:8081/";
+        var end = loc.slice(loc.lastIndexOf(root) + root.length);
+        let homepage = document.getElementById("homepage");
+        let dropdown = document.getElementById("dropdown");
+        let athletes = document.getElementById("athletes");
+        let stats = document.getElementById("stats");
+
+
+        if (end === "") { // If Empty or if just home URL
+            homepage.classList.add('active');
+            //Remove All Other Classes
+            dropdown.classList.remove('active');
+            athletes.classList.remove('active');
+            stats.classList.remove('active');
+        } else if (end === "sports" || end === "sportsAdmin" || end === "events" || end === "eventAdmin" || end === "locations" || end === "locationAdmin") { // if page = root/start-here/
+            dropdown.classList.add('active');
+            //Remove All Other Classes
+            homepage.classList.remove('active');
+            athletes.classList.remove('active');
+            stats.classList.remove('active');
+        } else if (end === "athletes" || end === "athletesAdmin") { // if page = root/work-with-me/
+            athletes.classList.add('active');
+            //Remove All Other Classes
+            homepage.classList.remove('active');
+            dropdown.classList.remove('active');
+            stats.classList.remove('active');
+        } else if (end === "stats") { // if page = root/work-with-me/
+            stats.classList.add('active');
+            //Remove All Other Classes
+            homepage.classList.remove('active');
+            dropdown.classList.remove('active');
+            athletes.classList.remove('active');
+        }
+
+
+    };
+    ready();
+</script>
+
+
+<div class="wrapper col3">
+    <div id="container">
+
+
+        <div>
+            <h1> Locations </h1>
+            <table id="locations_table">
+                <tr>
+                    <th>Location name</th>
+                    <th>Location city</th>
+                    <th>Location category</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        /**
+         * Function to get the list of locations from the database and display it in a table
+         * @returns {Promise<any>}
+         */
+        async function getLocationList() {
+            let req = await fetch("/api/getLocationslist", {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            let res = await req.json();
+            let table = document.getElementById("locations_table");
+            for (let i = 0; i < res.locations.length; i++) {
+                let row = table.insertRow(i + 1);
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+
+                cell1.innerHTML = res.locations[i].location_name;
+                cell2.innerHTML = res.locations[i].location_city;
+                cell3.innerHTML = res.locations[i].location_category;
+            }
+            return res;
+        }
+
+        let response;
+        let res = getLocationList()
+        init();
+
+        /**
+         * Function to delete a location from the database
+         */
+        $(function () {
+            $("#includedFooter").load("./partials/footer.html");
+        });
+    </script>
+</div>
+
+
+<div id="includedFooter"></div>
+
+
+</body>
+</html>

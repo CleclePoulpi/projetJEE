@@ -1,0 +1,615 @@
+@charset "utf-8";
+/*
+Template Name: Prestigious
+Author: <a href="http://www.os-templates.com/">OS Templates</a>
+Author URI: http://www.os-templates.com/
+Licence: Free to use under our free template licence terms
+Licence URI: http://www.os-templates.com/template-terms
+File: Layout CSS
+*/
+
+@import url("navi.css");
+@import url("forms.css");
+@import url("tables.css");
+
+html {
+    overflow-y: scroll;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    font-family: verdana, Arial, Helvetica, sans-serif;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+
+.justify {
+    text-align: justify;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.center {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.nostart {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.clear {
+    clear: both;
+}
+
+br.clear {
+    clear: both;
+    margin-top: -15px;
+}
+
+a {
+    outline: none;
+    text-decoration: none;
+}
+
+.fl_left,
+.imgl {
+    float: left;
+}
+
+.fl_right,
+.imgr {
+    float: right;
+}
+
+img {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.imgl,
+.imgr {
+    border: 1px solid #666666;
+    padding: 5px;
+    color: #666666;
+    background-color: #FFFFFF;
+}
+
+.imgl {
+    margin: 0 15px 0 0;
+    clear: left;
+}
+
+.imgr {
+    margin: 0 0 15px 15px;
+    clear: right;
+}
+
+/* ----------------------------------------------Wrapper------------------------------------- */
+
+div.wrapper {
+    display: block;
+    width: 100%;
+    margin: 0;
+    text-align: left;
+}
+
+div.wrapper h1,
+div.wrapper h2,
+div.wrapper h3,
+div.wrapper h4,
+div.wrapper h5,
+div.wrapper h6 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    font-size: 20px;
+    font-weight: normal;
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.col1,
+.col1 a {
+    color: #020817;
+    background-color: #9de5a7;
+}
+
+.col2 {
+    color: #020817;
+    background-color: #FFFFFF;
+}
+
+.col3 {
+    color: #020817;
+    background-color: #FFFFFF;
+}
+
+.col4 {
+    color: #020817;
+    background-color: #FFFFFF;
+}
+
+.col4 a {
+    color: #982216;
+    background-color: #FFFFFF;
+}
+
+.col5 {
+    color: #020817;
+    background-color: #F8F8F8;
+}
+
+.col5 a {
+    color: #9de5a7;
+    background-color: #F8F8F8;
+}
+
+.col6,
+.col6 a {
+    color: #FFFFFF;
+    background-color: #333333;
+}
+
+/* ----------------------------------------------Generalise------------------------------------- */
+
+#topbar,
+#header,
+#intro,
+#breadcrumb,
+#container,
+#footer,
+#copyright {
+    display: block;
+    position: relative;
+    width: 960px;
+    margin: 0 auto;
+}
+
+/* ----------------------------------------------TopBar------------------------------------- */
+
+#topbar {
+    padding: 10px 0;
+}
+
+#topbar p {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+#topbar ul {
+    float: right;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#topbar li {
+    display: inline;
+    margin: 0 8px 0 0;
+    padding: 0 10px 0 0;
+    border-right: 1px solid #0050a4;
+}
+
+#topbar li.last {
+    margin-right: 0;
+    padding-right: 0;
+    border: none;
+}
+
+/* ----------------------------------------------Header------------------------------------- */
+
+#header {
+    padding: 30px 0;
+    z-index: 1000;
+}
+
+#header h1,
+#header p {
+    margin: 0;
+    padding: 0;
+}
+
+#header #logo {
+    display: block;
+    float: left;
+    width: 260px;
+}
+
+#header h1 {
+    margin: 0;
+    font-size: 36px;
+    border: none;
+}
+
+#header h1 a {
+    color: #0050a4
+}
+
+/* ----------------------------------------------Homepage Intro------------------------------------- */
+
+#intro {
+    padding: 0 0 30px 0;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+#intro ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#intro li {
+    display: block;
+    float: left;
+    width: 234px;
+    margin: 0 8px 0 0;
+}
+
+#intro li.last {
+    margin-right: 0;
+}
+
+#intro img {
+    display: block;
+    width: 224px;
+    height: 200px;
+    margin: 0 0 8px 0;
+    padding: 4px;
+    color: #666666;
+    background-color: #FFFFFF;
+    border: 1px solid #E9E9E9;
+}
+
+#intro a {
+    display: block;
+    width: 234px;
+    margin: 0;
+    padding: 15px 0;
+    font-weight: bold;
+    text-align: center;
+    overflow: hidden;
+    color: #ef4135;
+    background-color: #F8F8F8;
+}
+
+/* ----------------------------------------------BreadCrumb------------------------------------- */
+
+#breadcrumb {
+    padding: 30px 0;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+#breadcrumb a {
+    color: #982216;
+    background-color: #FFFFFF;
+}
+
+#breadcrumb ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#breadcrumb ul li {
+    display: inline;
+}
+
+#breadcrumb ul li.current a {
+    text-decoration: underline;
+}
+
+/* ----------------------------------------------Content------------------------------------- */
+
+#container {
+    padding: 30px 0;
+    line-height: 1.4em;
+}
+
+#container h1,
+#container h2,
+#container h3,
+#container h4,
+#container h5,
+#container h6 {
+    padding-bottom: 8px;
+    border-bottom: 1px dotted #CCCCCC;
+}
+
+.content {
+    display: block;
+    float: left;
+    width: 600px;
+}
+
+/* Comments */
+
+#comments {
+    margin-bottom: 40px;
+}
+
+#comments .commentlist {
+    margin: 0;
+    padding: 0;
+}
+
+#comments .commentlist ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#comments .commentlist li.comment_odd,
+#comments .commentlist li.comment_even {
+    margin: 0 0 10px 0;
+    padding: 15px;
+    list-style: none;
+}
+
+#comments .commentlist li.comment_odd {
+    color: #666666;
+    background-color: #FFFFFF;
+}
+
+#comments .commentlist li.comment_odd a {
+    color: #3E7060;
+    background-color: #FFFFFF;
+}
+
+#comments .commentlist li.comment_even {
+    color: #666666;
+    background-color: #E8E8E8;
+}
+
+#comments .commentlist li.comment_even a {
+    color: #3E7060;
+    background-color: #E8E8E8;
+}
+
+#comments .commentlist .author .name {
+    font-weight: bold;
+}
+
+#comments .commentlist .submitdate {
+    font-size: smaller;
+}
+
+#comments .commentlist p {
+    margin: 10px 5px 10px 0;
+    padding: 0;
+    font-weight: normal;
+    text-transform: none;
+}
+
+#comments .commentlist li .avatar {
+    float: right;
+    border: 1px solid #EEEEEE;
+    margin: 0 0 0 10px;
+}
+
+/* ----------------------------------------------Column------------------------------------- */
+
+#column {
+    display: block;
+    float: right;
+    width: 300px;
+}
+
+.flickrbox ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.flickrbox li {
+    display: block;
+    float: left;
+    width: 80px;
+    height: 80px;
+    margin: 0 15px 15px 0;
+    padding: 4px;
+    color: #666666;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+}
+
+.flickrbox li.last {
+    margin-right: 0;
+}
+
+#column .holder,
+#column #featured {
+    display: block;
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+#column .holder h2.title {
+    display: block;
+    width: 100%;
+    height: 65px;
+    margin: 0;
+    padding: 15px 0 0 0;
+    font-size: 20px;
+    line-height: normal;
+    border-bottom: 1px dashed #666666;
+}
+
+#column .holder h2.title img {
+    float: left;
+    margin: -15px 8px 0 0;
+    padding: 5px;
+    border: 1px solid #666666;
+}
+
+#column div.imgholder {
+    display: block;
+    width: 290px;
+    margin: 0 0 10px 0;
+    padding: 4px;
+    color: #666666;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+}
+
+#column .holder p.readmore {
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    text-align: right;
+    line-height: normal;
+}
+
+/* Featured Block */
+
+#column #featured a {
+    color: #666666;
+    background-color: #F9F9F9;
+}
+
+#column #featured ul,
+#column #featured h2,
+#column #featured p {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#column #featured a {
+    color: #982216;
+    background-color: #F9F9F9;
+}
+
+#column #featured li {
+    display: block;
+    width: 250px;
+    margin: 0;
+    padding: 20px 25px;
+    color: #666666;
+    background-color: #F9F9F9;
+}
+
+#column #featured li p.imgholder {
+    display: block;
+    width: 240px;
+    height: 90px;
+    margin: 20px 0 15px 0;
+    padding: 4px;
+    border: 1px solid #CCCCCC;
+}
+
+#column #featured li h2 {
+    margin: 0;
+    padding: 0 0 14px 0;
+    font-weight: normal;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    line-height: normal;
+    border-bottom: 1px dashed #666666;
+}
+
+#column #featured p.readmore {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: right;
+    line-height: normal;
+}
+
+#column #latestnews {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#column #latestnews li {
+    display: block;
+    margin: 0 0 20px 0;
+    padding: 0 0 15px 0;
+    border-bottom: 1px dotted #CCCCCC;
+}
+
+#column #latestnews li.last {
+    margin-bottom: 0;
+}
+
+#column #latestnews p {
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+
+#column #latestnews p.readmore {
+    margin: 0;
+    padding: 0;
+}
+
+#column #latestnews .imgl {
+    margin: 0 10px 10px 0;
+    padding: 4px;
+}
+
+/* ----------------------------------------------Footer------------------------------------- */
+
+#footer {
+    padding: 30px 0;
+}
+
+#footer h2 {
+    padding-bottom: 8px;
+    border-bottom: 1px dotted #999999;
+}
+
+#footer p,
+#footer ul,
+#footer a {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    list-style: none;
+    line-height: normal;
+}
+
+#footer .footbox {
+    display: block;
+    float: right;
+    width: 190px;
+    margin: 0 0 0 30px;
+    padding: 0;
+}
+
+#footer li {
+    margin-bottom: 3px;
+}
+
+#footer .last {
+    margin: 0;
+}
+
+#newsletter {
+    display: block;
+    float: left;
+    width: 300px;
+}
+
+/* ----------------------------------------------Copyright------------------------------------- */
+
+#copyright {
+    padding: 20px 0;
+}
+
+#copyright p {
+    margin: 0;
+    padding: 0;
+}
