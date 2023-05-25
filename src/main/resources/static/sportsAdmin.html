@@ -334,13 +334,14 @@
                         formBody.push(encodedKey + "=" + encodedValue);
                     }
                     formBody = formBody.join("&");
-                    let req = await fetch("/api/addsport", {
+                    let req = await fetch("/api/disciplines/add", {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                         },
                         body: formBody
                     })
+
                 });
 
 
