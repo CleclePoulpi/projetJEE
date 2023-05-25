@@ -10,7 +10,10 @@
     <script src="script.js"></script>
     <script>
 
-
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
         async function checkToken() {
 
             let cookie = document.cookie;
@@ -39,19 +42,20 @@
             }
         }
 
-        addEventListener('load', function () {
-            init();
-        });
-
+        /**
+         * Function to init the page
+         */
         function init() {
             checkToken();
-            checkAdmin();
         }
 
 
     </script>
 </head>
 <body>
+
+
+
 <dialog id="dialog_login">
     <div class="container">
         <button value="Cancel" id="cancel" onclick="closeDialog(event)">X</button>
@@ -69,6 +73,13 @@
 
 
 <script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let submit = document.getElementById("submit_header");
@@ -153,6 +164,11 @@
 
 
 <script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
     let login_button = document.getElementById("connection_button");
     let top_text = document.getElementById("text_topbar");
     let dialog = document.getElementById("dialog_login");
@@ -164,12 +180,20 @@
         }
     });
 
+    /**
+     * Function to close the dialog
+     * @param event
+     */
     function closeDialog(event) {
         event.preventDefault();
         dialog.close();
     }
 
-
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
     function checkAdmin() {
         if (!admin) {
             document.getElementById("admin_sport").style.display = "none";
@@ -218,6 +242,9 @@
 <script>
     checkAdmin();
 
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
     function ready() {
 
         var loc = window.location.href; // returns the full URL
@@ -266,11 +293,63 @@
 <div class="wrapper col3">
     <div id="container">
         <div id="admin_addevent">
+            <h2> Add an event </h2>
+            <form style="text-align: center">
+                <label for="event_sport"> Event sport </label>
+                <select name="event_sport" id="event_sport" required>
+                </select>
+                <label for="event_category"> Event category </label>
+                <select name="event_category" id="event_category" required>
+                    <option value="H">Men</option>
+                    <option value="F">Female</option>
+                    <option value="mixte">Mixed</option>
+                </select>
+                <label for="event_type"> Event type </label>
+                <select name="event_type" id="event_type" required>
+                    <option value="médailles">Medals</option>
+                    <option value="qualifications">Qualifications</option>
+                </select>
+                <br>
+                <label for="event_date"> Event date </label>
+                <input type="date" name="event_date" id="event_date" placeholder="Event date" required>
+                <label for="event_starting_hour"> Event start Hour </label>
+                <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour" required>
+                <label for="event_ending_hour"> Event end Hour </label>
+                <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
+                <label for="event_location"> Event location </label>
+                <select name="event_location" id="event_location" required>
+                </select>
+                <br>
+                <label for="event_desc"> Event description </label> <br>
+                <textarea  name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
+                <br>
+                <button id="submit" value="Add event"> Submit </button>
+            </form>
         </div>
 
         <script>
             init();
-            let res;
+
+
+            /**
+             * function to get the list of sports
+             * @returns {Promise<any>}
+             */
+            async function getSportsList() {
+                let req = await fetch("/api/disciplines/get", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                return await req.json();
+            }
+
+            /**
+             * function to get the list of locations
+             * @returns {Promise<any>}
+             */
             async function getLocationList(){
                 let req = await fetch("/api/getLocationslist", {
                     method: "GET",
@@ -279,55 +358,31 @@
                     }
                 });
 
-                res = await req.json();
+                return await req.json();
 
             }
 
             if (admin === true) {
                 document.getElementById("admin_addevent").innerHTML = "";
             } else {
-
-                getLocationList();
-
-                let html = `<h2> Add an event </h2>
-                <form style="text-align: center">
-                    <label for="event_sport"> Event sport </label>
-                        <input type="text" name="event_sport" id="event_sport" placeholder="Event sport" required>
-                    <label for="event_category"> Event category </label>
-                        <select name="event_category" id="event_category" required>
-                                <option value="H">Men</option>
-                                <option value="F">Female</option>
-                                <option value="mixte">Mixed</option>
-                        </select>
-                    <label for="event_type"> Event type </label>
-                        <select name="event_type" id="event_type" required>
-                                <option value="médailles">Medals</option>
-                                <option value="qualifications">Qualifications</option>
-                        </select>
-                    <br>
-                    <label for="event_date"> Event date </label>
-                        <input type="date" name="event_date" id="event_date" placeholder="Event date" required>
-                    <label for="event_starting_hour"> Event start Hour </label>
-                        <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour" required>
-                    <label for="event_ending_hour"> Event end Hour </label>
-                        <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
-                    <label for="event_localisation"> Event localisation </label>
-                        <select name="event_localisation" id="event_localisation" required>`;
-                /* @TODO uncomment when the api is ready
-                res.forEach((localisation) => {
-                    html += `<option value="${localisation.idSite}">${localisation.nomSite}, ${localisation.villeSite}</option>`
+                /**
+                 * script to get the list of locations and sports and add them to the corresponding select
+                 */
+                getLocationList().then(async(res) => {
+                    res.locations.forEach((localisation) => {
+                        document.getElementById("event_location").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
+                    });
                 });
-                */
-                html += `</select>
-                    <br>
-                    <label for="event_desc"> Event description </label> <br>
-                        <textarea  name="event_desc" id="event_desc" placeholder="Event description" required></textarea>
-                    <br>
-                    <button id="submit" value="Add event"> Submit </button>
-                </form>`;
+               getSportsList().then(async (result) => {
+                    result.disciplines.forEach((sports) => {
+                        document.getElementById("event_sport").add(new Option(sports.name + ", " + function(paralympic){if(paralympic){return "Paralympic"}else{return "Not paralympic"}}(sports.paralympic), sports.id));
+                    });
+                });
 
-                document.getElementById("admin_addevent").innerHTML = html;
                 let submit = document.getElementById("submit");
+                /**
+                 * script to add an event to the database
+                 */
                 submit.addEventListener("click", async () => {
                     let event_starting_hour = document.getElementById("event_starting_hour").value;
                     let event_ending_hour = document.getElementById("event_ending_hour").value;
@@ -355,7 +410,7 @@
                     })
                     let res = await req.json();
                     if (res === "event added") {
-                        window.location.href = "events.html";
+                        window.location.href = "eventAdmin.html";
                     } else {
                         alert("Error :" + res);
                     }
@@ -366,19 +421,37 @@
 
 
         </script>
+        <div><h2> Delete an event </h2>
+            <form style="text-align: center">
+                <label for="event_delete"> Events </label>
+                <select name="event_delete" id="event_delete">
+                </select>
+                <br>
+                <button id="submit_delete" value="Delete event"> Submit</button>
+            </form>
+        </div>
         <div>
             <h1> Events </h1>
             <table id="event_table">
                 <tr>
-                    <th>Event name</th>
-                    <th>Event sport</th>
-                    <th>Event date</th>
-                    <th>Event localisation</th>
+                    <th>Name</th>
+                    <th>Sport</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Starting hour</th>
+                    <th>Ending hour</th>
+                    <th>Location</th>
+                    <th>Description</th>
                 </tr>
             </table>
         </div>
     </div>
     <script>
+        /**
+         * function to get the list of events and add them to the table
+         * @returns {Promise<any>}
+         */
         async function getEventList() {
             let req = await fetch("/api/events", {
                 method: "POST",
@@ -394,14 +467,73 @@
                 let cell2 = row.insertCell(1);
                 let cell3 = row.insertCell(2);
                 let cell4 = row.insertCell(3);
+                let cell5 = row.insertCell(4);
+                let cell6 = row.insertCell(5);
+                let cell7 = row.insertCell(6);
+                let cell8 = row.insertCell(7);
+                let cell9 = row.insertCell(8);
 
                 cell1.innerHTML = res[i].name;
                 cell2.innerHTML = res[i].sport;
-                cell3.innerHTML = res[i].date;
-                cell4.innerHTML = res[i].localisation;
+                cell3.innerHTML = res[i].category;
+                cell4.innerHTML = res[i].type;
+                cell5.innerHTML = res[i].date;
+                cell6.innerHTML = res[i].starting_hour;
+                cell7.innerHTML = res[i].ending_hour;
+                cell8.innerHTML = res[i].location;
+                cell9.innerHTML = res[i].description;
             }
+            return res;
         }
-
+        let res = getEventList();
+        /**
+         * function to add the list of events to the select
+         */
+        res.then(async (result) => {
+            response = result.events;
+            response.forEach((events) => {
+                document.getElementById("event_delete").add(new Option(events.name + ", " + events.sport +', '+ events.location +': '+events.date , events.id));
+            });
+        });
+        let delete_button = document.getElementById("submit_delete");
+        /**
+         * function to delete an event from the database
+         */
+        delete_button.addEventListener("click", async () => {
+            let sport_delete = document.getElementById("sports_delete").value;
+            await checkToken();
+            let data = {
+                'sport_id': sport_delete
+            };
+            let formBody = [];
+            for (let property in data) {
+                let encodedKey = encodeURIComponent(property);
+                let encodedValue = encodeURIComponent(data[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            }
+            formBody = formBody.join("&");
+            if (admin) {
+                let req = await fetch("/api/deleteevent", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formBody
+                })
+                let res = await req.text();
+                if (res == "event deleted") {
+                    window.location.href = "eventAdmin.html";
+                } else {
+                    alert("Error :" + res);
+                }
+            } else {
+                alert("You are not an admin");
+                window.location.href = "events.html";
+            }
+        });
+        /**
+         * function to add the footer to the page
+         */
         $(function () {
             $("#includedFooter").load("./partials/footer.html");
         });

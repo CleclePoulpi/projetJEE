@@ -21,7 +21,7 @@ public class disciplineController {
     @PostMapping("/add")
     public ResponseEntity<String> addDiscipline(@RequestBody MultiValueMap<String, String> request) {
         disciplineService.addDiscipline(request.getFirst("sport_name"), Boolean.parseBoolean(request.getFirst("sport_paralympic")));
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/sportsAdmin")).build();
+        return new ResponseEntity<>("sport added", HttpStatus.OK);
     }
 
     @ResponseBody
@@ -30,5 +30,12 @@ public class disciplineController {
         JSONObject response = new JSONObject();
         response.put("disciplines", disciplineService.getDisciplines());
         return ResponseEntity.ok(response);
+    }
+
+    @ResponseBody
+    @PostMapping("/delete")
+    public ResponseEntity<String> delDiscipline(@RequestBody MultiValueMap<String, String> request) {
+        disciplineService.delDiscipline(Integer.parseInt(request.getFirst("sport_id")));
+        return new ResponseEntity<>("sports deleted", HttpStatus.OK);
     }
 }

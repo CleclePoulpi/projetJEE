@@ -10,7 +10,10 @@
     <script src="script.js"></script>
     <script>
 
-
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
         async function checkToken() {
 
             let cookie = document.cookie;
@@ -39,19 +42,20 @@
             }
         }
 
-        addEventListener('load', function () {
-            init();
-        });
-
+        /**
+         * Function to init the page
+         */
         function init() {
             checkToken();
-            checkAdmin();
         }
 
 
     </script>
 </head>
 <body>
+
+
+
 <dialog id="dialog_login">
     <div class="container">
         <button value="Cancel" id="cancel" onclick="closeDialog(event)">X</button>
@@ -69,6 +73,13 @@
 
 
 <script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let submit = document.getElementById("submit_header");
@@ -153,6 +164,11 @@
 
 
 <script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
     let login_button = document.getElementById("connection_button");
     let top_text = document.getElementById("text_topbar");
     let dialog = document.getElementById("dialog_login");
@@ -164,12 +180,20 @@
         }
     });
 
+    /**
+     * Function to close the dialog
+     * @param event
+     */
     function closeDialog(event) {
         event.preventDefault();
         dialog.close();
     }
 
-
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
     function checkAdmin() {
         if (!admin) {
             document.getElementById("admin_sport").style.display = "none";
@@ -218,6 +242,9 @@
 <script>
     checkAdmin();
 
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
     function ready() {
 
         var loc = window.location.href; // returns the full URL
@@ -267,15 +294,25 @@
             <h1> Events </h1>
             <table id="event_table">
                 <tr>
-                    <th>Event name</th>
-                    <th>Event sport</th>
-                    <th>Event date</th>
-                    <th>Event localisation</th>
+                    <th>Name</th>
+                    <th>Sport</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Starting hour</th>
+                    <th>Ending hour</th>
+                    <th>Location</th>
+                    <th>Description</th>
                 </tr>
             </table>
         </div>
         <script>
             init();
+
+            /**
+             * Function to get the list of events from the database and display them in a table
+             * @returns {Promise<void>}
+             */
             async function getEventList() {
                 let req = await fetch("/api/events/get", {
                     method: "POST",
@@ -291,15 +328,28 @@
                     let cell2 = row.insertCell(1);
                     let cell3 = row.insertCell(2);
                     let cell4 = row.insertCell(3);
+                    let cell5 = row.insertCell(4);
+                    let cell6 = row.insertCell(5);
+                    let cell7 = row.insertCell(6);
+                    let cell8 = row.insertCell(7);
+                    let cell9 = row.insertCell(8);
 
                     cell1.innerHTML = res[i].name;
                     cell2.innerHTML = res[i].sport;
-                    cell3.innerHTML = res[i].date;
-                    cell4.innerHTML = res[i].localisation;
+                    cell3.innerHTML = res[i].category;
+                    cell4.innerHTML = res[i].type;
+                    cell5.innerHTML = res[i].date;
+                    cell6.innerHTML = res[i].starting_hour;
+                    cell7.innerHTML = res[i].ending_hour;
+                    cell8.innerHTML = res[i].location;
+                    cell9.innerHTML = res[i].description;
                 }
             }
 
-
+            getEventList();
+            /**
+             * Function to load the footer from partials
+             */
             $(function () {
                 $("#includedFooter").load("./partials/footer.html");
             });

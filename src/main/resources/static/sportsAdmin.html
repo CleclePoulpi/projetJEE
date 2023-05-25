@@ -10,7 +10,10 @@
     <script src="script.js"></script>
     <script>
 
-
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
         async function checkToken() {
 
             let cookie = document.cookie;
@@ -39,19 +42,19 @@
             }
         }
 
-        addEventListener('load', function () {
-            init();
-        });
-
+        /**
+         * Function to init the page
+         */
         function init() {
             checkToken();
-            checkAdmin();
         }
 
 
     </script>
 </head>
 <body>
+
+
 
 <dialog id="dialog_login">
     <div class="container">
@@ -70,6 +73,13 @@
 
 
 <script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let submit = document.getElementById("submit_header");
@@ -154,6 +164,11 @@
 
 
 <script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
     let login_button = document.getElementById("connection_button");
     let top_text = document.getElementById("text_topbar");
     let dialog = document.getElementById("dialog_login");
@@ -165,12 +180,20 @@
         }
     });
 
+    /**
+     * Function to close the dialog
+     * @param event
+     */
     function closeDialog(event) {
         event.preventDefault();
         dialog.close();
     }
 
-
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
     function checkAdmin() {
         if (!admin) {
             document.getElementById("admin_sport").style.display = "none";
@@ -219,6 +242,9 @@
 <script>
     checkAdmin();
 
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
     function ready() {
 
         var loc = window.location.href; // returns the full URL
@@ -260,6 +286,7 @@
     };
     ready();
 </script>
+
 <div class="wrapper col3">
     <div id="container">
         <div id="admin_addsport">
@@ -271,9 +298,12 @@
                 document.getElementById("admin_addsport").innerHTML = "";
             } else {
 
-
+                /**
+                 * Function to add a form to add a sport
+                 * @type {string}
+                 */
                 document.getElementById("admin_addsport").innerHTML = `<h2> Add a sport </h2>
-                <form action="/api/disciplines/add" method="post" style="text-align: center">
+                <form style="text-align: center">
                     <label for="sport_name"> Sport name </label>
                         <input type="text" name="sport_name" id="sport_name" placeholder="Sport name" required>
                     <label for="sport_paralympic"> Paralympic sport </label>
@@ -282,30 +312,36 @@
                                 <option value="false">No</option>
                         </select>
                     <br>
-                    <button type="submit" id="submit" value="Add Sport"> Add sport </button>
+                    <button id="submit" value="Add Sport"> Add sport </button>
                 </form>`;
 
                 let submit = document.getElementById("submit");
+
+                /**
+                 * Function to add a sport to the database
+                 */
                 submit.addEventListener("click", async () => {
                     let sport_name = document.getElementById("sport_name").value;
                     let sport_paralympic = document.getElementById("sport_paralympic").value;
-
-                    let req = await fetch("/api/addsport", {
+                    let data = {
+                        'sport_name': sport_name,
+                        'sport_paralympic': sport_paralympic
+                    };
+                    let formBody = [];
+                    for (let property in data) {
+                        let encodedKey = encodeURIComponent(property);
+                        let encodedValue = encodeURIComponent(data[property]);
+                        formBody.push(encodedKey + "=" + encodedValue);
+                    }
+                    formBody = formBody.join("&");
+                    let req = await fetch("/api/disciplines/add", {
                         method: "POST",
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                         },
-                        body: JSON.stringify({
-                            nomDiscipline: sport_name,
-                            paralympiqueDiscipline: sport_paralympic
-                        })
+                        body: formBody
                     })
-                    let res = await req.json();
-                    if (res === "location added") {
-                        window.location.href = "sportsAdmin.html";
-                    } else {
-                        alert("Error :" + res);
-                    }
+
                 });
 
 
@@ -313,6 +349,15 @@
 
 
         </script>
+        <div><h2> Delete a sport </h2>
+            <form style="text-align: center">
+                <label for="sports_delete"> Sports </label>
+                <select name="sports_delete" id="sports_delete">
+                </select>
+                <br>
+                <button id="submit_delete" value="Delete sports"> Submit</button>
+            </form>
+        </div>
         <div>
             <h1> Sports </h1>
             <table id="sports_table">
@@ -324,6 +369,10 @@
         </div>
     </div>
     <script>
+        /**
+         * Function to get the list of sports from the database
+         * @returns {Promise<any>}
+         */
         async function getSportsList() {
             let req = await fetch("/api/disciplines/get", {
                 method: "POST",
@@ -342,14 +391,65 @@
                 cell1.innerHTML = res.disciplines[i].name;
                 cell2.innerHTML = function(){if(res.disciplines[i].paralympic){return "Yes"}else{return "No"}}();
             }
+            return res;
         }
+        let res = getSportsList();
 
+        /**
+         * Function to add a select to delete a sport
+         * @type {string}
+         */
+        res.then(async (result) => {
+            response = result.disciplines;
+            response.forEach((sports) => {
+                document.getElementById("sports_delete").add(new Option(sports.name + ", " + function(paralympic){if(paralympic){return "Paralympic"}else{return "Not paralympic"}}(sports.paralympic), sports.id));
+            });
+        });
+        /**
+         * Function to delete a sport from the database
+         * @type {HTMLElement}
+         */
+        let delete_button = document.getElementById("submit_delete");
+        delete_button.addEventListener("click", async () => {
+            let sport_delete = document.getElementById("sports_delete").value;
+            await checkToken();
+            let data = {
+                'sport_id': sport_delete
+            };
+            let formBody = [];
+            for (let property in data) {
+                let encodedKey = encodeURIComponent(property);
+                let encodedValue = encodeURIComponent(data[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            }
+            formBody = formBody.join("&");
+            if (admin) {
+                let req = await fetch("/api/disciplines/delete", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formBody
+                })
+                let res = await req.text();
+                if (res == "sports deleted") {
+                    window.location.href = "sportsAdmin.html";
+                } else {
+                    alert("Error :" + res);
+                }
+            } else {
+                alert("You are not an admin");
+                window.location.href = "sports.html";
+            }
+        });
 
+        /**
+         * Function to load the footer
+         */
         $(function () {
             $("#includedFooter").load("./partials/footer.html");
         });
 
-        getSportsList();
     </script>
 </div>
 

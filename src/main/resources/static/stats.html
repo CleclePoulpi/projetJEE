@@ -10,7 +10,10 @@
     <script src="script.js"></script>
     <script>
 
-
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
         async function checkToken() {
 
             let cookie = document.cookie;
@@ -39,19 +42,18 @@
             }
         }
 
-        addEventListener('load', function () {
-            init();
-        });
-
+        /**
+         * Function to init the page
+         */
         function init() {
             checkToken();
-            checkAdmin();
         }
 
 
     </script>
 </head>
 <body>
+
 
 
 <dialog id="dialog_login">
@@ -71,6 +73,13 @@
 
 
 <script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let submit = document.getElementById("submit_header");
@@ -155,6 +164,11 @@
 
 
 <script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
     let login_button = document.getElementById("connection_button");
     let top_text = document.getElementById("text_topbar");
     let dialog = document.getElementById("dialog_login");
@@ -166,12 +180,20 @@
         }
     });
 
+    /**
+     * Function to close the dialog
+     * @param event
+     */
     function closeDialog(event) {
         event.preventDefault();
         dialog.close();
     }
 
-
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
     function checkAdmin() {
         if (!admin) {
             document.getElementById("admin_sport").style.display = "none";
@@ -220,6 +242,9 @@
 <script>
     checkAdmin();
 
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
     function ready() {
 
         var loc = window.location.href; // returns the full URL
@@ -262,13 +287,12 @@
     ready();
 </script>
 
-
 <div class="wrapper col3">
     <div id="container">
 
         <h1>Statistics</h1>
         <div class="left">
-            <h2>Sports with the most sessions</h2>
+            <h2>Sites with the most sessions</h2>
             <table id="session_table">
                 <tr>
                     <th>Sport</th>
@@ -287,6 +311,11 @@
         </div>
         <script>
             init();
+
+
+            /**
+             * Function to get the statistics from the database and display them in the tables
+             */
             async function getStats() {
                 let req = await fetch("/api/stats", {
                     method: "GET",
@@ -306,14 +335,16 @@
                     let dcell1 = drow.insertCell(0);
                     let dcell2 = drow.insertCell(1);
 
-                    scell1.innerHTML = res.session[i].nomDiscipline;
+                    scell1.innerHTML = res.session[i].locations;
                     scell2.innerHTML = res.session[i].nbSession;
                     dcell1.innerHTML = res.duree[i].nomDiscipline;
                     dcell2.innerHTML = res.duree[i].dureeTotale;
                 }
             }
 
-
+            /**
+             * Function to add a footer to the page
+             */
             $(function () {
                 $("#includedFooter").load("./partials/footer.html");
             });

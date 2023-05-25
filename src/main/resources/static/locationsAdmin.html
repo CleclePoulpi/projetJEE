@@ -10,7 +10,10 @@
     <script src="script.js"></script>
     <script>
 
-
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
         async function checkToken() {
 
             let cookie = document.cookie;
@@ -39,19 +42,19 @@
             }
         }
 
-        addEventListener('load', function () {
-            init();
-        });
-
+        /**
+         * Function to init the page
+         */
         function init() {
             checkToken();
-            checkAdmin();
         }
 
 
     </script>
 </head>
 <body>
+
+
 
 <dialog id="dialog_login">
     <div class="container">
@@ -70,6 +73,13 @@
 
 
 <script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let submit = document.getElementById("submit_header");
@@ -154,6 +164,11 @@
 
 
 <script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
     let login_button = document.getElementById("connection_button");
     let top_text = document.getElementById("text_topbar");
     let dialog = document.getElementById("dialog_login");
@@ -165,12 +180,20 @@
         }
     });
 
+    /**
+     * Function to close the dialog
+     * @param event
+     */
     function closeDialog(event) {
         event.preventDefault();
         dialog.close();
     }
 
-
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
     function checkAdmin() {
         if (!admin) {
             document.getElementById("admin_sport").style.display = "none";
@@ -219,6 +242,9 @@
 <script>
     checkAdmin();
 
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
     function ready() {
 
         var loc = window.location.href; // returns the full URL
@@ -272,8 +298,12 @@
             if (admin === true) {
                 document.getElementById("admin_addlocation").innerHTML = "";
             } else {
+                /**
+                 * function to add the form to add a location
+                 */
+
                 document.getElementById("admin_addlocation").innerHTML = `<h2> Add a location </h2>
-                <form action="/api/addlocation" method="post" style="text-align: center">
+                <form style="text-align: center">
                     <label for="location_name"> Location name </label>
                         <input type="text" name="location_name" id="location_name" placeholder="Location name" required>
                     <label for="location_city"> Location city </label>
@@ -286,31 +316,46 @@
                                 <option value="centre aquatique">Aquatic complex</option>
                         </select>
                     <br>
-                    <button type="submit" id="submit" value="Add location"> Submit </button>
+                    <button id="submit" value="Add location"> Submit </button>
                 </form>`;
-
+                /**
+                 * Function to add a location
+                 */
                 let submit = document.getElementById("submit");
                 submit.addEventListener("click", async () => {
                     let location_name = document.getElementById("location_name").value;
                     let location_city = document.getElementById("location_city").value;
                     let location_category = document.getElementById("location_category").value;
-
-                    let req = await fetch("/api/addlocation", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            nomSite: location_name,
-                            villeSite: location_city,
-                            categorieSite: location_category
+                    await checkToken();
+                    let data = {
+                        'location_name': location_name,
+                        'location_city': location_city,
+                        'location_category': location_category
+                    };
+                    let formBody = [];
+                    for (let property in data) {
+                        let encodedKey = encodeURIComponent(property);
+                        let encodedValue = encodeURIComponent(data[property]);
+                        formBody.push(encodedKey + "=" + encodedValue);
+                    }
+                    formBody = formBody.join("&");
+                    if (admin) {
+                        let req = await fetch("/api/addlocation", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                            },
+                            body: formBody
                         })
-                    })
-                    let res = await req.json();
-                    if (res === "location added") {
-                        window.location.href = "locationsAdmin.html";
+                        let res = await req.text();
+                        if (res == "location added") {
+                            window.location.href = "locationsAdmin.html";
+                        } else {
+                            alert("Error :" + res);
+                        }
                     } else {
-                        alert("Error :" + res);
+                        alert("You are not an admin");
+                        window.location.href = "locations.html";
                     }
                 });
 
@@ -319,6 +364,17 @@
 
 
         </script>
+        <div><h2> Delete a location </h2>
+            <form style="text-align: center">
+                <label for="location_delete"> Locations </label>
+                <select name="location_delete" id="location_delete">
+                </select>
+                <br>
+                <button id="submit_delete" value="Delete location"> Submit</button>
+            </form>
+        </div>
+
+
         <div>
             <h1> Locations </h1>
             <table id="locations_table">
@@ -331,6 +387,11 @@
         </div>
     </div>
     <script>
+
+        /**
+         * Function to get the list of locations
+         * @returns {Promise<any>}
+         */
         async function getLocationList() {
             let req = await fetch("/api/getLocationslist", {
                 method: "GET",
@@ -340,7 +401,6 @@
             })
 
             let res = await req.json();
-            console.log(res.locations);
             let table = document.getElementById("locations_table");
             for (let i = 0; i < res.locations.length; i++) {
                 let row = table.insertRow(i + 1);
@@ -352,10 +412,60 @@
                 cell2.innerHTML = res.locations[i].location_city;
                 cell3.innerHTML = res.locations[i].location_category;
             }
+            return res;
         }
-        getLocationList();
 
+        let response;
+        let res = getLocationList()
+        /**
+         * Function to get the list of locations and add them to the select
+         */
+        res.then(async (result) => {
+            response = result.locations;
+            response.forEach((localisation) => {
+                document.getElementById("location_delete").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
+            });
+        });
+        /**
+         * Function to delete a location
+         */
+        let delete_button = document.getElementById("submit_delete");
+        delete_button.addEventListener("click", async () => {
+            let location_delete = document.getElementById("location_delete").value;
+            await checkToken();
+            let data = {
+                'location_id': location_delete
+            };
+            let formBody = [];
+            for (let property in data) {
+                let encodedKey = encodeURIComponent(property);
+                let encodedValue = encodeURIComponent(data[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            }
+            formBody = formBody.join("&");
+            if (admin) {
+                let req = await fetch("/api/deletelocation", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formBody
+                })
+                let res = await req.text();
+                if (res == "location deleted") {
+                    window.location.href = "locationsAdmin.html";
+                } else {
+                    alert("Error :" + res);
+                }
+            } else {
+                alert("You are not an admin");
+                window.location.href = "locations.html";
+            }
+        });
 
+        /**
+         * Function to load the footer
+         */
         $(function () {
             $("#includedFooter").load("./partials/footer.html");
         });
@@ -364,7 +474,6 @@
 
 
 <div id="includedFooter"></div>
-
 
 
 </body>
