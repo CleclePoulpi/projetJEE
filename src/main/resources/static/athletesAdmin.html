@@ -10,7 +10,10 @@
     <script src="script.js"></script>
     <script>
 
-
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
         async function checkToken() {
 
             let cookie = document.cookie;
@@ -39,19 +42,19 @@
             }
         }
 
-        addEventListener('load', function () {
-            init();
-        });
-
+        /**
+         * Function to init the page
+         */
         function init() {
             checkToken();
-            checkAdmin();
         }
 
 
     </script>
 </head>
 <body>
+
+
 
 <dialog id="dialog_login">
     <div class="container">
@@ -70,6 +73,13 @@
 
 
 <script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let submit = document.getElementById("submit_header");
@@ -154,6 +164,11 @@
 
 
 <script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
     let login_button = document.getElementById("connection_button");
     let top_text = document.getElementById("text_topbar");
     let dialog = document.getElementById("dialog_login");
@@ -165,12 +180,20 @@
         }
     });
 
+    /**
+     * Function to close the dialog
+     * @param event
+     */
     function closeDialog(event) {
         event.preventDefault();
         dialog.close();
     }
 
-
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
     function checkAdmin() {
         if (!admin) {
             document.getElementById("admin_sport").style.display = "none";
@@ -219,6 +242,9 @@
 <script>
     checkAdmin();
 
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
     function ready() {
 
         var loc = window.location.href; // returns the full URL
@@ -260,6 +286,8 @@
     };
     ready();
 </script>
+
+
 <div class="wrapper col3">
     <div id="container">
         <div id="admin_import">
@@ -269,6 +297,10 @@
             if (admin === true) {
                 document.getElementById("admin_import").innerHTML = "";
             } else {
+                /**
+                 * Function to display the import button and the file input
+                 * @type {string}
+                 */
                 document.getElementById("admin_import").innerHTML = `<div style="text-align: center" >
                             <label for="file"> Import athletes </label>
                             <input type="file" name="file" id="file" accept="text/csv" required>
@@ -276,7 +308,9 @@
                             <button id="submit"> Submit </button>
 
                         </div>'`;
-
+                /**
+                 * Function to import the athletes from a csv file
+                 */
                 document.getElementById("submit").addEventListener("click", async function () {
                     let file = function (array) {
                         if (array.length > 1) {
@@ -288,6 +322,9 @@
                     let text = await file.text();
                     let array = text.split("\r\n");
                     let separated = array[0].split(",");
+                    /**
+                     * Function to check if the csv file is correctly formatted
+                     */
                     let separator = ',';
                     if (separated[1][0]==' ') {
                         separator =  ', ';
@@ -296,9 +333,11 @@
                     }
                     let fields = array[0].split(separator);
                     let athletes = [];
+                    /**
+                     * Function to create an array of athletes from the csv file
+                     */
                     for (let i = 1; i < array.length; i++) {
                         if(array[i]!=="") {
-
                             let athlete = array[i].split(separator);
                             let athlete_object = {};
                             for (let j = 0; j < athlete.length; j++) {
@@ -309,6 +348,9 @@
                             athletes.push(athlete_object);
                         }
                     }
+                    /**
+                     * Function to send the array of athletes to the backend
+                     */
                     await fetch("/api/athletes/importAthletes", {
                         method: "POST",
                         headers: {
@@ -344,6 +386,10 @@
             </table>
         </div>
         <script>
+            /**
+             * Function to get all the athletes from the backend and display them in a table
+             * @returns {Promise<void>}
+             */
             async function getAthletes() {
                 let req = await fetch("/api/athletes/getAllAthletes", {
                     method: "POST",
@@ -382,7 +428,9 @@
             }
 
             getAthletes();
-
+            /**
+             * Function to load the footer
+             */
             $(function () {
                 $("#includedFooter").load("./partials/footer.html");
             });

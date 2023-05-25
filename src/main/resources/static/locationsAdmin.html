@@ -10,7 +10,10 @@
     <script src="script.js"></script>
     <script>
 
-
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
         async function checkToken() {
 
             let cookie = document.cookie;
@@ -31,7 +34,6 @@
                 if (res === "unauthorized") {
                     console.log("not logged");
                     alert("Cookie expired, please log in");
-                    window.location.href = "http://localhost:8081/locations";
                 } else {
                     admin = true;
                     privileges = parseInt(res);
@@ -40,19 +42,19 @@
             }
         }
 
-        addEventListener('load', function () {
-            init();
-        });
-
+        /**
+         * Function to init the page
+         */
         function init() {
             checkToken();
-            checkAdmin();
         }
 
 
     </script>
 </head>
 <body>
+
+
 
 <dialog id="dialog_login">
     <div class="container">
@@ -71,6 +73,13 @@
 
 
 <script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let submit = document.getElementById("submit_header");
@@ -155,6 +164,11 @@
 
 
 <script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
     let login_button = document.getElementById("connection_button");
     let top_text = document.getElementById("text_topbar");
     let dialog = document.getElementById("dialog_login");
@@ -166,12 +180,20 @@
         }
     });
 
+    /**
+     * Function to close the dialog
+     * @param event
+     */
     function closeDialog(event) {
         event.preventDefault();
         dialog.close();
     }
 
-
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
     function checkAdmin() {
         if (!admin) {
             document.getElementById("admin_sport").style.display = "none";
@@ -220,6 +242,9 @@
 <script>
     checkAdmin();
 
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
     function ready() {
 
         var loc = window.location.href; // returns the full URL
@@ -273,6 +298,10 @@
             if (admin === true) {
                 document.getElementById("admin_addlocation").innerHTML = "";
             } else {
+                /**
+                 * function to add the form to add a location
+                 */
+
                 document.getElementById("admin_addlocation").innerHTML = `<h2> Add a location </h2>
                 <form style="text-align: center">
                     <label for="location_name"> Location name </label>
@@ -289,7 +318,9 @@
                     <br>
                     <button id="submit" value="Add location"> Submit </button>
                 </form>`;
-
+                /**
+                 * Function to add a location
+                 */
                 let submit = document.getElementById("submit");
                 submit.addEventListener("click", async () => {
                     let location_name = document.getElementById("location_name").value;
@@ -356,6 +387,11 @@
         </div>
     </div>
     <script>
+
+        /**
+         * Function to get the list of locations
+         * @returns {Promise<any>}
+         */
         async function getLocationList() {
             let req = await fetch("/api/getLocationslist", {
                 method: "GET",
@@ -381,12 +417,18 @@
 
         let response;
         let res = getLocationList()
+        /**
+         * Function to get the list of locations and add them to the select
+         */
         res.then(async (result) => {
             response = result.locations;
             response.forEach((localisation) => {
                 document.getElementById("location_delete").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
             });
         });
+        /**
+         * Function to delete a location
+         */
         let delete_button = document.getElementById("submit_delete");
         delete_button.addEventListener("click", async () => {
             let location_delete = document.getElementById("location_delete").value;
@@ -421,7 +463,9 @@
             }
         });
 
-
+        /**
+         * Function to load the footer
+         */
         $(function () {
             $("#includedFooter").load("./partials/footer.html");
         });

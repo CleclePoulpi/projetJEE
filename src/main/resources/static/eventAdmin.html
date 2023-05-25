@@ -10,7 +10,10 @@
     <script src="script.js"></script>
     <script>
 
-
+        /**
+         * Function to check if the user is logged in with a cookie
+         * @returns {Promise<void>}
+         */
         async function checkToken() {
 
             let cookie = document.cookie;
@@ -31,7 +34,6 @@
                 if (res === "unauthorized") {
                     console.log("not logged");
                     alert("Cookie expired, please log in");
-                    window.location.href = "http://localhost:8081/events";
                 } else {
                     admin = true;
                     privileges = parseInt(res);
@@ -40,19 +42,20 @@
             }
         }
 
-        addEventListener('load', function () {
-            init();
-        });
-
+        /**
+         * Function to init the page
+         */
         function init() {
             checkToken();
-            checkAdmin();
         }
 
 
     </script>
 </head>
 <body>
+
+
+
 <dialog id="dialog_login">
     <div class="container">
         <button value="Cancel" id="cancel" onclick="closeDialog(event)">X</button>
@@ -70,6 +73,13 @@
 
 
 <script>
+
+
+    /**
+     * Script to log in with a dialog
+     * @type {HTMLElement}
+     */
+
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let submit = document.getElementById("submit_header");
@@ -154,6 +164,11 @@
 
 
 <script>
+
+    /**
+     * Script to listen to the login button and open the dialog to log in
+     * @type {HTMLElement}
+     */
     let login_button = document.getElementById("connection_button");
     let top_text = document.getElementById("text_topbar");
     let dialog = document.getElementById("dialog_login");
@@ -165,12 +180,20 @@
         }
     });
 
+    /**
+     * Function to close the dialog
+     * @param event
+     */
     function closeDialog(event) {
         event.preventDefault();
         dialog.close();
     }
 
-
+    /**
+     * Function to check if the user is logged in
+     * and if he is an admin, display the admin options in the menu bar accordingly to his privileges
+     * and change the login button to a logout button
+     */
     function checkAdmin() {
         if (!admin) {
             document.getElementById("admin_sport").style.display = "none";
@@ -219,6 +242,9 @@
 <script>
     checkAdmin();
 
+    /**
+     * Function to check which page is currently displayed and highlight the corresponding menu bar button
+     */
     function ready() {
 
         var loc = window.location.href; // returns the full URL
@@ -303,6 +329,12 @@
 
         <script>
             init();
+
+
+            /**
+             * function to get the list of sports
+             * @returns {Promise<any>}
+             */
             async function getSportsList() {
                 let req = await fetch("/api/disciplines/get", {
                     method: "POST",
@@ -314,6 +346,10 @@
                 return await req.json();
             }
 
+            /**
+             * function to get the list of locations
+             * @returns {Promise<any>}
+             */
             async function getLocationList(){
                 let req = await fetch("/api/getLocationslist", {
                     method: "GET",
@@ -329,7 +365,9 @@
             if (admin === true) {
                 document.getElementById("admin_addevent").innerHTML = "";
             } else {
-
+                /**
+                 * script to get the list of locations and sports and add them to the corresponding select
+                 */
                 getLocationList().then((res) => {
                     res.locations.forEach((localisation) => {
                         document.getElementById("event_localisation").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
@@ -343,6 +381,9 @@
                 });
 
                 let submit = document.getElementById("submit");
+                /**
+                 * script to add an event to the database
+                 */
                 submit.addEventListener("click", async () => {
                     let event_starting_hour = document.getElementById("event_starting_hour").value;
                     let event_ending_hour = document.getElementById("event_ending_hour").value;
@@ -409,6 +450,10 @@
         </div>
     </div>
     <script>
+        /**
+         * function to get the list of events and add them to the table
+         * @returns {Promise<any>}
+         */
         async function getEventList() {
             let req = await fetch("/api/events", {
                 method: "POST",
@@ -443,6 +488,9 @@
             return res;
         }
         let res = getEventList();
+        /**
+         * function to add the list of events to the select
+         */
         res.then(async (result) => {
             response = result.events;
             response.forEach((events) => {
@@ -450,6 +498,9 @@
             });
         });
         let delete_button = document.getElementById("submit_delete");
+        /**
+         * function to delete an event from the database
+         */
         delete_button.addEventListener("click", async () => {
             let sport_delete = document.getElementById("sports_delete").value;
             await checkToken();
@@ -482,6 +533,9 @@
                 window.location.href = "events.html";
             }
         });
+        /**
+         * function to add the footer to the page
+         */
         $(function () {
             $("#includedFooter").load("./partials/footer.html");
         });
