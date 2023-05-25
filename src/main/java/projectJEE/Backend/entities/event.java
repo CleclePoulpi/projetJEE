@@ -4,9 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.sql.Time;
+import java.time.LocalTime;
+import java.util.Random;
 
 @Data
 @AllArgsConstructor
@@ -21,9 +25,9 @@ public class event {
 
     private String code;
 
-    private Date date;
+    private LocalDate date;
 
-    private Time start_time;
+    private LocalTime start_time;
 
     private String description;
 
@@ -31,7 +35,7 @@ public class event {
     @JoinColumn(name = "discipline_id", referencedColumnName = "id")
     private discipline discipline;
 
-    private Time end_time;
+    private LocalTime end_time;
 
     @OneToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")
@@ -46,7 +50,9 @@ public class event {
     @Column(name = "category")
     private category category ;
 
-    public event(Date date, Time start_time, String description, discipline discipline, Time end_time, Location location, type type, category category) {
+
+
+    public event(LocalDate date, LocalTime start_time, String description, discipline discipline, LocalTime end_time, Location location, type type, category category, String code) {
         this.date = date;
         this.start_time = start_time;
         this.description = description;
@@ -55,5 +61,15 @@ public class event {
         this.location = location;
         this.type = type;
         this.category = category;
+        this.code = code;
+    }
+
+
+    public LocalTime getStarting_hour() {
+        return this.start_time;
+    }
+
+    public LocalTime getEnding_hour() {
+        return this.end_time;
     }
 }

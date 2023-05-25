@@ -12,8 +12,13 @@ import projectJEE.Backend.repository.locationRepository;
 import projectJEE.Backend.repository.disciplinesRepository;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class eventServiceImpl implements eventService{
@@ -34,19 +39,25 @@ public class eventServiceImpl implements eventService{
 
     @Override
     public void addEvent(String event_date, String event_sport, String event_location, String event_desc, String event_category, String event_type, String event_starting_hour, String event_ending_hour) {
+
         discipline sport = disciplineRepository.findDisciplineById((long) Integer.parseInt(event_sport)).get(0);
+        boolean notValid = true;
+        Random obj = new Random();
+        String code = "";
+        while (notValid) {
+            code = sport.getName().substring(0, 3) + obj.nextInt(10) + obj.nextInt(10);
+            notValid = eventRepository.findEventByCodeAndDiscipline(code, sport).size() != 0;
+        }
         event event = new event(
-                        new Date(event_date),
-                        new Time(Long.parseLong(event_starting_hour)),
-                        event_desc,
-                        sport,
-                        new Time(Long.parseLong(event_ending_hour)),
-                        locationRepository.findLocationById((long) Integer.parseInt(event_location)).get(0),
-                        type.valueOf(event_type),
-                        category.valueOf(event_category));
-        String event_id  = event.getId().toString();
-        event.setCode(sport.getName().substring(0,3) + event_id.substring(event_id.length()-3));
-        System.out.println(event);
+                LocalDate.parse(event_date, DateTimeFormatter.ISO_DATE),
+                LocalTime.parse(event_starting_hour),
+                event_desc,
+                sport,
+                LocalTime.parse(event_ending_hour),
+                locationRepository.findLocationById((long) Integer.parseInt(event_location)).get(0),
+                type.valueOf(event_type),
+                category.valueOf(event_category),
+                code);
         eventRepository.save(event);
     }
 }
