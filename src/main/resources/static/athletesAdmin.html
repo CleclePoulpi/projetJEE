@@ -313,9 +313,14 @@
                  * Function to import the athletes from a csv file
                  */
                 document.getElementById("submit").addEventListener("click", async function () {
-                    await checkToken();
-                    if (!admin) {
-                        alert("You are not an admin");
+                    let cookie = document.cookie;
+                    cookie = cookie.split(";");
+                    cookie = cookie.find((element) => {
+                        return element.includes("JWebToken");
+                    });
+                    if (cookie == undefined) {
+                        admin = false;
+                        alert("You are not logged in as an admin");
                         window.location.href = "http://localhost:8081/";
                     } else {
                         let file = function (array) {
@@ -376,9 +381,15 @@
                     }
                 });
                 document.getElementById("drop_athletes").addEventListener("click", async function () {
-                    await checkToken();
-                    if (!admin) {
-                        alert("You are not admin")
+                    let cookie = document.cookie;
+                    cookie = cookie.split(";");
+                    cookie = cookie.find((element) => {
+                        return element.includes("JWebToken");
+                    });
+                    if (cookie == undefined) {
+                        admin = false;
+                        alert("You are not logged in as an admin");
+                        window.location.href = "http://localhost:8081/";
                     } else {
                         await fetch("/api/athletes/dropAthletes", {
                             method: "POST",

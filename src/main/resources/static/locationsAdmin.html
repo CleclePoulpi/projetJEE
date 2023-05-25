@@ -323,9 +323,14 @@
                  */
                 let submit = document.getElementById("submit");
                 submit.addEventListener("click", async () => {
-                    await checkToken();
-                    if (!admin) {
-                        alert("You are not an admin");
+                    let cookie = document.cookie;
+                    cookie = cookie.split(";");
+                    cookie = cookie.find((element) => {
+                        return element.includes("JWebToken");
+                    });
+                    if (cookie == undefined) {
+                        admin = false;
+                        alert("You are not logged in as an admin");
                         window.location.href = "http://localhost:8081/";
                     } else {
                         let location_name = document.getElementById("location_name").value;
@@ -432,9 +437,14 @@
          */
         let delete_button = document.getElementById("submit_delete");
         delete_button.addEventListener("click", async () => {
-            await checkToken();
-            if (!admin) {
-                alert("You are not an admin");
+            let cookie = document.cookie;
+            cookie = cookie.split(";");
+            cookie = cookie.find((element) => {
+                return element.includes("JWebToken");
+            });
+            if (cookie == undefined) {
+                admin = false;
+                alert("You are not logged in as an admin");
                 window.location.href = "http://localhost:8081/";
             } else {
                 let location_delete = document.getElementById("location_delete").value;

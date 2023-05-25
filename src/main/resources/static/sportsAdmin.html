@@ -321,11 +321,18 @@
                  * Function to add a sport to the database
                  */
                 submit.addEventListener("click", async () => {
-                    await checkToken();
-                    if (!admin) {
+
+                    let cookie = document.cookie;
+                    cookie = cookie.split(";");
+                    cookie = cookie.find((element) => {
+                        return element.includes("JWebToken");
+                    });
+                    if (cookie == undefined) {
+                        admin = false;
                         alert("You are not logged in as an admin");
                         window.location.href = "http://localhost:8081/";
                     } else {
+
                         let sport_name = document.getElementById("sport_name").value;
                         let sport_paralympic = document.getElementById("sport_paralympic").value;
                         let data = {
@@ -339,13 +346,18 @@
                             formBody.push(encodedKey + "=" + encodedValue);
                         }
                         formBody = formBody.join("&");
-                        let req = await fetch("/api/disciplines/add", {
-                            method: "POST",
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                            },
-                            body: formBody
-                        })
+                        if (!admin) {
+                            alert("You are not logged in as an admin");
+                            window.location.href = "http://localhost:8081/";
+                        } else {
+                            let req = await fetch("/api/disciplines/add", {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                                },
+                                body: formBody
+                            })
+                        }
                     }
                 });
 
@@ -430,8 +442,13 @@
         let delete_button = document.getElementById("submit_delete");
         delete_button.addEventListener("click", async () => {
             let sport_delete = document.getElementById("sports_delete").value;
-            await checkToken();
-            if (!admin) {
+            let cookie = document.cookie;
+            cookie = cookie.split(";");
+            cookie = cookie.find((element) => {
+                return element.includes("JWebToken");
+            });
+            if (cookie == undefined) {
+                admin = false;
                 alert("You are not logged in as an admin");
                 window.location.href = "http://localhost:8081/";
             } else {
