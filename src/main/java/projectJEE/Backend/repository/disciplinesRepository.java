@@ -16,4 +16,5 @@ public interface disciplinesRepository extends JpaRepository<discipline, Long> {
      */
     List<discipline> findByName(String name);
 
+    List<discipline> findDisciplineById(Long id);
 }

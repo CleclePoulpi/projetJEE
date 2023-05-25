@@ -18,7 +18,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String location_name;
+    private String name;
     private String location_city;
     private String location_category;
 
@@ -29,7 +29,7 @@ public class Location {
      * @param category category of the location
      */
     public Location(String name, String city, String category) {
-        this.location_name = name;
+        this.name = name;
         this.location_city = city;
         this.location_category = category;
     }
