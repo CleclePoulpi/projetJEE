@@ -12,6 +12,7 @@ import projectJEE.Backend.repository.locationRepository;
 import projectJEE.Backend.repository.disciplinesRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -59,18 +60,17 @@ public class eventServiceImpl implements eventService{
     }
     /**
      * This method adds an event inside the database.
-     * @param event_date
-     * @param event_sport
-     * @param event_location
-     * @param event_desc
-     * @param event_category
-     * @param event_type
-     * @param event_starting_hour
-     * @param event_ending_hour
+     * @param event_date the date of the event
+     * @param event_sport the sport of the event
+     * @param event_location the location of the event
+     * @param event_desc the description of the event
+     * @param event_category the category of the event
+     * @param event_type the type of the event
+     * @param event_starting_hour the starting hour of the event
+     * @param event_ending_hour the ending hour of the event
      */
     @Override
     public void addEvent(LocalDate event_date, String event_sport, String event_location, String event_desc, String event_category, String event_type, LocalTime event_starting_hour, LocalTime event_ending_hour) {
-
         discipline sport = disciplineRepository.findDisciplineById((long) Integer.parseInt(event_sport)).get(0);
         boolean notValid = true;
         Random obj = new Random();
@@ -121,7 +121,7 @@ public class eventServiceImpl implements eventService{
             return result;
         }
         else {
-            return null;
+            return LocalDateTime.of(date, starting_hour);
         }
     }
 }

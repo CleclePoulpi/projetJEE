@@ -70,7 +70,6 @@ public class apiController {
     @ResponseBody
     @PostMapping("/token")
     public ResponseEntity<String> checkToken(@CookieValue("JWebToken") String bearerToken, HttpServletResponse response) throws NoSuchAlgorithmException {
-        System.out.println(bearerToken);
         JWebToken incomingToken = new JWebToken(bearerToken);
         if (!incomingToken.isValid()) {
             final Cookie JWebToken = new Cookie("JWebToken", "");

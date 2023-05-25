@@ -27,7 +27,6 @@ public class disciplineServiceImpl implements disciplineService {
      */
     @Override
     public void addDiscipline(String name, boolean paralympic) {
-        System.out.println(name);
         disciplinesRepository.save(new discipline(name, paralympic));
     }
 

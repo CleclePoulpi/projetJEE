@@ -58,7 +58,6 @@ public class athletesServiceImpl implements athletesService {
             athlete athlete = new athlete(a.get("Prénom"),a.get("Nom de famille"),a.get("Nationalité"),
                     new SimpleDateFormat("dd/MM/yyyy").parse(a.get("Date de naissance")),
                     disciplinesRepository.findByName(a.get("Sport")).get(0),a.get("Genre"));
-            System.out.println(athlete);
             athletesRepository.save(athlete);
         }
     }

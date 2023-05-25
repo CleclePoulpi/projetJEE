@@ -107,6 +107,10 @@ public class event {
         this.code = code;
     }
 
+    public event(long parseInt) {
+        this.id = parseInt;
+    }
+
     public LocalTime getStarting_hour() {
         return this.start_time;
     }

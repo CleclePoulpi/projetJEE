@@ -57,7 +57,6 @@ public class athleteController {
     @ResponseBody
     @PostMapping("/importAthletes")
     public ResponseEntity<String> importAthletes(@RequestBody JSONObject request) throws ParseException {
-        System.out.println(request.get("athletes"));
         athletesService.importathletes((List<LinkedHashMap<String, String>>) request.get("athletes"));
         return new ResponseEntity<>("imported", HttpStatus.OK);
     }
