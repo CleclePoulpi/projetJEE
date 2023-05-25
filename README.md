@@ -2,7 +2,7 @@
 
 Groupe n°6
 
-Branche la plus à jour : backend_de_cyril
+Branche la plus à jour : master
 
 URL d'accueil : [localhost:8081](http://localhost:8081/)
 
