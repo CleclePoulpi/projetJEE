@@ -297,12 +297,17 @@
                     let fields = array[0].split(separator);
                     let athletes = [];
                     for (let i = 1; i < array.length; i++) {
-                        let athlete = array[i].split(separator);
-                        let athlete_object = {};
-                        for (let j = 0; j < athlete.length; j++) {
-                            athlete_object[fields[j]] = athlete[j];
+                        if(array[i]!=="") {
+
+                            let athlete = array[i].split(separator);
+                            let athlete_object = {};
+                            for (let j = 0; j < athlete.length; j++) {
+                                if (athlete[j] !== "") {
+                                    athlete_object[fields[j]] = athlete[j];
+                                }
+                            }
+                            athletes.push(athlete_object);
                         }
-                        athletes.push(athlete_object);
                     }
                     await fetch("/api/athletes/importAthletes", {
                         method: "POST",
