@@ -108,7 +108,7 @@ public class eventServiceImpl implements eventService{
         }
         for (event event : events) {
             if (event.getDiscipline().equals(sport) && event.getDate().equals(date)) {
-                if (lowestTime.isAfter(event.getEnding_hour())) {
+                if (lowestTime.isBefore(event.getEnding_hour())) {
                     lowestTime = event.getEnding_hour();
                 }
                if (Math.abs(starting_hour.compareTo(event.getEnding_hour())) < 60 || Math.abs(ending_hour.compareTo(event.getStarting_hour())) < 60 || Math.abs(starting_hour.compareTo(event.getStarting_hour())) < 60 || Math.abs(ending_hour.compareTo(event.getEnding_hour())) < 60) {

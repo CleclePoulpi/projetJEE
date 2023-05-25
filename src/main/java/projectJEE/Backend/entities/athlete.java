@@ -57,13 +57,6 @@ public class athlete {
     }
 
     /**
-     * This method sets the surname of the athlete.
-     */
-    public void setSurname(String x) {
-        this.surname = x;
-    }
-
-    /**
      * This method sets the name of the athlete.
      */
     public void setName(String x) {
