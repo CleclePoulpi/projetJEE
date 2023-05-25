@@ -436,7 +436,7 @@
                                     } else {
                                         let date = response.split("T")[0];
                                         let hour = response.split("T")[1].split(":")[0];
-                                        let min = hour.split(":")[1];
+                                        let min = response.split(":")[1];
                                         alert("Timing not available, next available time is at " + hour + ":" + min + " on " + date);
                                     }
                                 })
