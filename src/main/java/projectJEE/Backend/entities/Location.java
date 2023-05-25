@@ -42,6 +42,17 @@ public class Location {
         this.id = id;
     }
 
-
-
+    /**
+     * Constructor of the class location.
+     * @param id id of the location
+     * @param name name of the location
+     * @param city city of the location
+     * @param category category of the location
+     */
+    public Location(long id, String name, String city, String category) {
+        this.id = id;
+        this.name = name;
+        this.location_city = city;
+        this.location_category = category;
+    }
 }

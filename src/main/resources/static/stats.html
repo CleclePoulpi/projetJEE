@@ -296,7 +296,7 @@
             <h2>Sites with the most sessions</h2>
             <table id="session_table">
                 <tr>
-                    <th>Sport</th>
+                    <th>Location</th>
                     <th>Number of sessions</th>
                 </tr>
             </table>
@@ -306,7 +306,7 @@
             <table id="duration_table">
                 <tr>
                     <th>Sport</th>
-                    <th>Duration</th>
+                    <th>Duration (min)</th>
                 </tr>
             </table>
         </div>
@@ -327,7 +327,7 @@
                 let res = await req.json();
                 let sessionTable = document.getElementById("session_table");
                 let durationTable = document.getElementById("duration_table");
-                for (let i = 0; i < res.session.length; i++) {
+                for (let i = 0; i < res.disciplines.length; i++) {
                     let srow = sessionTable.insertRow(i + 1);
                     let drow = durationTable.insertRow(i + 1);
 
@@ -336,10 +336,10 @@
                     let dcell1 = drow.insertCell(0);
                     let dcell2 = drow.insertCell(1);
 
-                    scell1.innerHTML = res.session[i].locations;
-                    scell2.innerHTML = res.session[i].nbSession;
-                    dcell1.innerHTML = res.duree[i].nomDiscipline;
-                    dcell2.innerHTML = res.duree[i].dureeTotale;
+                    scell1.innerHTML = res.locations[i].location.name;
+                    scell2.innerHTML = res.locations[i].count;
+                    dcell1.innerHTML = res.disciplines[i].discipline.name;
+                    dcell2.innerHTML = res.disciplines[i].time;
                 }
             }
 
@@ -349,6 +349,7 @@
             $(function () {
                 $("#includedFooter").load("./partials/footer.html");
             });
+            getStats();
         </script>
     </div>
 </div>
