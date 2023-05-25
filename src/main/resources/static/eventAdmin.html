@@ -289,8 +289,8 @@
                 <input type="time" name="event_starting_hour" id="event_starting_hour" placeholder="Event start Hour" required>
                 <label for="event_ending_hour"> Event end Hour </label>
                 <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
-                <label for="event_localisation"> Event localisation </label>
-                <select name="event_localisation" id="event_localisation" required>
+                <label for="event_location"> Event location </label>
+                <select name="event_location" id="event_location" required>
                 </select>
                 <br>
                 <label for="event_desc"> Event description </label> <br>
@@ -365,7 +365,7 @@
 
 
         </script>
-        <div><h2> Delete a event </h2>
+        <div><h2> Delete an event </h2>
             <form style="text-align: center">
                 <label for="event_delete"> Events </label>
                 <select name="event_delete" id="event_delete">
@@ -378,10 +378,15 @@
             <h1> Events </h1>
             <table id="event_table">
                 <tr>
-                    <th>Event name</th>
-                    <th>Event sport</th>
-                    <th>Event date</th>
-                    <th>Event localisation</th>
+                    <th>Name</th>
+                    <th>Sport</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Starting hour</th>
+                    <th>Ending hour</th>
+                    <th>Location</th>
+                    <th>Description</th>
                 </tr>
             </table>
         </div>
@@ -402,11 +407,21 @@
                 let cell2 = row.insertCell(1);
                 let cell3 = row.insertCell(2);
                 let cell4 = row.insertCell(3);
+                let cell5 = row.insertCell(4);
+                let cell6 = row.insertCell(5);
+                let cell7 = row.insertCell(6);
+                let cell8 = row.insertCell(7);
+                let cell9 = row.insertCell(8);
 
                 cell1.innerHTML = res[i].name;
                 cell2.innerHTML = res[i].sport;
-                cell3.innerHTML = res[i].date;
-                cell4.innerHTML = res[i].location;
+                cell3.innerHTML = res[i].category;
+                cell4.innerHTML = res[i].type;
+                cell5.innerHTML = res[i].date;
+                cell6.innerHTML = res[i].starting_hour;
+                cell7.innerHTML = res[i].ending_hour;
+                cell8.innerHTML = res[i].location;
+                cell9.innerHTML = res[i].description;
             }
             return res;
         }
