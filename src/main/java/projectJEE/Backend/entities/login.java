@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * This class represents a login entity for the database.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +25,11 @@ public class login {
     private String username;
     private String password;
 
+    /**
+     * Constructor for login entity.
+     * @param username username of the admin
+     * @param password password of the admin
+     */
     public login(String username, String password) {
         this.username = username;
         this.password = password;

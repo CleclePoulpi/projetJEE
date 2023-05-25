@@ -5,10 +5,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * This class is used to manage the pages
+ */
 @Controller
 @RequestMapping("/")
 public class pagesController {
-
+    /**
+     * This method is used to get the index page
+     * @return the index page
+     */
     @ResponseBody
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
@@ -16,6 +22,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the athletes page
+     * @return the athletes page
+     */
     @ResponseBody
     @GetMapping("/athletes")
     public ModelAndView athletes() {
@@ -24,6 +34,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the athletesAdmin page
+     * @return the athletesAdmin page
+     */
     @ResponseBody
     @GetMapping("/athletesAdmin")
     public ModelAndView athletesAdmin() {
@@ -32,6 +46,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the eventsAdmin page
+     * @return the eventsAdmin page
+     */
     @ResponseBody
     @GetMapping("/EventAdmin")
     public ModelAndView EventAdmin() {
@@ -40,6 +58,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the events page
+     * @return the events page
+     */
     @ResponseBody
     @GetMapping("/events")
     public ModelAndView events() {
@@ -48,6 +70,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the locations page
+     * @return the locations page
+     */
     @ResponseBody
     @GetMapping("/locations")
     public ModelAndView localisations() {
@@ -56,6 +82,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the locationsAdmin page
+     * @return the locationsAdmin page
+     */
     @ResponseBody
     @GetMapping("/locationsAdmin")
     public ModelAndView localisationsAdmin() {
@@ -63,6 +93,11 @@ public class pagesController {
         modelAndView.setViewName("locationsAdmin.html");
         return modelAndView;
     }
+
+    /**
+     * This method is used to get the plan page
+     * @return the plan page
+     */
     @ResponseBody
     @GetMapping("/plan")
     public ModelAndView plan() {
@@ -71,6 +106,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the sports page
+     * @return the sports page
+     */
     @ResponseBody
     @GetMapping("/sports")
     public ModelAndView sports() {
@@ -79,6 +118,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the sportsAdmin page
+     * @return the sportsAdmin page
+     */
     @ResponseBody
     @GetMapping("/sportsAdmin")
     public ModelAndView sportsAdmin() {
@@ -87,6 +130,10 @@ public class pagesController {
         return modelAndView;
     }
 
+    /**
+     * This method is used to get the stats page
+     * @return the stats page
+     */
     @ResponseBody
     @GetMapping("/stats")
     public ModelAndView stats() {

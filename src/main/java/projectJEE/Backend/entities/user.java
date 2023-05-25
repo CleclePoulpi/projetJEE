@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * This class represents a user in the database
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,12 +26,22 @@ public class user {
     private String password;
     private Long privilege;
 
+    /**
+     * Constructor
+     * @param username username of the admin
+     * @param password   password of the admin
+     * @param privilege privilege of the admin
+     */
     public user(String username, String password, Long privilege) {
         this.username = username;
         this.password = password;
         this.privilege = privilege;
     }
 
+    /**
+     * Get the privilege of the admin
+     * @return privilege of the admin
+     */
     public Long getPrivilege() {
         return privilege;
     }
