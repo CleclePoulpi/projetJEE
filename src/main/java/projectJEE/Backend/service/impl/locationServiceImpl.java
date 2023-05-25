@@ -16,6 +16,10 @@ public class locationServiceImpl implements locationService {
         locationRepository.save(new Location(name, city, category));
     }
 
+    public void delLocation(int id) {
+        locationRepository.delete(new Location((long)id));
+    }
+
     public Object getLocations() {
         return locationRepository.findAll();
     }

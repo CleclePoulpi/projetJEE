@@ -31,6 +31,7 @@
                 if (res === "unauthorized") {
                     console.log("not logged");
                     alert("Cookie expired, please log in");
+                    window.location.href = "http://localhost:8081/events";
                 } else {
                     admin = true;
                     privileges = parseInt(res);
@@ -313,11 +314,11 @@
                         <input type="time" name="event_ending_hour" id="event_ending_hour" placeholder="Event end Hour" required>
                     <label for="event_localisation"> Event localisation </label>
                         <select name="event_localisation" id="event_localisation" required>`;
-                /* @TODO uncomment when the api is ready
+
                 res.forEach((localisation) => {
                     html += `<option value="${localisation.idSite}">${localisation.nomSite}, ${localisation.villeSite}</option>`
                 });
-                */
+
                 html += `</select>
                     <br>
                     <label for="event_desc"> Event description </label> <br>

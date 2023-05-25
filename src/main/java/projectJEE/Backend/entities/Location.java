@@ -25,4 +25,10 @@ public class Location {
         this.location_category = category;
     }
 
+    public Location(Long id) {
+        this.id = id;
+    }
+
+
+
 }

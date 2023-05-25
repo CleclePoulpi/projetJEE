@@ -268,7 +268,7 @@
 
         <h1>Statistics</h1>
         <div class="left">
-            <h2>Sports with the most sessions</h2>
+            <h2>Sites with the most sessions</h2>
             <table id="session_table">
                 <tr>
                     <th>Sport</th>
@@ -306,7 +306,7 @@
                     let dcell1 = drow.insertCell(0);
                     let dcell2 = drow.insertCell(1);
 
-                    scell1.innerHTML = res.session[i].nomDiscipline;
+                    scell1.innerHTML = res.session[i].locations;
                     scell2.innerHTML = res.session[i].nbSession;
                     dcell1.innerHTML = res.duree[i].nomDiscipline;
                     dcell2.innerHTML = res.duree[i].dureeTotale;
