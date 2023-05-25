@@ -13,4 +13,4 @@ Comptes à utiliser :
 
 Dans la base de données, les tables avec le suffixe *_ignorer* sont des tables non utilisées que nous n'avons pas réussi à supprimer. Il s'agit des premières structures que nous avions mises en place, mais nous avons utilisé une autre implémentation par la suite.
 
-Il est parfois nécéssaire après un ajout de recharger la page, les requetes prenant parfois trop de temps avant le rafraichissement de la page.
+Il est parfois nécessaire après un ajout ou une suppression de recharger la page, les requêtes prenant parfois trop de temps avant le rafraîchissement de la page.
