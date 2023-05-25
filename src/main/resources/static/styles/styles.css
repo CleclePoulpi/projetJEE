@@ -248,3 +248,7 @@ input[type=file]:hover {
     border: none;
 
 }
+
+.dropData:hover {
+    background-color: #e70c0c;
+}
