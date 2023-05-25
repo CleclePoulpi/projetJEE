@@ -306,7 +306,7 @@
             <table id="duration_table">
                 <tr>
                     <th>Sport</th>
-                    <th>Duration</th>
+                    <th>Duration (min)</th>
                 </tr>
             </table>
         </div>
@@ -336,10 +336,10 @@
                     let dcell1 = drow.insertCell(0);
                     let dcell2 = drow.insertCell(1);
 
-                    scell1.innerHTML = res.locations[i].name;
-                    scell2.innerHTML = res.locations[i].nbSession;
-                    dcell1.innerHTML = res.disciplines[i].name;
-                    dcell2.innerHTML = res.disciplines[i].dureeTotale;
+                    scell1.innerHTML = res.locations[i].location.name;
+                    scell2.innerHTML = res.locations[i].count;
+                    dcell1.innerHTML = res.disciplines[i].discipline.name;
+                    dcell2.innerHTML = res.disciplines[i].time;
                 }
             }
 
