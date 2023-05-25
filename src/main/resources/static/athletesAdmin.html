@@ -398,18 +398,12 @@
                     }
                 })
 
-                let req2 = await fetch("/api/disciplines/get", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
+
 
                 let res = await req.json();
-                let res2 = await req2.json();
 
                 let table = document.getElementById("athletes_table");
-                for (let i = 0; i < res.length; i++) {
+                for (let i = 0; i < res.athletes.length; i++) {
                     let row = table.insertRow(i + 1);
                     let cell1 = row.insertCell(0);
                     let cell2 = row.insertCell(1);
@@ -418,12 +412,12 @@
                     let cell5 = row.insertCell(4);
                     let cell6 = row.insertCell(5);
 
-                    cell1.innerHTML = res[i].prenomAthlete;
-                    cell2.innerHTML = res[i].nomAthlete;
-                    cell3.innerHTML = res[i].genreAthlete;
-                    cell4.innerHTML = res[i].naissanceAthlete;
-                    cell5.innerHTML = res[i].nationaliteAthlete;
-                    cell6.innerHTML = res2[res[i].disciplineAthlete].nomDiscipline; // à vérifier pour l'id de la discipline
+                    cell1.innerHTML = res.athletes[i].surname;
+                    cell2.innerHTML = res.athletes[i].name;
+                    cell3.innerHTML = res.athletes[i].gender;
+                    cell4.innerHTML = res.athletes[i].dateOfBirth.split("T")[0];
+                    cell5.innerHTML = res.athletes[i].nationality;
+                    cell6.innerHTML = res.athletes[i].discipline.name;
                 }
             }
 
