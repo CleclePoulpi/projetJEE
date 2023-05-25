@@ -19,7 +19,7 @@ public class statController {
     public ResponseEntity<JSONObject> getStat() {
         JSONObject response = new JSONObject();
         response.put("locations", statService.getMostPopularLocations());
-        response.put("disciplines", statService.getMostPopularDisciplines());
+        //response.put("disciplines", statService.getMostPopularDisciplines());
         return ResponseEntity.ok(response);
     }
 }

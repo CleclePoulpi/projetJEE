@@ -324,7 +324,9 @@
                         'Content-Type': 'application/json'
                     }
                 })
+                console.log(req);
                 let res = await req.json();
+                console.log(res);
                 let sessionTable = document.getElementById("session_table");
                 let durationTable = document.getElementById("duration_table");
                 for (let i = 0; i < res.session.length; i++) {
@@ -349,6 +351,7 @@
             $(function () {
                 $("#includedFooter").load("./partials/footer.html");
             });
+            getStats();
         </script>
     </div>
 </div>
