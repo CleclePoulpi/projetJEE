@@ -270,7 +270,8 @@
             <h2> Add an event </h2>
             <form style="text-align: center">
                 <label for="event_sport"> Event sport </label>
-                <input type="text" name="event_sport" id="event_sport" placeholder="Event sport" required>
+                <select name="event_sport" id="event_sport" required>
+                </select>
                 <label for="event_category"> Event category </label>
                 <select name="event_category" id="event_category" required>
                     <option value="H">Men</option>
@@ -302,6 +303,17 @@
 
         <script>
             init();
+            async function getSportsList() {
+                let req = await fetch("/api/disciplines/get", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                return await req.json();
+            }
+
             async function getLocationList(){
                 let req = await fetch("/api/getLocationslist", {
                     method: "GET",
@@ -310,7 +322,7 @@
                     }
                 });
 
-                return  await req.json();
+                return await req.json();
 
             }
 
@@ -319,12 +331,16 @@
             } else {
 
                 getLocationList().then((res) => {
-                    console.log(res);
                     res.locations.forEach((localisation) => {
                         document.getElementById("event_localisation").add(new Option(localisation.location_name + ", " + localisation.location_city, localisation.id));
                     });
                 });
-
+                let res1 = getSportsList();
+                res1.then(async (result) => {
+                    result.disciplines.forEach((sports) => {
+                        document.getElementById("event_sport").add(new Option(sports.name + ", " + function(paralympic){if(paralympic){return "Paralympic"}else{return "Not paralympic"}}(sports.paralympic), sports.id));
+                    });
+                });
 
                 let submit = document.getElementById("submit");
                 submit.addEventListener("click", async () => {
@@ -342,6 +358,7 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
+                            event_name : event_name,
                             event_starting_hour: event_starting_hour,
                             event_ending_hour: event_ending_hour,
                             event_desc: event_desc,
