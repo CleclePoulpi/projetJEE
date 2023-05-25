@@ -12,6 +12,9 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Random;
 
+/**
+ * This class represents an event.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -62,14 +65,5 @@ public class event {
         this.type = type;
         this.category = category;
         this.code = code;
-    }
-
-
-    public LocalTime getStarting_hour() {
-        return this.start_time;
-    }
-
-    public LocalTime getEnding_hour() {
-        return this.end_time;
     }
 }

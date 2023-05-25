@@ -18,7 +18,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+/**
+ * Class to generate and validate connexion tokens
+ */
 public class JWebToken {
 
     private static final String SECRET_KEY = "${jwt.secret}";
@@ -29,14 +31,29 @@ public class JWebToken {
     private String signature;
     private String encodedHeader;
 
+    /**
+     * Encode the header to base64
+     */
     private JWebToken() {
         encodedHeader = encode(new JSONObject(JWT_HEADER));
     }
 
+    /**
+     * Encode a JSONObject to base64
+     * @param payload the JSONObject to encode
+     * @return the encoded string
+     */
     public JWebToken(JSONObject payload) {
         this(payload.getString("sub"), payload.getString("privilege"), payload.getJSONArray("aud"), payload.getLong("exp"));
     }
 
+    /**
+     * Encode each part of the token to base64
+     * @param sub the subject of the token
+     * @param privilege the privilege of the token
+     * @param aud the audience of the token
+     * @param expires the expiry date of the token
+     */
     public JWebToken(String sub, String privilege, JSONArray aud, long expires) {
         this();
         payload.put("sub", sub);
@@ -49,6 +66,11 @@ public class JWebToken {
         signature = hmacSha256(encodedHeader + "." + encode(payload), SECRET_KEY);
     }
 
+    /**
+     * Create a token from a string and check if it is valid
+     * @param token the token to check
+     * @throws NoSuchAlgorithmException if the algorithm is not supported
+     */
     public JWebToken(String token) throws NoSuchAlgorithmException {
         this();
         String[] parts = token.split("\\.");
@@ -71,31 +93,23 @@ public class JWebToken {
         signature = parts[2];
     }
 
+
     @Override
     public String toString() {
         return encodedHeader + "." + encode(payload) + "." + signature;
     }
 
+    /**
+     * Check if the token is valid
+     * @return true if the token is valid
+     */
     public boolean isValid() {
         return payload.getLong("exp") > (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) //token not expired
                 && signature.equals(hmacSha256(encodedHeader + "." + encode(payload), SECRET_KEY)); //signature matched
     }
 
-    public String getSubject() {
-        return payload.getString("sub");
-    }
-
     public String getPrivilege() {
         return payload.getString("privilege");
-    }
-
-    public List<String> getAudience() {
-        JSONArray arr = payload.getJSONArray("aud");
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < arr.length(); i++) {
-            list.add(arr.getString(i));
-        }
-        return list;
     }
 
     private static String encode(JSONObject obj) {
@@ -113,9 +127,9 @@ public class JWebToken {
     /**
      * Sign with HMAC SHA256 (HS256)
      *
-     * @param data
-     * @return
-     * @throws Exception
+     * @param data the data to sign
+     * @return the signature
+     * @throws Exception if the algorithm is not supported or the key is invalid
      */
     private String hmacSha256(String data, String secret) {
         try {
