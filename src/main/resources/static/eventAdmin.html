@@ -414,7 +414,7 @@
         res.then(async (result) => {
             response = result.events;
             response.forEach((events) => {
-                document.getElementById("sports_delete").add(new Option(events.name + ", " + events.sport +', '+ events.location +': '+events.date , events.id));
+                document.getElementById("event_delete").add(new Option(events.name + ", " + events.sport +', '+ events.location +': '+events.date , events.id));
             });
         });
         let delete_button = document.getElementById("submit_delete");
