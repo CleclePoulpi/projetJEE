@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Time;
 
 @Data
@@ -19,9 +19,7 @@ public class event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
-
-    private int code;
+    private String code;
 
     private Date date;
 
@@ -48,9 +46,7 @@ public class event {
     @Column(name = "category")
     private category category ;
 
-    public event(String name, int code, Date date, Time start_time, String description, discipline discipline, Time end_time, Location location, type type, category category) {
-        this.name = name;
-        this.code = code;
+    public event(Date date, Time start_time, String description, discipline discipline, Time end_time, Location location, type type, category category) {
         this.date = date;
         this.start_time = start_time;
         this.description = description;
