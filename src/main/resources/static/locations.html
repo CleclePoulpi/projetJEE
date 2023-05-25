@@ -47,6 +47,7 @@
          */
         function init() {
             checkToken();
+            checkAdmin();
         }
 
 
@@ -333,6 +334,7 @@
 
         let response;
         let res = getLocationList()
+        init();
 
         /**
          * Function to delete a location from the database
