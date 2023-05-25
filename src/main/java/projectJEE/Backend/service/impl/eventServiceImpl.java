@@ -11,12 +11,9 @@ import projectJEE.Backend.repository.eventRepository;
 import projectJEE.Backend.repository.locationRepository;
 import projectJEE.Backend.repository.disciplinesRepository;
 
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +32,11 @@ public class eventServiceImpl implements eventService{
     @Override
     public List<event> getEvents() {
         return eventRepository.findAll();
+    }
+
+    @Override
+    public void delEvent(String eventId) {
+        eventRepository.delete(new event((long) Integer.parseInt(eventId)));
     }
 
     @Override

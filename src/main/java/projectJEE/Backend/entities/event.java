@@ -54,7 +54,9 @@ public class event {
     private category category ;
 
 
-
+    public event(Long id) {
+        this.id = id;
+    }
     public event(LocalDate date, LocalTime start_time, String description, discipline discipline, LocalTime end_time, Location location, type type, category category, String code) {
         this.date = date;
         this.start_time = start_time;

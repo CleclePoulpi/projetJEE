@@ -530,10 +530,10 @@
                 alert("You are not logged in as an admin");
                 window.location.href = "http://localhost:8081/";
             } else {
-                let sport_delete = document.getElementById("sports_delete").value;
+                let event_delete = document.getElementById("event_delete").value;
                 await checkToken();
                 let data = {
-                    'sport_id': sport_delete
+                    'event_id': event_delete
                 };
                 let formBody = [];
                 for (let property in data) {
@@ -543,7 +543,7 @@
                 }
                 formBody = formBody.join("&");
                 if (admin) {
-                    let req = await fetch("/api/deleteevent", {
+                    let req = await fetch("/api/events/delete", {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
