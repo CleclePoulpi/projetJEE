@@ -295,7 +295,7 @@
             <h1> Events </h1>
             <table id="event_table">
                 <tr>
-                    <th>Name</th>
+                    <th>Code</th>
                     <th>Sport</th>
                     <th>Category</th>
                     <th>Type</th>
@@ -323,7 +323,7 @@
                 })
                 let res = await req.json();
                 let table = document.getElementById("event_table");
-                for (let i = 0; i < res.length; i++) {
+                for (let i = 0; i < res.events.length; i++) {
                     let row = table.insertRow(i + 1);
                     let cell1 = row.insertCell(0);
                     let cell2 = row.insertCell(1);
@@ -335,15 +335,15 @@
                     let cell8 = row.insertCell(7);
                     let cell9 = row.insertCell(8);
 
-                    cell1.innerHTML = res[i].name;
-                    cell2.innerHTML = res[i].sport;
-                    cell3.innerHTML = res[i].category;
-                    cell4.innerHTML = res[i].type;
-                    cell5.innerHTML = res[i].date;
-                    cell6.innerHTML = res[i].starting_hour;
-                    cell7.innerHTML = res[i].ending_hour;
-                    cell8.innerHTML = res[i].location;
-                    cell9.innerHTML = res[i].description;
+                    cell1.innerHTML = res.events[i].code;
+                    cell2.innerHTML = res.events[i].discipline.name;
+                    cell3.innerHTML = res.events[i].category;
+                    cell4.innerHTML = res.events[i].type;
+                    cell5.innerHTML = res.events[i].date;
+                    cell6.innerHTML = res.events[i].start_time;
+                    cell7.innerHTML = res.events[i].end_time;
+                    cell8.innerHTML = res.events[i].location.location_name;
+                    cell9.innerHTML = res.events[i].description;
                 }
             }
 
@@ -358,7 +358,7 @@
     </div>
 </div>
 
-            getEventList();
+
 
 <div id="includedFooter"></div>
 
