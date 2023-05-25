@@ -179,6 +179,10 @@ input[type=text], select, input[type=date], input[type=time], textarea, input[ty
     resize: none;
 }
 
+.center_button {
+    display: flex;
+    justify-content: center;
+}
 
 input[type=submit], button[type=submit], button {
     background-color: #5cb85c;
